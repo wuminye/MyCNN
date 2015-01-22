@@ -41,3 +41,6 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+*.mat
+train-images.idx3-ubyte
+train-labels.idx1-ubyte
