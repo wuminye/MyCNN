@@ -1,6 +1,6 @@
 function [ featureMap ] = cnnPooling(inputFeature, kernel )
 %CNNPOOLING Summary of this function goes here
-%   Detailed explanation goes here
+%  目前  Pooling 输出没有激活函数
 
 assert(kernel.x <= size(inputFeature ,1), ['Kernel is too large...', '']);
 assert(kernel.y <= size(inputFeature ,2), ['Kernel is too large...', '']);

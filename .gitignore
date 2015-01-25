@@ -44,3 +44,4 @@ Temporary Items
 *.mat
 train-images.idx3-ubyte
 train-labels.idx1-ubyte
+*.asv
