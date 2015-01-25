@@ -2,13 +2,14 @@ function [ y ] = cnnANN( input , w , b )
 %CNNANN Summary of this function goes here
 %   Detailed explanation goes here
 
-input = squeeze(input);
+%input = squeeze(input); 保持规范化
+assert(size(input ,1) == 1, ['Dims of input error  ', '']);
 assert(size(input ,2) == 1, ['Dims of input error  ', '']);
 assert(size(w ,1) == size(b,1), ['Dims of w and b error  ', '']);
-assert(size(input ,1) == size(w ,2), ['Dims of input and w error  ', '']);
+assert(size(input ,3) == size(w ,2), ['Dims of input and w error  ', '']);
 
-
-y = w * input + b;
+tem =  input(1,1,:);
+y = w * tem(:) + b;
 
 y = ActiveFunction(y);
 end
