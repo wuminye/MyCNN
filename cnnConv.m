@@ -3,7 +3,7 @@ function [ featureMap ] = cnnConv( inputFeature , w , b , connector)
 %   Detailed explanation goes here
 %   ===========================================
 %   inputFeature : lastLayerFeature  (ox , oy , old_num)
-%   w :   weights of kernel         (a, b, num)
+%   w :   weights of kernel         (a, b, old_num, num)
 %   b :   bias                      (x, y, num)
 %   connector: the way of  featuremaps connections between current layer
 %              and last layer  (i , j)==1 current i-th featuremap connect
