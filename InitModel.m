@@ -15,8 +15,9 @@ for i = 1 : num_layer
        Layer{i}.out = [Layer{i-1}.out(1)- Layer{i}.kernelsize(1)+1,...
                        Layer{i-1}.out(2)- Layer{i}.kernelsize(2)+1, Layer{i}.mapnum];
        r = sqrt(6)/(Layer{i}.kernelsize*Layer{i}.kernelsize' + 1);
-       Layer{i}.w = rand([ Layer{i}.kernelsize ,Layer{i}.mapnum])*2*r - r;
-       Layer{i}.b = rand(Layer{i}.out)*2*r - r ;
+       %featuremap多个卷积核 --- 4D
+       Layer{i}.w = rand([ Layer{i}.kernelsize ,Layer{i-1}.out(3) ,Layer{i}.mapnum ])*2*r - r;
+       Layer{i}.b = rand(Layer{i}.mapnum,1)*2*r - r ;   %实数偏置
        Layer{i}.connector = ones(Layer{i}.mapnum,Layer{i-1}.out(3));
    end
     
@@ -28,7 +29,7 @@ for i = 1 : num_layer
    
    if strcmp(cur,'ANN')
       r = sqrt(6)/(Layer{i-1}.out(1) + Layer{i}.out(1));
-      p = squeeze(Layer{i-1}.out);
+      p = max(Layer{i-1}.out);
       Layer{i}.w = rand(Layer{i}.out(1),p(1))*2*r - r ;
       Layer{i}.b = rand(Layer{i}.out)*2*r - r;
    end

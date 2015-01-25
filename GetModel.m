@@ -1,8 +1,8 @@
 function [ model ] = GetModel(input)
 %GETMODEL Summary of this function goes here
 %   Detailed explanation goes here
-%{
-num_layer = 4;
+
+num_layer = 6;
 
 Layer = cell(num_layer,1);
 
@@ -26,7 +26,9 @@ Layer{5}.kernelsize = [8 8];
 
 Layer{6}.type = 'ANN';
 Layer{6}.out  = [10 1];
-%}
+
+
+%{
 num_layer = 3;
 Layer = cell(num_layer,1);
 
@@ -38,7 +40,7 @@ Layer{2}.out  = [81 1];
 
 Layer{3}.type = 'ANN';
 Layer{3}.out  = [10 1];
-
+%}
 
 model = InitModel(Layer);
 

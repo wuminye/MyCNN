@@ -11,13 +11,15 @@ for i = num-1:-1: 2
     nex =  model.Layer{i+1}.type;
     res{i}.b = 0;
     res{i}.w = 0;
+       
+    
     if strcmp(cur,'Pooling') && strcmp(nex,'ANN')
         res{i}.b = model.Layer{i+1}.w'*res{i+1}.b;  %.*(data{i}.*(1-data{i}));Pooling层没有激活函数
         res{i}.b = reshape(res{i}.b,1,1,size(res{i}.b,1));% 转化成featureMap
         %res{i}.w = res{i}.b*data{i-1}'; Pooling层没有权值
     end
     
-    if strcmp(cur,'Pooling') && strcmp(nex,'Pooling')
+    if (strcmp(cur,'Pooling') || strcmp(cur,'Conv')) && strcmp(nex,'Pooling')
         k = model.Layer{i+1}.kernel;
         B = ones(size(k));
         %初始化误差featuremap
@@ -29,6 +31,16 @@ for i = num-1:-1: 2
         for j = 1 : size(res{i+1}.b,3)
             %有效误差矩阵
             res{i}.b(1:x,1:y,j) = kron(res{i+1}.b(:,:,j) , A);
+        end
+        %计算卷积层的核函数梯度
+        if strcmp(cur,'Conv')
+            %Initialize Conv Kernel
+            res{i}.w = zeros(size(model.Layer{i}.k));
+            
+            for j = 1 : size(res{i}.w,3)
+           %     res{i}.w(:,:,j) = conv2(data{i-1}(:,:,))
+            end
+            
         end
     end
     
