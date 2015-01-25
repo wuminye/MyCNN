@@ -20,7 +20,7 @@ for i = num-1:-1: 2
     res{i}.w = 0;
       
     if strcmp(cur,'Pooling') && strcmp(nex,'Conv')   
-       res{i}.t = zeros(size(model.Layer{i}.out));
+       res{i}.t = zeros(model.Layer{i}.out);
        
        for p = 1:size(res{i}.t,3)
            for q = 1:size(res{i+1}.t,3)
@@ -45,14 +45,14 @@ for i = num-1:-1: 2
         k = model.Layer{i+1}.kernel;
         B = ones(size(k));
         %初始化误差featuremap
-        res{i}.t = zeros(size(model.Layer{i-1}.out));
+        res{i}.t = zeros(model.Layer{i}.out);
         %计算有效误差矩阵的大小
         x = size(res{i+1}.b,1)*size(k,1);
         y = size(res{i+1}.b,2)*size(k,2);
         
         for j = 1 : size(res{i+1}.b,3)
             %有效误差矩阵
-            res{i}.t(1:x,1:y,j) = kron(res{i+1}.b(:,:,j) , A);
+            res{i}.t(1:x,1:y,j) = kron(res{i+1}.b(:,:,j) , B);
         end
         
         %计算卷积层的核函数梯度
