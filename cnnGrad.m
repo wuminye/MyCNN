@@ -16,7 +16,21 @@ for i = num-1:-1: 2
     res{i}.b = 0;
     res{i}.t = 0;
     res{i}.w = 0;
+      
+    if strcmp(cur,'Pooling') && strcmp(nex,'Conv')   
+       res{i}.t = zeros(size(model.Layer{i}.out));
        
+       for p = 1:size(res{i}.t,3)
+           for q = 1:size(res{i+1}.t,3)
+               if model.Layer{i+1}.connector(q,p)~=1
+                   continue;
+               end
+               res{i}.t(:,:,p) = res{i}.t(:,:,p) + ...
+                        conv2(res{i+1}.t(:,:,q),model.Layer{i+1}.w(:,:,p,q),'full');
+           end
+       end 
+       
+    end
     
     if strcmp(cur,'Pooling') && strcmp(nex,'ANN')
         res{i}.t = model.Layer{i+1}.w'*res{i+1}.t;  %.*(data{i}.*(1-data{i}));Pooling层没有激活函数
@@ -53,7 +67,6 @@ for i = num-1:-1: 2
                tem =res{i}.t(:,:,q);
                res{i}.b(q) = sum(tem(:));
             end
-            
             
         else
              res{i}.b =  res{i}.t; % 非卷积层
