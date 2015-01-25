@@ -18,4 +18,4 @@ theta = SaveTheta(model);
 fprintf('Start training....\n');
 options = optimset('MaxIter', 50);
 [nn_params, cost] = fmincg(F, theta, options);
-save nn_params
+%save nn_params

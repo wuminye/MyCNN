@@ -24,6 +24,7 @@ for i = 1: n
     theta = tem;
 end
 
-
+disp(mean(err));
+disp(std(err));
 end
 

@@ -36,23 +36,24 @@ for i = num-1:-1: 2
     
     if strcmp(cur,'Pooling') && strcmp(nex,'ANN')
         res{i}.t = model.Layer{i+1}.w'*res{i+1}.t;  %.*(data{i}.*(1-data{i}));Pooling层没有激活函数
-        res{i}.b = res{i}.t;
-        res{i}.b = reshape(res{i}.b,1,1,size(res{i}.b,1));% 转化成featureMap
+        res{i}.b = reshape(res{i}.t,1,1,[]);% 转化成featureMap
+        res{i}.t = res{i}.b;
         %res{i}.w = res{i}.b*data{i-1}'; Pooling层没有权值
     end
     
     if (strcmp(cur,'Pooling') || strcmp(cur,'Conv')) && strcmp(nex,'Pooling')
         k = model.Layer{i+1}.kernel;
-        B = ones(size(k));
+        B = ones(k.x,k.y);
         %初始化误差featuremap
         res{i}.t = zeros(model.Layer{i}.out);
         %计算有效误差矩阵的大小
-        x = size(res{i+1}.b,1)*size(k,1);
-        y = size(res{i+1}.b,2)*size(k,2);
+        x = size(res{i+1}.b,1)*k.x;
+        y = size(res{i+1}.b,2)*k.y;
         
         for j = 1 : size(res{i+1}.b,3)
             %有效误差矩阵
-            res{i}.t(1:x,1:y,j) = kron(res{i+1}.b(:,:,j) , B);
+            res{i}.t(1:x,1:y,j) = kron(res{i+1}.b(:,:,j) , B)./(k.x*k.y);
+            %res{i}.t(1:x,1:y,j) = kron(res{i+1}.b(:,:,j) , B);
         end
         
         %计算卷积层的核函数梯度
