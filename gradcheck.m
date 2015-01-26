@@ -6,9 +6,9 @@ function err = gradcheck( theta,data,y,model,lambda,eps)
 n = size(grad,1);
 err = zeros(n,1);
 for i = 1: n
-    if mod(i,1000)==0
-       % disp(i);
-        %disp([ min(err) max(err)  ]);
+    if mod(i,500)==0
+        disp(i);
+        disp([ min(err) max(err)  ]);
         %disp(err(i-1));
     end
     tem = theta;
@@ -19,6 +19,7 @@ for i = 1: n
 
     err(i)= abs((J1-J2)/(2*eps)-grad(i));
     if err(i)>=eps 
+        fprintf('[%i] err: %e ',i,err(i));
         disp(err(i));
     end;
     theta = tem;
