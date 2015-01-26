@@ -58,6 +58,10 @@ for i = num-1:-1: 2
         
         %计算卷积层的核函数梯度
         if strcmp(cur,'Conv')
+            
+            %修正卷积层的误差，要乘以导数。
+            res{i}.t = res{i}.t.*(data{i}.*(1-data{i}));
+            
             %Initialize Conv Kernel
             res{i}.w = zeros(size(model.Layer{i}.w));
             res{i}.b = zeros(size(model.Layer{i}.b));

@@ -59,9 +59,9 @@ t{top} =[zeros(size(yy,1),1) t{top}];
 D = cell(size(Layer,1)-1,1);
 grad = [];
 for i = top-1:-1:1
-   D{i} = (a{i}*t{i+1}(:,2:end))' + lambda*(tTheta{i})./m;
-   D{i}(:,1) =   D{i}(:,1) - lambda*(tTheta{i}(:,1))./m;
-   %D{i} = (a{i}*t{i+1}(:,2:end))' ;
+   %D{i} = (a{i}*t{i+1}(:,2:end))' + lambda*(tTheta{i})./m;
+   %D{i}(:,1) =   D{i}(:,1) - lambda*(tTheta{i}(:,1))./m;
+   D{i} = (a{i}*t{i+1}(:,2:end))' ;
    grad = [D{i}(:);grad];
 end
 %D1 = (Xt'*t2(:,2:end))' + lambda*(Theta1);

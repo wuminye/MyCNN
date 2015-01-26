@@ -23,10 +23,10 @@ for i = 2 : num
     
     if strcmp(cur,'ANN')
          n = length(t.b(:));
-         model.Layer{i}.b = reshape(theta(pos:pos+n-1),size(t.b,1),size(t.b,2),size(t.b,3));
+         model.Layer{i}.b = reshape(theta(pos:pos+n-1),size(t.b));
          pos=pos+n;
          n = length(t.w(:));
-         model.Layer{i}.w = reshape(theta(pos:pos+n-1),size(t.w,1),size(t.w,2),size(t.w,3));
+         model.Layer{i}.w = reshape(theta(pos:pos+n-1),size(t.w));
          pos=pos+n;
         
     end

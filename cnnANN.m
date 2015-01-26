@@ -12,5 +12,6 @@ tem =  input(1,1,:);
 y = w * tem(:) + b;
 
 y = ActiveFunction(y);
+y = reshape(y,1,1,[]);
 end
 

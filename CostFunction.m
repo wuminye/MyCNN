@@ -1,6 +1,6 @@
 function [ J, grad ] = CostFunction( theta , input , y, model ,lambda)
 
-num_data = size(input,3);
+num_data = size(input,4);
 model = LoadTheta(theta,model);
 J = 0;
 res = cell(num_data,1);
@@ -8,10 +8,12 @@ T   = cell(num_data,1);
 
 %计算每个样本的带价值和修正梯度
 for i = 1 : num_data
-   res{i} = cnnCalcnet(model,input(:,:,i));
-   yy = zeros(size(res{i}{length(res{i})},1),1);
+   res{i} = cnnCalcnet(model,input(:,:,:,i));
+   output = res{i}{length(res{i})}(:);
+   yy = zeros(size(output,1),1);
    yy(y(i)) = 1;
-   J = J + (-yy'*log(res{i}{length(res{i})})-(1-yy')*log(1-res{i}{length(res{i})}) ); 
+   
+   J = J + (-yy'*log(output)-(1-yy')*log(1-output) ); 
    T{i} = cnnGrad( model, res{i} , yy ,num_data);
    if mod(i,4000)==0
       fprintf('.');
@@ -32,7 +34,7 @@ for i = 2 : num_data
        end
     end
 end
-fprintf('\n');
+%fprintf('\n');
 %计算正则项梯度偏差
 for j = 1: length(model.Layer)
    if strcmp(model.Layer{j}.type,'ANN') || strcmp(model.Layer{j}.type,'Conv')
@@ -46,6 +48,6 @@ for i = 1 : length(fs)
         grad = [grad;fs{i}.b(:);fs{i}.w(:);];
     end
 end
-fprintf('epoch over.\n');
+%fprintf('epoch over.\n');
 end
 
