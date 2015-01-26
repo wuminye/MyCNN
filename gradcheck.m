@@ -19,7 +19,7 @@ for i = 1: n
 
     err(i)= abs((J1-J2)/(2*eps)-grad(i));
     if err(i)>=eps 
-        %disp(err(i));
+        disp(err(i));
     end;
     theta = tem;
 end

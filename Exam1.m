@@ -16,6 +16,6 @@ F=@(p)CostFunction( p, images , labels(1:num_train), model ,0.01);
 FF = @(p)checkcf(p,squeeze(images)',labels(1:num_train),0.01,[784 81 10]');
 theta = SaveTheta(model);
 fprintf('Start training....\n');
-options = optimset('MaxIter', 50);
-[nn_params, cost] = fmincg(F, theta, options);
+
+err = gradcheck( theta ,images,labels(1:num_train),model,0.01,1e-6);
 %save nn_params
