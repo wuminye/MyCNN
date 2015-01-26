@@ -7,7 +7,7 @@ res = cell(num_data,1);
 T   = cell(num_data,1);
 
 %计算每个样本的带价值和修正梯度
-for i = 1 : num_data
+parfor i = 1 : num_data
    res{i} = cnnCalcnet(model,input(:,:,:,i));
    output = res{i}{length(res{i})}(:);
    yy = zeros(size(output,1),1);
