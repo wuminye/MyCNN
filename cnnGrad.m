@@ -96,7 +96,7 @@ for i = num-1:-1: 2
         x = size(res{i+1}.t,1)*k.x;
         y = size(res{i+1}.t,2)*k.y;
         
-        for j = 1 : size(res{i+1}.b,3)
+        for j = 1 : size(res{i+1}.t,3)
             %ÓÐÐ§Îó²î¾ØÕó
             res{i}.t(1:x,1:y,j) = kron(res{i+1}.t(:,:,j) , B)./(k.x*k.y);
             %res{i}.t(1:x,1:y,j) = kron(res{i+1}.b(:,:,j) , B);
