@@ -7,16 +7,20 @@ res = cell(num_data,1);
 T   = cell(num_data,1);
 
 %计算每个样本的带价值和修正梯度
+cor = 0;
 for i = 1 : num_data
    res{i} = cnnCalcnet(model,input(:,:,:,i));
    output = res{i}{length(res{i})}(:);
    yy = zeros(size(output,1),1);
    yy(y(i)) = 1;
-   
+   [q,ar] = max(output);
+   if ar == y(i)
+       cor = cor + 1;
+   end
    J = J + (-yy'*log(output)-(1-yy')*log(1-output) ); 
    T{i} = cnnGrad( model, res{i} , yy ,num_data);
    if mod(i,4000)==0
-      fprintf('.');
+      %fprintf('.');
     end
 end;
 J = J / num_data;
@@ -34,7 +38,7 @@ for i = 2 : num_data
        end
     end
 end
-%fprintf('\n');
+%fprintf('%.5f%% \n',cor/num_data*100);
 %计算正则项梯度偏差
 for j = 1: length(model.Layer)
    if strcmp(model.Layer{j}.type,'ANN') || strcmp(model.Layer{j}.type,'Conv')
