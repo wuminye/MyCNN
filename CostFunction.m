@@ -8,7 +8,7 @@ T   = cell(num_data,1);
 
 %计算每个样本的带价值和修正梯度
 cor = 0;
-for i = 1 : num_data
+parfor i = 1 : num_data
    res{i} = cnnCalcnet(model,input(:,:,:,i));
    output = res{i}{length(res{i})}(:);
    yy = zeros(size(output,1),1);
@@ -38,7 +38,7 @@ for i = 2 : num_data
        end
     end
 end
-%fprintf('%.5f%% \n',cor/num_data*100);
+fprintf('%.5f%% \n',cor/num_data*100);
 %计算正则项梯度偏差
 for j = 1: length(model.Layer)
    if strcmp(model.Layer{j}.type,'ANN') || strcmp(model.Layer{j}.type,'Conv')
