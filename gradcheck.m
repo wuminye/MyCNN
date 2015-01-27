@@ -18,10 +18,10 @@ for i = 1: n
     [J2, grad2]=CostFunction(theta,data,y,model,lambda);
 
     err(i)= abs((J1-J2)/(2*eps)-grad(i));
-    if err(i)>=eps 
-        fprintf('[%i] err: %e ',i,err(i));
-        disp(err(i));
-    end;
+    %if err(i)>=eps 
+        fprintf('[%i] err: %e  \t%e\t%e\n',i,err(i),(J1-J2)/(2*eps),grad(i));
+        %disp(err(i));
+    %end;
     theta = tem;
 end
 

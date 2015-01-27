@@ -76,7 +76,7 @@ for i = num-1:-1: 2
                res{i}.t(:,:,p) = res{i}.t(:,:,p) + ...
                         conv2(res{i+1}.t(:,:,q),model.Layer{i+1}.w(:,:,p,q),'full');
            end
-       end 
+        end 
        
     end
     
@@ -93,12 +93,12 @@ for i = num-1:-1: 2
         %初始化误差featuremap
         res{i}.t = zeros(model.Layer{i}.out);
         %计算有效误差矩阵的大小
-        x = size(res{i+1}.b,1)*k.x;
-        y = size(res{i+1}.b,2)*k.y;
+        x = size(res{i+1}.t,1)*k.x;
+        y = size(res{i+1}.t,2)*k.y;
         
         for j = 1 : size(res{i+1}.b,3)
             %有效误差矩阵
-            res{i}.t(1:x,1:y,j) = kron(res{i+1}.b(:,:,j) , B)./(k.x*k.y);
+            res{i}.t(1:x,1:y,j) = kron(res{i+1}.t(:,:,j) , B)./(k.x*k.y);
             %res{i}.t(1:x,1:y,j) = kron(res{i+1}.b(:,:,j) , B);
         end
         
