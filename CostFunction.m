@@ -3,14 +3,14 @@ function [ J, grad ] = CostFunction( theta , input , y, model ,lambda)
 num_data = size(input,4);
 model = LoadTheta(theta,model);
 J = 0;
-res = cell(num_data,1);
+
 T   = cell(num_data,1);
 
 %计算每个样本的带价值和修正梯度
 cor = 0;
-parfor i = 1 : num_data
-   res{i} = cnnCalcnet(model,input(:,:,:,i));
-   output = res{i}{length(res{i})}(:);
+for i = 1 : num_data
+   res = cnnCalcnet(model,input(:,:,:,i));
+   output = res{length(res)}(:);
    yy = zeros(size(output,1),1);
    yy(y(i)) = 1;
    [q,ar] = max(output);
@@ -18,7 +18,7 @@ parfor i = 1 : num_data
        cor = cor + 1;
    end
    J = J + (-yy'*log(output)-(1-yy')*log(1-output) ); 
-   T{i} = cnnGrad( model, res{i} , yy ,num_data);
+   T{i} = cnnGrad( model, res , yy ,num_data);
    if mod(i,4000)==0
       %fprintf('.');
     end
