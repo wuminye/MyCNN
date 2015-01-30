@@ -2,7 +2,7 @@ function [ model ] = GetModel(input)
 %GETMODEL Summary of this function goes here
 %   Detailed explanation goes here
 
-num_layer = 7;
+num_layer = 8;
 
 Layer = cell(num_layer,1);
 
@@ -27,8 +27,11 @@ Layer{5}.mapnum  =   24;
 Layer{6}.type = 'Reshape';
 Layer{6}.kernelsize = [1 1 36*24];
 
-Layer{7}.type = 'SoftMax';
-Layer{7}.out  = [10 1];
+Layer{7}.type = 'ANN';
+Layer{7}.out = [36 1];
+
+Layer{8}.type = 'SoftMax';
+Layer{8}.out  = [10 1];
 
 
 %{

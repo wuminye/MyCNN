@@ -39,7 +39,7 @@ for i = 1 : num_layer
    
    if strcmp(cur,'ANN')
       pp = max(Layer{i-1}.out(:));
-      p = max(Layer{i}.out(:))
+      p = max(Layer{i}.out(:));
       r = sqrt(6)/(pp + p);
       Layer{i}.w = rand(p,pp)*2*r - r ;
       Layer{i}.b = rand(p,1)*2*r - r;
