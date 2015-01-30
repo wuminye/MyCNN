@@ -30,7 +30,11 @@ for i = 2 : num
          pos=pos+n;
         
     end
-    
+     if strcmp(cur,'SoftMax')
+         n = length(t.w(:));
+         model.Layer{i}.w = reshape(theta(pos:pos+n-1),size(t.w));
+         pos=pos+n;   
+     end
 end;
 
 end

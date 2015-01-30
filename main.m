@@ -1,5 +1,5 @@
 
-num_train = 500;
+num_train = 5;
 
 imageDim = 28;
 images = loadMNISTImages('train-images.idx3-ubyte');

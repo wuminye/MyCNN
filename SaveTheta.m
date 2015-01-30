@@ -15,6 +15,10 @@ for i = 2 : num
        theta = [theta ; t.b(:)];
        theta = [theta ; t.w(:)];
    end
+   
+    if strcmp(cur,'SoftMax')
+       theta = [theta ; t.w(:)];
+    end
 end
 end
 
