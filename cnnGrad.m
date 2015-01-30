@@ -105,7 +105,7 @@ for i = num-1:-1: 2
         res{i}.t = res{i}.t.*(data{i}.*(1-data{i}));
         res{i}.b = res{i}.t;
         res{i}.t = reshape(res{i}.t,1,1,[]); % 可要可不要？？
-        res{i}.w = res{i}.b*reshape(data{i-1}, [] ,1)';
+        res{i}.w = res{i}.b(:)*reshape(data{i-1}, [] ,1)';
         res{i}.b = res{i}.t;
     end
 %============================================================================    
