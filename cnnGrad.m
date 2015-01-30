@@ -8,17 +8,20 @@ res = cell(num,1);
 te1 = data{num}(1,1,:);
 te2 = data{num-1}(1,1,:);
 te1 = te1(:);te2 = te2(:);
-%{
+if strcmp(model.Layer{num}.type,'ANN')
 %---------logic regression --------
-res{num}.t = (te1(:) - y)./m;
+res{num}.t = reshape((te1(:) - y)./m,1,1,[]);
 res{num}.b = res{num}.t;
 res{num}.w = (te1(:) - y)*te2(:)'./m;
 %----------------------------------
-%}
+else
 %---------SoftMax regression-------
-res{num}.t = (te1 - y)./m;
+res{num}.t = reshape((te1 - y)./m,1,1,[]);
 res{num}.w = (te1 - y)*te2'./m;
+
 %----------------------------------
+end
+
 for i = num-1:-1: 2
     t = model.Layer{i};
     cur = t.type;
@@ -55,7 +58,7 @@ for i = num-1:-1: 2
         
     end
     
-    if strcmp(cur,'Conv') && strcmp(nex,'ANN')
+    if strcmp(cur,'Conv') && ( strcmp(nex,'ANN') || strcmp(nex,'SoftMax'))
         te = reshape(data{i}(1,1,:), [] ,1);
         res{i}.t = model.Layer{i+1}.w'*reshape(res{i+1}.t,[],1).*(te.*(1-te));
         res{i}.t = reshape(res{i}.t,1,1,[]);
@@ -88,7 +91,7 @@ for i = num-1:-1: 2
        
     end
     
-    if strcmp(cur,'Pooling') && strcmp(nex,'ANN')
+    if strcmp(cur,'Pooling') && (strcmp(nex,'ANN') || strcmp(nex,'SoftMax'))
         res{i}.t = model.Layer{i+1}.w'*reshape(res{i+1}.t,[],1);  %.*(data{i}.*(1-data{i}));Pooling层没有激活函数
         res{i}.b = reshape(res{i}.t,1,1,[]);% 转化成featureMap
         res{i}.t = res{i}.b;
