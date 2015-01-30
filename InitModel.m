@@ -11,6 +11,10 @@ for i = 1 : num_layer
        Layer{i}.out = size(input);
    end
    %}
+   if strcmp(cur,'Reshape')
+        Layer{i}.out =  Layer{i}.kernelsize;
+   end
+   
    if strcmp(cur,'SoftMax')
       r = sqrt(6)/(Layer{i-1}.out(1) + Layer{i}.out(1));
       p = max(Layer{i-1}.out(3));

@@ -2,38 +2,33 @@ function [ model ] = GetModel(input)
 %GETMODEL Summary of this function goes here
 %   Detailed explanation goes here
 
-num_layer = 8;
+num_layer = 7;
 
 Layer = cell(num_layer,1);
 
 Layer{1}.type = 'Input';
-Layer{1}.out = [input];
-
+Layer{1}.out = input;
 
 Layer{2}.type = 'Conv';
-Layer{2}.kernelsize = [5 5];
-Layer{2}.mapnum  =   4;
+Layer{2}.kernelsize = [3 3];
+Layer{2}.mapnum  =   6;
 
-Layer{3}.type = 'Pooling';
-Layer{3}.kernelsize = [2 2];
+Layer{3}.type = 'Conv';
+Layer{3}.kernelsize = [3 3];
+Layer{3}.mapnum  =   16;
 
-Layer{4}.type = 'Conv';
-Layer{4}.kernelsize = [5 5];
-Layer{4}.mapnum  =   8;
+Layer{4}.type = 'Pooling';
+Layer{4}.kernelsize = [3 3];
 
-Layer{5}.type = 'Pooling';
-Layer{5}.kernelsize = [2 2];
+Layer{5}.type = 'Conv';
+Layer{5}.kernelsize = [3 3];
+Layer{5}.mapnum  =   24;
 
-Layer{6}.type = 'Conv';
-Layer{6}.kernelsize = [3 3];
-Layer{6}.mapnum  =   16;
+Layer{6}.type = 'Reshape';
+Layer{6}.kernelsize = [1 1 36*24];
 
-Layer{7}.type = 'Conv';
-Layer{7}.kernelsize = [2 2];
-Layer{7}.mapnum  =   32;
-
-Layer{8}.type = 'SoftMax';
-Layer{8}.out  = [10 1];
+Layer{7}.type = 'SoftMax';
+Layer{7}.out  = [10 1];
 
 
 %{

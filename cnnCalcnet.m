@@ -5,6 +5,9 @@ function [ res ] = cnnCalcnet( model ,data )
  res{1} = data;
  for i  = 2 : length(model.Layer)
      cur = model.Layer{i}.type;
+     if strcmp(cur,'Reshape')
+         res{i} = cnnReshape(res{i-1},model.Layer{i}.kernelsize); 
+     end
      
      if strcmp(cur,'SoftMax')
         res{i} = cnnSoftMax(res{i-1},model.Layer{i}.w);
