@@ -16,9 +16,9 @@ for i = 1 : num_layer
    end
    
    if strcmp(cur,'SoftMax')
-      r = sqrt(6)/(Layer{i-1}.out(1) + Layer{i}.out(1));
-      p = max(Layer{i-1}.out(3));
-      Layer{i}.w = rand(Layer{i}.out(1),p(1))*2*r - r ;
+      r = sqrt(6)/(max(Layer{i-1}.out(:)) + Layer{i}.out(1));
+      p = max(Layer{i-1}.out(:));
+      Layer{i}.w = rand(Layer{i}.out(1),p)*2*r - r ;
    end
    
    if strcmp(cur,'Conv')
@@ -38,10 +38,11 @@ for i = 1 : num_layer
    end
    
    if strcmp(cur,'ANN')
-      r = sqrt(6)/(Layer{i-1}.out(1) + Layer{i}.out(1));
-      p = max(Layer{i-1}.out);
-      Layer{i}.w = rand(Layer{i}.out(1),p(1))*2*r - r ;
-      Layer{i}.b = rand(Layer{i}.out)*2*r - r;
+      pp = max(Layer{i-1}.out(:));
+      p = max(Layer{i}.out(:))
+      r = sqrt(6)/(pp + p);
+      Layer{i}.w = rand(p,pp)*2*r - r ;
+      Layer{i}.b = rand(p,1)*2*r - r;
    end
 end
 
