@@ -17,7 +17,12 @@ for i = 1 : num_data
    if ar == y(i)
        cor = cor + 1;
    end
-   J = J + (-yy'*log(output)-(1-yy')*log(1-output) ); 
+%============代价函数计算==============
+   %J = J + (-yy'*log(output)-(1-yy')*log(1-output) ); 
+   
+   %使用SoftMax的代价函数
+   J = J + -yy'*log(output);
+%====================================
    T{i} = cnnGrad( model, res , yy ,num_data);
    if mod(i,4000)==0
       %fprintf('.');

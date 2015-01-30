@@ -11,6 +11,12 @@ for i = 1 : num_layer
        Layer{i}.out = size(input);
    end
    %}
+   if strcmp(cur,'SoftMax')
+      r = sqrt(6)/(Layer{i-1}.out(1) + Layer{i}.out(1));
+      p = max(Layer{i-1}.out(3));
+      Layer{i}.w = rand(Layer{i}.out(1),p(1))*2*r - r ;
+   end
+   
    if strcmp(cur,'Conv')
        Layer{i}.out = [Layer{i-1}.out(1)- Layer{i}.kernelsize(1)+1,...
                        Layer{i-1}.out(2)- Layer{i}.kernelsize(2)+1, Layer{i}.mapnum];

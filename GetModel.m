@@ -32,7 +32,7 @@ Layer{7}.type = 'Conv';
 Layer{7}.kernelsize = [2 2];
 Layer{7}.mapnum  =   32;
 
-Layer{8}.type = 'ANN';
+Layer{8}.type = 'SoftMax';
 Layer{8}.out  = [10 1];
 
 

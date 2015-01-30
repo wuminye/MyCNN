@@ -1,4 +1,4 @@
-function [ y ] = cnnANN( input , w , b )
+function [ y ] = cnnANN( input , w, b )
 %CNNANN Summary of this function goes here
 %   Detailed explanation goes here
 

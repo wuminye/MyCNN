@@ -7,10 +7,18 @@ res = cell(num,1);
 %最后一层的误差值,要保证最后两层都是一维的
 te1 = data{num}(1,1,:);
 te2 = data{num-1}(1,1,:);
+te1 = te1(:);te2 = te2(:);
+%{
+%---------logic regression --------
 res{num}.t = (te1(:) - y)./m;
 res{num}.b = res{num}.t;
 res{num}.w = (te1(:) - y)*te2(:)'./m;
-
+%----------------------------------
+%}
+%---------SoftMax regression-------
+res{num}.t = (te1 - y)./m;
+res{num}.w = (te1 - y)*te2'./m;
+%----------------------------------
 for i = num-1:-1: 2
     t = model.Layer{i};
     cur = t.type;
