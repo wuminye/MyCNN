@@ -46,7 +46,7 @@ for i = 2 : num_data
        end
     end
 end
-fprintf('%.5f%% \n',cor/num_data*100);
+fprintf('\n%.5f%%  %e \n',cor/num_data*100,J);
 %计算正则项梯度偏差
 for j = 1: length(model.Layer)
    if strcmp(model.Layer{j}.type,'ANN') || strcmp(model.Layer{j}.type,'Conv') ...

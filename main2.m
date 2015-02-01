@@ -1,5 +1,5 @@
 tic;
-num_train = 10;
+num_train = 400;
 
 imageDim = 28;
 images = loadMNISTImages('train-images.idx3-ubyte');
@@ -17,7 +17,7 @@ model = GetModel([28 28 1]);
 
 fprintf('Start training....\n');
 step = 200;
-[ model ] = cnnTrainModel( model, images , labels(1:num_train) , step, 0.1 , 0.01 );
+[ model ] = cnnTrainModel( model, images , labels(1:num_train) , step, 0.4 , 0.01 );
 
 save model  model
 toc;
