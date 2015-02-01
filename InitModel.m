@@ -25,6 +25,7 @@ for i = 1 : num_layer
        Layer{i}.out = [Layer{i-1}.out(1)- Layer{i}.kernelsize(1)+1,...
                        Layer{i-1}.out(2)- Layer{i}.kernelsize(2)+1, Layer{i}.mapnum];
        r = sqrt(6)/(Layer{i}.kernelsize*Layer{i}.kernelsize' + 1);
+       %r = sqrt(6)/(Layer{i-1}.out(1)*Layer{i-1}.out(2) + 1);
        %featuremap多个卷积核 --- 4D
        Layer{i}.w = rand([ Layer{i}.kernelsize ,Layer{i-1}.out(3) ,Layer{i}.mapnum ])*2*r - r;
        Layer{i}.b = rand(Layer{i}.mapnum,1)*2*r - r ;   %实数偏置
