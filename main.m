@@ -9,11 +9,11 @@ labels = labels(1:num_train);
 
 
 model = GetModel([28 28 1]);
+model.lambda = 0.01;
 
 
+F=@(p)CostFunction( p, images, labels, model );
 
-F=@(p)CostFunction( p, images, labels, model ,0.01);
-FSGD=@(p)CostFunctionSGD( p, images, labels, model ,0.01);
 %FF = @(p)checkcf(p,squeeze(images)',labels(1:num_train),0.01,[784 81 10]');
 theta = SaveTheta(model);
 fprintf('Start training....\n');

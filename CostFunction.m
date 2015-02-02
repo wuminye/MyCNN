@@ -1,5 +1,5 @@
-function [ J, grad ] = CostFunction( theta , input , y, model ,lambda)
-
+function [ J, grad ] = CostFunction( theta , input , y, model )
+lambda = model.lambda;
 num_data = size(input,4);
 model = LoadTheta(theta,model);
 J = 0;

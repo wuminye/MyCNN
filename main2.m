@@ -8,13 +8,13 @@ labels = labels(1:num_train);
 
 %images = reshape(images,784,1,size(images,3));
 model = GetModel([28 28 1]);
-
+model.lambda = 0.01;
 
 
 
 fprintf('Start training....\n');
 step = 200;
-[ model ] = cnnTrainModel( model, images , labels , step, 0.01 );
+[ model ] = cnnTrainModel( model, images , labels , step );
 
 save model2  model
 

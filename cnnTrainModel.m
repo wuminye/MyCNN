@@ -1,4 +1,4 @@
-function [ outmodel ] = cnnTrainModel( model, X , y , step, lambda )
+function [ outmodel ] = cnnTrainModel( model, X , y , step )
 %CNNTRAINMODEL Summary of this function goes here
 %   Detailed explanation goes here
 theta = SaveTheta(model);
@@ -14,7 +14,7 @@ for i = 1: step
   fprintf('< %d > Num_train: %d  Iter_num: %d \n',i,pn,itn);
   [ tX,ty ] = cnnTDAllocate(model,X,y ,pn );
   
-  F=@(p)CostFunction( p, tX, ty, model ,lambda);
+  F=@(p)CostFunction( p, tX, ty, model );
   options = optimset('MaxIter', itn);
   [nn_params, cost] = fmincg(F, theta, options);
   

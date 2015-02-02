@@ -1,11 +1,11 @@
 function [ J , cor ] = cnnAnalyze( model,num )
 %CNNANALYZE Summary of this function goes here
 %   Detailed explanation goes here
-if ~exist('num', 'var')
-    num = 60000;
-end
-
 [images , labels] = LoadData('MNIST');
+
+if ~exist('num', 'var')
+    num = size(images,4);
+end
 
 %随机选取num个样本分析
 index = randperm(size(images,4),num); 
@@ -14,7 +14,7 @@ images = images(:,:,:,index);
 labels = labels(index);
 
 
-lambda = 0.01;
+lambda = model.lambda;
 
 J = 0;
 %计算每个样本的带价值和修正梯度
