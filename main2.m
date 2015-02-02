@@ -19,7 +19,8 @@ fprintf('Start training....\n');
 step = 200;
 [ model ] = cnnTrainModel( model, images , labels , step, 0.01 );
 
-save model  model
+save model2  model
 
-[a,b] = cnnAnalyze( model );
+[ J , cor ] = cnnAnalyze( model);
+fprintf('\n[ Correction: %.5f%% | Cost: %e ]\n',cor,J);
 toc;

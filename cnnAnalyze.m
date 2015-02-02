@@ -1,19 +1,24 @@
 function [ J , cor ] = cnnAnalyze( model,num )
-tic;
 %CNNANALYZE Summary of this function goes here
 %   Detailed explanation goes here
 if ~exist('num', 'var')
     num = 60000;
 end
+
+
+
 imageDim = 28;
 images = loadMNISTImages('train-images.idx3-ubyte');
 images = reshape(images,imageDim,imageDim,1,[]);
-images = images(:,:,:,1:num);
-disp(size(images));
+
+%随机选取num个样本分析
+index = randperm(size(images,4),num); 
+
+images = images(:,:,:,index);
+%disp(size(images));
 labels = loadMNISTLabels('train-labels.idx1-ubyte');
 labels(labels==0) =10;
-labels = labels(1:num);
-
+labels = labels(index);
 lambda = 0.01;
 
 
@@ -42,6 +47,6 @@ J = J / num;
 J = J + lambda*cnnCalcReg(model)/(2*num);
 
 cor = cor/num*100;
-toc;
+
 end
 
