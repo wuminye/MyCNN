@@ -7,10 +7,10 @@ num_train = size(X,4);
 
 for i = 1: step
   if mod(i,floor(step/7))==0
-      [ J , cor ] = cnnAnalyze( model,3000);
+      [ J , cor ] = cnnAnalyze( model,model.traintestnum);
       fprintf('\n*[ Correction: %.5f%% | Cost: %e ]*\n\n',cor,J);
   end
-  [pn,itn] = getpn(i,step,num_train);
+  [pn,itn] = getpn(model,i,step,num_train);
   fprintf('< %d > Num_train: %d  Iter_num: %d \n',i,pn,itn);
   [ tX,ty ] = cnnTDAllocate(model,X,y ,pn );
   
@@ -22,7 +22,7 @@ for i = 1: step
   model = LoadTheta(nn_params,model);
   save model2  model
   
-  [ J , cor ] = cnnAnalyze( model,200);
+  [ J , cor ] = cnnAnalyze( model,model.testnum);
   fprintf('[ Correction: %.5f%% | Cost: %e ]\n',cor,J);
   fprintf('------ Cost: %e | %.5f%% -----\n\n',cost(end),cost(1)/cost(end)*100);
   
@@ -33,9 +33,9 @@ outmodel = model;
 
 end
 
-function [pn ,itn] = getpn(i,step,num)
-   tick = 15 ;%刻度    
-   itn  = 30 ;%最大迭代次数
+function [pn ,itn] = getpn(model,i,step,num)
+   tick = model.tick ;%刻度    
+   itn  = model.itn ;%最大迭代次数
    
    tem = floor(step/tick);
      
@@ -54,7 +54,7 @@ function [pn ,itn] = getpn(i,step,num)
    %计算样本数量
    y = (10/step)^2*( (cur*tem)^2 + ((cur-1)*tem)^2 )/2;
    y = y * 0.42;
-   pn = ceil(y/100*num);
+   pn = ceil(y/100*num*0.998 + 0.002*num);
    
    %计算迭代次数
    itn = ceil(0.8*itn*(1 - cur/tick)+0.2*itn);

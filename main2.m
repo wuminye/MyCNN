@@ -1,19 +1,21 @@
 tic;
-num_train = 10000;
+num_train = 5000;
 
-[images , labels] = LoadData('MNIST');
+model = GetModel('faces');
+
+[images , labels] = LoadData(model.dataname);
 
 images = images(:,:,:,1:num_train);
 labels = labels(1:num_train);
 
 %images = reshape(images,784,1,size(images,3));
-model = GetModel([28 28 1]);
-model.lambda = 0.01;
+
+
 
 
 
 fprintf('Start training....\n');
-step = 200;
+step = 50;
 [ model ] = cnnTrainModel( model, images , labels , step );
 
 save model2  model

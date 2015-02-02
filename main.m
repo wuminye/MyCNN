@@ -1,15 +1,13 @@
 tic;
 num_train = 20;
 
+model = GetModel('faces');
 
-[images , labels] = LoadData('MNIST');
+
+[images , labels] = LoadData(model.dataname);
 
 images = images(:,:,:,1:num_train);
 labels = labels(1:num_train);
-
-
-model = GetModel([28 28 1]);
-model.lambda = 0.01;
 
 
 F=@(p)CostFunction( p, images, labels, model );

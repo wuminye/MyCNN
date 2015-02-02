@@ -1,7 +1,7 @@
 function [ J , cor ] = cnnAnalyze( model,num )
 %CNNANALYZE Summary of this function goes here
 %   Detailed explanation goes here
-[images , labels] = LoadData('MNIST');
+[images , labels] = LoadData(model.dataname);
 
 if ~exist('num', 'var')
     num = size(images,4);
