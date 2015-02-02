@@ -6,7 +6,7 @@ index = randperm(num_train,pn);
 tX = X(:,:,:,index);
 ty = y(index);
 
-[ J , cor ] = cnnAnalyze( model,500);
+[ J , cor ] = cnnAnalyze( model,200);
  fprintf('[ Correction: %.5f%% | Cost: %e ]\n',cor,J);
 end
 

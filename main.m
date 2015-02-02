@@ -1,15 +1,13 @@
 tic;
-num_train = 500;
+num_train = 20;
 
-imageDim = 28;
-images = loadMNISTImages('train-images.idx3-ubyte');
-images = reshape(images,imageDim,imageDim,1,[]);
+
+[images , labels] = LoadData('MNIST');
+
 images = images(:,:,:,1:num_train);
-disp(size(images));
-labels = loadMNISTLabels('train-labels.idx1-ubyte');
-labels(labels==0) =10;
 labels = labels(1:num_train);
-%images = reshape(images,784,1,size(images,3));
+
+
 model = GetModel([28 28 1]);
 
 

@@ -5,23 +5,16 @@ if ~exist('num', 'var')
     num = 60000;
 end
 
-
-
-imageDim = 28;
-images = loadMNISTImages('train-images.idx3-ubyte');
-images = reshape(images,imageDim,imageDim,1,[]);
+[images , labels] = LoadData('MNIST');
 
 %随机选取num个样本分析
 index = randperm(size(images,4),num); 
 
 images = images(:,:,:,index);
-%disp(size(images));
-labels = loadMNISTLabels('train-labels.idx1-ubyte');
-labels(labels==0) =10;
 labels = labels(index);
+
+
 lambda = 0.01;
-
-
 
 J = 0;
 %计算每个样本的带价值和修正梯度
