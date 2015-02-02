@@ -40,7 +40,7 @@ end
 if strcmp(name,'faces')
    input = [20 20 1];
    
-   num_layer = 7;
+   num_layer = 6;
    Layer = cell(num_layer,1);
    
    Layer{1}.type = 'Input';
@@ -54,24 +54,20 @@ if strcmp(name,'faces')
    Layer{3}.kernelsize = [2 2];
    
    Layer{4}.type = 'Conv';
-   Layer{4}.kernelsize = [3 3];
-   Layer{4}.mapnum  =   24;
+   Layer{4}.kernelsize = [9 9];
+   Layer{4}.mapnum  =   32;
    
-   Layer{5}.type = 'Conv';
-   Layer{5}.kernelsize = [7 7];
-   Layer{5}.mapnum  =   68;
+   Layer{5}.type = 'ANN';
+   Layer{5}.out = [32 1];
    
-   Layer{6}.type = 'ANN';
-   Layer{6}.out = [32 1];
-   
-   Layer{7}.type = 'SoftMax';
-   Layer{7}.out  = [2 1];
+   Layer{6}.type = 'SoftMax';
+   Layer{6}.out  = [2 1];
    
 end
    
 model = InitModel(Layer);
 
-model.lambda = 0.05;
+model.lambda = 0.002;
 model.dataname = name;  %数据库名称
 model.testnum = 200 ; %每批训练前后 测试样本的数量
 model.traintestnum = 3000 ; %每多批训练前后 测试样本的数量
