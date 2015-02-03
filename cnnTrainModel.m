@@ -8,23 +8,28 @@ num_train = size(X,4);
 for i = 1: step
   if mod(i,floor(model.interval))==0
       [ J , cor ] = cnnAnalyze( model,model.traintestnum);
-      fprintf('\n*[ Correction: %.5f%% | Cost: %e ]*\n\n',cor,J);
+      model=cnnLog(model,'\n*[ Correction: %.5f%% | Cost: %e ]*\n\n',cor,J);
   end
   [pn,itn] = getpn(model,i,step,num_train);
-  fprintf('< %d > Num_train: %d  Iter_num: %d \n',i,pn,itn);
-  [ tX,ty ] = cnnTDAllocate(model,X,y ,pn );
+  model=cnnLog(model,'< %d > Num_train: %d  Iter_num: %d \n',i,pn,itn);
+  
+  [ J , cor ] = cnnAnalyze( model,model.testnum);
+  model=cnnLog(model,'[ Correction: %.5f%% | Cost: %e ]\n',cor,J);
+  
+  [ tX,ty,model] = cnnTDAllocate(model,X,y ,pn );
+  
   
   F=@(p)CostFunction( p, tX, ty, model );
   options = optimset('MaxIter', itn);
-  [nn_params, cost] = fmincg(F, theta, options);
-  
+  [nn_params, cost , model] = fmincg(model,F, theta, options);
+  model=cnnLog(model,'%fmincg result\n',cost);
   %保存结果至model2.mat
   model = LoadTheta(nn_params,model);
   save model2  model
   
   [ J , cor ] = cnnAnalyze( model,model.testnum);
-  fprintf('[ Correction: %.5f%% | Cost: %e ]\n',cor,J);
-  fprintf('------ Cost: %e | %.5f%% -----\n\n',cost(end),cost(1)/cost(end)*100);
+  model=cnnLog(model,'[ Correction: %.5f%% | Cost: %e ]\n',cor,J);
+  model=cnnLog(model,'------ Cost: %e | %.5f%% -----\n\n',cost(end),cost(1)/cost(end)*100);
   
   theta = nn_params;
 end
@@ -58,4 +63,8 @@ function [pn ,itn] = getpn(model,i,step,num)
    
    %计算迭代次数
    itn = ceil((1-model.itreservation)*itn*(1 - cur/tick)+model.itreservation*itn);
+   if step == 1
+      pn = 1;
+      itn=1;
+   end
 end

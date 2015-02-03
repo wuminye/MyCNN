@@ -1,4 +1,4 @@
-function [ J, grad ] = CostFunction( theta , input , y, model )
+function [ J, grad ,cor ] = CostFunction( theta , input , y, model )
 lambda = model.lambda;
 num_data = size(input,4);
 model = LoadTheta(theta,model);
@@ -48,7 +48,8 @@ for i = 2 : num_data
        end
     end
 end
-fprintf('%.5f%%  %e \r',cor/num_data*100,J);
+cor = cor/num_data*100;
+fprintf('%.5f%%  %e \r',cor,J);
 %计算正则项梯度偏差
 for j = 1: length(model.Layer)
    if strcmp(model.Layer{j}.type,'ANN') || strcmp(model.Layer{j}.type,'Conv') ...

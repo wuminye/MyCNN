@@ -82,5 +82,7 @@ model.interval = model.step/7;  %每隔多少批一次大检查
 model.reservation = 0.002;    %每批最少保留的样本比例
 model.rate = 0.42;    %每批样本数量缩放比例
 model.itreservation = 0.2;    %每批最少保留的迭代次数比例
+
+model.logn = 0 ; %初始化日志计数
 end
 

@@ -14,12 +14,12 @@ labels = labels(1:num_train);
 
 
 
-fprintf('Start training....\n');
+model=cnnLog(model,'Start training II... %s\n',datestr(now));
 step = model.step;
 [ model ] = cnnTrainModel( model, images , labels , step );
 
 save model2  model
 
 [ J , cor ] = cnnAnalyze( model);
-fprintf('\n[ Correction: %.5f%% | Cost: %e ]\n',cor,J);
+model=cnnLog(model,'$[ Correction: %.5f%% | Cost: %e ]$\n',cor,J);
 toc;
