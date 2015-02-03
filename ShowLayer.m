@@ -20,6 +20,8 @@ for i = 1 : num
     end
 
 end
+subplot(2,2,cnt);
+ imshow(data(:,:));
  axis image off
 [a,b]=max(res{num});
 disp((res{num}(:))');

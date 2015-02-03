@@ -1,7 +1,7 @@
 tic;
-num_train = 5000;
 
 model = GetModel('faces');
+num_train = model.num_train;
 
 [images , labels] = LoadData(model.dataname);
 
@@ -15,7 +15,7 @@ labels = labels(1:num_train);
 
 
 fprintf('Start training....\n');
-step = 50;
+step = model.step;
 [ model ] = cnnTrainModel( model, images , labels , step );
 
 save model2  model

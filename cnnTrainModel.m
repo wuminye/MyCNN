@@ -6,7 +6,7 @@ num_train = size(X,4);
 %pn = ceil(num_train./150); % 随机取的样本个数
 
 for i = 1: step
-  if mod(i,floor(step/7))==0
+  if mod(i,floor(model.interval))==0
       [ J , cor ] = cnnAnalyze( model,model.traintestnum);
       fprintf('\n*[ Correction: %.5f%% | Cost: %e ]*\n\n',cor,J);
   end
@@ -53,9 +53,9 @@ function [pn ,itn] = getpn(model,i,step,num)
    
    %计算样本数量
    y = (10/step)^2*( (cur*tem)^2 + ((cur-1)*tem)^2 )/2;
-   y = y * 0.42;
-   pn = ceil(y/100*num*0.998 + 0.002*num);
+   y = y * model.rate;
+   pn = ceil(y/100*num*(1-model.reservation) + model.reservation*num);
    
    %计算迭代次数
-   itn = ceil(0.8*itn*(1 - cur/tick)+0.2*itn);
+   itn = ceil((1-model.itreservation)*itn*(1 - cur/tick)+model.itreservation*itn);
 end

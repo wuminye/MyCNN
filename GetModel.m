@@ -69,9 +69,18 @@ model = InitModel(Layer);
 
 model.lambda = 0.002;
 model.dataname = name;  %数据库名称
+
+model.num_train = 3000; %用于训练的样本数量
+model.MaxIter = 350; % 批量梯度法的迭代次数
+
 model.testnum = 200 ; %每批训练前后 测试样本的数量
 model.traintestnum = 3000 ; %每多批训练前后 测试样本的数量
 model.tick = 15 ; %训练时的刻度
 model.itn =  30 ; %每批训练最大迭代次数
+model.step = 50 ; %训练的批次数
+model.interval = model.step/7;  %每隔多少批一次大检查
+model.reservation = 0.002;    %每批最少保留的样本比例
+model.rate = 0.42;    %每批样本数量缩放比例
+model.itreservation = 0.2;    %每批最少保留的迭代次数比例
 end
 
