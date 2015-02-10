@@ -2,9 +2,10 @@ function [  ] = Showimg(data,dir)
 %SHOWIMG Summary of this function goes here
 %   Detailed explanation goes here
 close all;
-scale = 10;
+scale = 20;
 
 F = imread([dir data.filename]);
+subplot(2,2,1);
 imshow(F);
 hold on;
 rst = data.data;
@@ -39,9 +40,11 @@ for k = 1 : length(face)
 end
 
 Z = CalcGuass(data.data{1}, scale);
-figure;
-imshow(double(imresize(F,1/scale)).*Z/255);
-figure;
+
+subplot(2,2,2);
+%imshow(double(imresize(F,1/scale)).*Z/255);
+imshow(Z);
+subplot(2,2,3);
 mesh(Z);
 end
 
