@@ -9,13 +9,14 @@ T   = cell(num_data,1);
 %计算每个样本的带价值和修正梯度
 cor = 0;
 
-parfor i = 1 : num_data
+for i = 1 : num_data
    res = cnnCalcnet(model,input(:,:,:,i));
    output = res{length(res)}(:);
-   yy = zeros(size(output,1),1);
-   yy(y(i)) = 1;
-   [q,ar] = max(output);
-   if ar == y(i)
+   %yy = zeros(size(output,1),1);
+   %yy(y(i)) = 1;
+   yy = y(i,:)';
+  
+   if onehot2num(output) == onehot2num(y)
        cor = cor + 1;
    end
 %============代价函数计算==============
@@ -70,3 +71,7 @@ end
 %fprintf('epoch over.\n');
 end
 
+
+function r = onehot2num(y)
+[a,r] = max(y);
+end

@@ -16,6 +16,7 @@ for i = 1: step
   [ J , cor ] = cnnAnalyze( model,model.testnum);
   model=cnnLog(model,'[ Correction: %.5f%% | Cost: %e ]\n',cor,J);
   
+  %分配每批训练样本
   [ tX,ty,model] = cnnTDAllocate(model,X,y ,pn );
   
   

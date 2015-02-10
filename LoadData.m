@@ -8,7 +8,10 @@ if strcmp(name,'MNIST')
    X = images;
    labels = loadMNISTLabels('train-labels.idx1-ubyte');
    labels(labels==0) =10;
-   y =  labels;
+   y = zeros(size(labels,1),10);
+    for p = 1:size(y,1)
+       y(p,labels(p)) = 1;
+   end
 end
 
 if strcmp(name,'faces')
@@ -25,7 +28,23 @@ if strcmp(name,'faces')
    %randpermutation
    index = randperm(size(X,4));
    X = X(:,:,:,index);
-   y = y(index);
+   yy = zeros(2,size(y,1));
+   for p = 1:size(y,1)
+       yy(y(p),p) = 1;
+   end
+   y= yy';
+end
+
+if strcmp(name,'face2')
+   load('./FaceData/Database');
+   addpath('./FaceData/');
+   dir = './FaceData/pic/';
+   N = Database.cnt ;
+   
+   X = zeros(320,240,1,N);
+   
+    
+    
 end
 
 end

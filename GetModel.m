@@ -70,7 +70,7 @@ model = InitModel(Layer);
 model.lambda = 0.002;
 model.dataname = name;  %数据库名称
 
-model.num_train = 3000; %用于训练的样本数量
+model.num_train = 1000; %用于训练的样本数量
 model.MaxIter = 350; % 批量梯度法的迭代次数
 
 model.testnum = 200 ; %每批训练前后 测试样本的数量

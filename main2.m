@@ -6,7 +6,7 @@ num_train = model.num_train;
 [images , labels] = LoadData(model.dataname);
 
 images = images(:,:,:,1:num_train);
-labels = labels(1:num_train);
+labels = labels(1:num_train,:);
 
 %images = reshape(images,784,1,size(images,3));
 

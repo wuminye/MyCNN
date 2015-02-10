@@ -11,7 +11,7 @@ end
 index = randperm(size(images,4),num); 
 
 images = images(:,:,:,index);
-labels = labels(index);
+labels = labels(index,:);
 
 
 lambda = model.lambda;
@@ -19,15 +19,15 @@ lambda = model.lambda;
 J = 0;
 %计算每个样本的带价值和修正梯度
 cor = 0;
-parfor i = 1 : num
+for i = 1 : num
    res = cnnCalcnet(model,images(:,:,:,i));
    output = res{length(res)}(:);
-   yy = zeros(size(output,1),1);
-   yy(labels(i)) = 1;
-   [q,ar] = max(output);
-   if ar == labels(i)
+   %yy = zeros(size(output,1),1);
+   %yy(labels(i)) = 1;
+   yy = labels(i,:)';
+  if onehot2num(output) == onehot2num(yy)
        cor = cor + 1;
-   end
+  end
 %============代价函数计算==============
    %J = J + (-yy'*log(output)-(1-yy')*log(1-output) ); 
    
@@ -43,3 +43,6 @@ cor = cor/num*100;
 
 end
 
+function r = onehot2num(y)
+[a,r] = max(y);
+end
