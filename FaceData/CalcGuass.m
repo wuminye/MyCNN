@@ -13,9 +13,9 @@ for i = 1 : length(data.face)
    th = (t.height*data.img_height+t.width*data.img_width)/(800*scale);
    
    zz = exp(-( (xx-data.img_width*t.center.x/scale/100).^2 + (yy-t.center.y*data.img_height/scale/100).^2 )/(2*th.^2));
-   zz(zz<0.1) = 0;
-   zz=zz*1.4;
-   zz(zz>0.95)=1;
+   zz(zz<0.5) = 0;
+ %  zz=zz*1.4;
+   zz(zz>0.6)=1;
    Z = Z + zz;
 end
 

@@ -9,7 +9,7 @@ T   = cell(num_data,1);
 %计算每个样本的带价值和修正梯度
 cor = 0;
 
-for i = 1 : num_data
+parfor i = 1 : num_data
    res = cnnCalcnet(model,input(:,:,:,i));
    output = res{length(res)}(:);
    %yy = zeros(size(output,1),1);
@@ -20,10 +20,10 @@ for i = 1 : num_data
        cor = cor + 1;
    end
 %============代价函数计算==============
-   %J = J + (-yy'*log(output)-(1-yy')*log(1-output) ); 
+   J = J + (-yy'*log(output)-(1-yy')*log(1-output) ); 
    
    %使用SoftMax的代价函数
-   J = J + -yy'*log(output);
+   %J = J + -yy'*log(output);
 %====================================
    T{i} = cnnGrad( model, res , yy ,num_data);
    if mod(i,4000)==0

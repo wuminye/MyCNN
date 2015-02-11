@@ -1,9 +1,9 @@
 
 
 
-model = GetModel('faces');
+model = GetModel('face2');
 
-num_train = 5;
+num_train = 2;
 
 [images , labels] = LoadData(model.dataname);
 

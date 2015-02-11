@@ -1,12 +1,10 @@
 tic;
 
-model = GetModel('faces');
-num_train = model.num_train;
+model = GetModel('face2');
 
 [images , labels] = LoadData(model.dataname);
 
-images = images(:,:,:,1:num_train);
-labels = labels(1:num_train,:);
+
 
 %images = reshape(images,784,1,size(images,3));
 

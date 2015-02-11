@@ -1,7 +1,7 @@
-function [ J , cor ] = cnnAnalyze( model,num )
+function [ J , cor ] = cnnAnalyze( model,num,images,labels )
 %CNNANALYZE Summary of this function goes here
 %   Detailed explanation goes here
-[images , labels] = LoadData(model.dataname);
+
 
 if ~exist('num', 'var')
     num = size(images,4);
@@ -19,7 +19,7 @@ lambda = model.lambda;
 J = 0;
 %计算每个样本的带价值和修正梯度
 cor = 0;
-for i = 1 : num
+parfor i = 1 : num
    res = cnnCalcnet(model,images(:,:,:,i));
    output = res{length(res)}(:);
    %yy = zeros(size(output,1),1);
@@ -29,10 +29,10 @@ for i = 1 : num
        cor = cor + 1;
   end
 %============代价函数计算==============
-   %J = J + (-yy'*log(output)-(1-yy')*log(1-output) ); 
+   J = J + (-yy'*log(output)-(1-yy')*log(1-output) ); 
    
    %使用SoftMax的代价函数
-   J = J + -yy'*log(output);
+   %J = J + -yy'*log(output);
 %====================================
 
 end;

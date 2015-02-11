@@ -41,10 +41,18 @@ if strcmp(name,'face2')
    dir = './FaceData/pic/';
    N = Database.cnt ;
    
-   X = zeros(320,240,1,N);
+   %N = 50;
    
-    
-    
+   X = zeros(240,320,1,N);
+   y = zeros(N,16*12);
+   fprintf('begin read IMG...\n');
+   for i = 1 : N
+    fprintf('\r%4d\r',i);
+    data = Database.data{i};
+    F = imread([dir data.filename]);
+    X(:,:,1,i) = double(imresize(F,0.5))/255;
+    y(i,:) = reshape(CalcGuass(data.data{1}, 40),1,16*12);
+   end
 end
 
 end

@@ -49,3 +49,5 @@ train-labels.idx1-ubyte
 face.png
 *.gif
 *.JPG
+*.fig
+*.eps
