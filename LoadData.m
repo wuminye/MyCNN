@@ -43,15 +43,17 @@ if strcmp(name,'face2')
    
    %N = 50;
    
-   X = zeros(240,320,1,N);
-   y = zeros(N,16*12);
+   X = zeros(120,160,1,N);
+   y = zeros(N,16);
    fprintf('begin read IMG...\n');
    for i = 1 : N
-    fprintf('\r%4d\r',i);
+    fprintf('\r%5d\r',i);
     data = Database.data{i};
     F = imread([dir data.filename]);
-    X(:,:,1,i) = double(imresize(F,0.5))/255;
-    y(i,:) = reshape(CalcGuass(data.data{1}, 40),1,16*12);
+    X(:,:,1,i) = double(imresize(F,0.25))/255;
+    [ta,tb,tc] = CalcGuass(data.data{1}, 40);
+    y(i,:) = zeros(1,size(ta,2));
+    y(i,tc)  = 1;
    end
 end
 

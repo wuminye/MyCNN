@@ -67,56 +67,44 @@ end
 
 
 if strcmp(name,'face2')
-   input = [240 320 1];
+   input = [120 160 1];
     
-   num_layer = 12;
+   num_layer = 8;
    Layer = cell(num_layer,1);
 
    Layer{1}.type = 'Input';
    Layer{1}.out = input;
 
    Layer{2}.type = 'Conv';
-   Layer{2}.kernelsize = [7 7]; %  234 314
-   Layer{2}.mapnum  =   3;
+   Layer{2}.kernelsize = [3 3]; %  118 158
+   Layer{2}.mapnum  =   4;
     
    Layer{3}.type = 'Pooling';
-   Layer{3}.kernelsize = [2 2]; %  117  157
+   Layer{3}.kernelsize = [2 2]; %  59  79
 
    Layer{4}.type = 'Conv';
-   Layer{4}.kernelsize = [8 8];  % 110  150
-   Layer{4}.mapnum  =   24;
+   Layer{4}.kernelsize = [10 10];  % 50  70
+   Layer{4}.mapnum  =   8;
    
    Layer{5}.type = 'Pooling';
-   Layer{5}.kernelsize = [2 2]; %  55  75
+   Layer{5}.kernelsize = [5 5]; %  10  14
    
    Layer{6}.type = 'Conv';
-   Layer{6}.kernelsize = [16 16]; %  40  60
-   Layer{6}.mapnum  =   32;
+   Layer{6}.kernelsize = [10 14]; %  1  1
+   Layer{6}.mapnum  =   22;
    
-   Layer{7}.type = 'Pooling';
-   Layer{7}.kernelsize = [4 4]; %  10  15
-   
-   Layer{8}.type = 'Conv';
-   Layer{8}.kernelsize = [3 6]; %  8  10
-   Layer{8}.mapnum  =   70;
-   
-   Layer{9}.type = 'Pooling';
-   Layer{9}.kernelsize = [2 2]; % 4   5 
-   
-   Layer{10}.type = 'Conv';
-   Layer{10}.kernelsize = [4 5]; % 1  1
-   Layer{10}.mapnum  =   240;
+ 
 
-   Layer{11}.type = 'ANN';
-   Layer{11}.out = [210 1];
+   Layer{7}.type = 'ANN';
+   Layer{7}.out = [32 1];
 
-   Layer{12}.type = 'ANN';
-   Layer{12}.out = [192 1];
+   Layer{8}.type = 'SoftMax';
+   Layer{8}.out = [16 1];
 end
    
 model = InitModel(Layer);
 
-model.lambda = 0.0007;
+model.lambda = 0.001;
 model.dataname = name;  %数据库名称
 
 model.num_train = 2000; %用于训练的样本数量
@@ -125,7 +113,7 @@ model.MaxIter = 350; % 批量梯度法的迭代次数
 model.testnum = 100 ; %每批训练前后 测试样本的数量
 model.traintestnum = 500 ; %每多批训练前后 测试样本的数量
 model.tick = 15 ; %训练时的刻度
-model.itn =  25 ; %每批训练最大迭代次数
+model.itn =  27 ; %每批训练最大迭代次数
 model.step = 55 ; %训练的批次数
 model.interval = model.step/7;  %每隔多少批一次大检查
 model.reservation = 0.002;    %每批最少保留的样本比例

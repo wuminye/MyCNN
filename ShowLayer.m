@@ -33,7 +33,7 @@ subplot(3,4,cnt);
 cnt =cnt+1;
 
 subplot(3,4,cnt);
- imagesc(reshape(y,12,16),[0 1]);
+ imagesc(reshape(y,1,16),[0 1]);
  axis image off
 %[a,b]=max(res{num});
 %disp((res{num}(:))');
