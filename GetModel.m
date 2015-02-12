@@ -69,45 +69,59 @@ end
 if strcmp(name,'face2')
    input = [120 160 1];
     
-   num_layer = 8;
+   num_layer = 12;
    Layer = cell(num_layer,1);
 
    Layer{1}.type = 'Input';
    Layer{1}.out = input;
-
+   
    Layer{2}.type = 'Conv';
-   Layer{2}.kernelsize = [3 3]; %  118 158
-   Layer{2}.mapnum  =   4;
-    
+   Layer{2}.kernelsize = [5 5]; %  116 156
+   Layer{2}.mapnum  =  3;
+   
    Layer{3}.type = 'Pooling';
-   Layer{3}.kernelsize = [2 2]; %  59  79
-
+   Layer{3}.kernelsize = [2 2]; %  58 78
+   
    Layer{4}.type = 'Conv';
-   Layer{4}.kernelsize = [10 10];  % 50  70
-   Layer{4}.mapnum  =   8;
-   
+   Layer{4}.kernelsize = [15 15]; %  44 64
+   Layer{4}.mapnum  =   5;
+      
    Layer{5}.type = 'Pooling';
-   Layer{5}.kernelsize = [5 5]; %  10  14
-   
+   Layer{5}.kernelsize = [2 2]; %  22 32
+
    Layer{6}.type = 'Conv';
-   Layer{6}.kernelsize = [10 14]; %  1  1
-   Layer{6}.mapnum  =   22;
+   Layer{6}.kernelsize = [13 13];  % 10  20
+   Layer{6}.mapnum  =   8;
    
- 
+   Layer{7}.type = 'Conv';
+   Layer{7}.kernelsize = [3 3];  % 8  18
+   Layer{7}.mapnum  =   12;
+   
+   Layer{8}.type = 'Pooling';
+   Layer{8}.kernelsize = [2 2]; %  4  9
+   
+   Layer{9}.type = 'Conv';
+   Layer{9}.kernelsize = [3 3]; %  2  7
+   Layer{9}.mapnum  =   20;
+      
+   Layer{10}.type = 'Conv';
+   Layer{10}.kernelsize = [2 7]; %  1 4
+   Layer{10}.mapnum  =   40;
+   
 
-   Layer{7}.type = 'ANN';
-   Layer{7}.out = [32 1];
+   Layer{11}.type = 'ANN';
+   Layer{11}.out = [45 1];
 
-   Layer{8}.type = 'SoftMax';
-   Layer{8}.out = [16 1];
+   Layer{12}.type = 'SoftMax';
+   Layer{12}.out = [17 1];
 end
    
 model = InitModel(Layer);
 
-model.lambda = 0.001;
+model.lambda = 0.0005;
 model.dataname = name;  %数据库名称
 
-model.num_train = 2000; %用于训练的样本数量
+model.num_train = 8000; %用于训练的样本数量
 model.MaxIter = 350; % 批量梯度法的迭代次数
 
 model.testnum = 100 ; %每批训练前后 测试样本的数量

@@ -22,7 +22,7 @@ for i = 1 : num
 end
 
 tem = reshape(res{num},[],size(res{num},3));
-[h,im]=displayData(tem,16); 
+[h,im]=displayData(tem,17); 
 subplot(3,4,cnt);
 imagesc(im ,[0 1]);
 cnt =cnt+1;
@@ -33,8 +33,8 @@ subplot(3,4,cnt);
 cnt =cnt+1;
 
 subplot(3,4,cnt);
- imagesc(reshape(y,1,16),[0 1]);
- axis image off
+imagesc(reshape(y,[],size(y,2)),[0 1]);
+axis image off
 %[a,b]=max(res{num});
 %disp((res{num}(:))');
 %fprintf('ANS: %i\n',b);

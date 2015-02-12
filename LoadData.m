@@ -36,25 +36,17 @@ if strcmp(name,'faces')
 end
 
 if strcmp(name,'face2')
-   load('./FaceData/Database');
+    
    addpath('./FaceData/');
-   dir = './FaceData/pic/';
-   N = Database.cnt ;
    
-   %N = 50;
-   
-   X = zeros(120,160,1,N);
-   y = zeros(N,16);
-   fprintf('begin read IMG...\n');
-   for i = 1 : N
-    fprintf('\r%5d\r',i);
-    data = Database.data{i};
-    F = imread([dir data.filename]);
-    X(:,:,1,i) = double(imresize(F,0.25))/255;
-    [ta,tb,tc] = CalcGuass(data.data{1}, 40);
-    y(i,:) = zeros(1,size(ta,2));
-    y(i,tc)  = 1;
-   end
+   [ X,yx,yy] = LoadFaces();
+    index = randperm(size(X,4));
+    X = X(:,:,:,index);
+    yx = yx(index,:);
+    yy = yy(index,:);
+    
+    y =yy;
+   fprintf('Loaded %d.\n',size(X,4));
 end
 
 end
