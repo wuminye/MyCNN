@@ -6,7 +6,7 @@ api = facepp(API_KEY, API_SECRET);
 
 
 %获取文件列表
-filedir = 'C:\Users\minye\Desktop\matlab\UFLDL\cnn\MyCNN\FaceData\pic\';
+filedir = 'C:\Users\minye\Desktop\matlab\UFLDL\cnn\MyCNN\FaceData\lfw\';
 Files = dir(fullfile(filedir,'*'));
 Files = Files(3:end);
 LengthFiles = length(Files);
@@ -14,7 +14,8 @@ fprintf('<< %d  files totally>>\n',LengthFiles);
 %创建保存区域
 %Database.data = cell(LengthFiles,1);
 %Database.cnt = 0;
-load Database
+%Database.i = 0;
+load Database2
 fprintf('Database.cnt = %d  \n',Database.cnt);
 be = Database.i+1;
 for i = be:6625
@@ -30,10 +31,10 @@ for i = be:6625
     lm = cell(length(face),1);
     im = imread(strcat(filedir,Files(i).name));
 
-    imshow(im);
-    hold on;
+    %imshow(im);
+  %  hold on;
     
-    if length(face) == 0
+    if length(face) == 0 || length(face)>=2
         continue;
     end
     
@@ -44,6 +45,7 @@ for i = be:6625
         center = face_i.position.center;
         w = face_i.position.width / 100 * img_width;
         h = face_i.position.height / 100 * img_height;
+        %{
         rectangle('Position', ...
             [center.x * img_width / 100 -  w/2, center.y * img_height / 100 - h/2, w, h], ...
             'Curvature', 0.4, 'LineWidth',2, 'EdgeColor', 'blue');
@@ -65,18 +67,19 @@ for i = be:6625
         
         pt = ps.nose;
         scatter(pt.x * img_width / 100, pt.y * img_height / 100, 'g.');
+        %}
     end
     
-    pause(0.3);
+   % pause(0.05);
     Database.cnt = Database.cnt +1;
     Database.data{Database.cnt}.filename = Files(i).name;
     Database.data{Database.cnt}.data = rst;
     Database.data{Database.cnt}.landmark = lm;
-    if mod(Database.cnt,30)==0
+    if mod(Database.cnt,70)==0
        Database.i = i;
-       save Database Database 
+       save Database2 Database 
        fprintf('Saved.\n');
     end
 end
 fprintf('%d/%d Done...\n',cnt,LengthFiles);
-save Database Database
+save Database2 Database
