@@ -2,8 +2,8 @@ function [ X,y ] = LoadNoFaces( )
 %LOADNOFACES Summary of this function goes here
 %   Detailed explanation goes here
 
-  %dir = './FaceData/nofaces/';
- dir1 = './nofaces/';
+%dir1 = './FaceData/nofaces/';
+dir1 = './nofaces/';
 
 Files = dir(fullfile(dir1,'*'));
 Files = Files(3:end);
@@ -20,7 +20,7 @@ fprintf('begin read IMG...\n');
 for i = 1 : LengthFiles
     F = rgb2gray(imread(strcat(dir1,Files(i).name)));
     F = double(F)/255;
-    F = imresize(F,1600/max(size(F)));
+    F = imresize(F,1500/max(size(F)));
     scale = 1;
     for j = 1 : 3
        nF = imresize(F,scale);
@@ -40,6 +40,8 @@ for i = 1 : LengthFiles
     end
     
 end
+
+fprintf('Loaded %d nofaces.\n',size(X,4));
 
 end
 

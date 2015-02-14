@@ -1,15 +1,18 @@
 function [ X,y] = LoadFaces()
 % 加载人脸样本
 %   Detailed explanation goes here
-  load('Database');
-  %dir = './FaceData/pic/';
- dir = './pic/';
+ % load('Database');
+ dir = './FaceData/pic/';
+ %dir = './pic/';
+ dir2 = './FaceData/lfw/';
+ %dir2 = './lfw/';
+ 
  
   rx = 36; %目标高度
   ry = 32; %目标宽度
   
   N = Database.cnt ;
-  N = 100 ;
+  %N = 100 ;
   
   X = zeros(rx,ry,1,0);
   y = zeros(0,2);
@@ -32,7 +35,7 @@ function [ X,y] = LoadFaces()
  
       h = w*rx/ry;
 
-      F = imread([dir data.filename]);
+      F = rgb2gray(imread([dir data.filename]));
       F = double(F)/255;
 
       nF = F(ceil(py-h/2:py+h/2),ceil(px - w/2:px + w/2));
@@ -44,6 +47,41 @@ function [ X,y] = LoadFaces()
       imshow(nF);
   end
   
+  fprintf('begin read LFW...\n');
+  load('Database2');
+  
+  N = Database.cnt ;
+  for i = 1 : N
+      data = Database.data{i};
+      
+      fprintf('\r%5d\r',i);
+      
+      [px,py,h,w] = getpoint(data.data{1});
+      
+    
+      
+      w = w*1.15;
+       
+      h = w*rx/ry;
+
+      F = rgb2gray(imread([dir2 data.filename]));
+      F = double(F)/255;
+      
+      %防止越界
+      if py-h/2<1 || py+h/2>size(F,1) || px - w/2<1 || px + w/2>size(F,2)
+          continue;
+      end
+
+      nF = F(ceil(py-h/2:py+h/2),ceil(px - w/2:px + w/2));
+      nF = imresize(nF,[rx,ry]);
+      X(:,:,1,end+1) = nF;
+      y(end+1,1) = 1;
+      X(:,:,1,end+1) = medfilt2(nF);
+      y(end+1,1) = 1;
+      imshow(nF);
+  end
+  
+  fprintf('Loaded %d faces.\n',size(X,4));
   
 end
 
