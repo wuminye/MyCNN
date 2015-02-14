@@ -52,3 +52,4 @@ face.png
 *.fig
 *.eps
 ShowOnTrain.m.bak
+*.png
