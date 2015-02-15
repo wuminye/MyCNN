@@ -7,7 +7,7 @@ res = cnnCalcnet(model,data);
 toc;
 num = length(model.Layer);
 cnt=1;
-colormap(gray);
+%colormap(gray);
 for i = 1 : num
     cur = model.Layer{i}.type;
     if strcmp(cur,'Conv') || strcmp(cur,'Pooling') 

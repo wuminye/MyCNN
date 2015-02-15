@@ -7,6 +7,7 @@ while true
     for i = 1 : 20
       k = ceil(N*rand);
      ShowLayer( model, images(:,:,1,k) ,labels(k,:) );
+     drawnow;
      pause(5);
     end
 end

@@ -10,7 +10,7 @@ if ~exist('example_width', 'var') || isempty(example_width)
 end
 
 % Gray Image
-colormap(gray);
+%colormap(gray);
 
 % Compute rows, cols
 [m n] = size(X);
@@ -57,6 +57,6 @@ h = 0;
 % Do not show axis
 
 
-drawnow;
+%drawnow;
 
 end
