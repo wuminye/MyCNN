@@ -1,7 +1,7 @@
 function [ ] = ShowLayer( model, data ,y)
 %可视化网络的中间二维图像计算结果
 %data为featureMap的格式
-close all;
+%close all;
 tic;
 res = cnnCalcnet(model,data);
 toc;
@@ -22,9 +22,10 @@ for i = 1 : num
 end
 
 tem = reshape(res{num},[],size(res{num},3));
-[h,im]=displayData(tem,size(res{num},3)); 
+%[h,im]=displayData(tem,size(res{num},3)); 
 subplot(3,4,cnt);
-imagesc(im ,[0 1]);
+%imagesc(im ,[0 1]);
+bar(tem,0.4,'histc');
 cnt =cnt+1;
 
 subplot(3,4,cnt);

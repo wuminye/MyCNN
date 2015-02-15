@@ -1,5 +1,6 @@
 load model2;
-[images , labels] = LoadData(model.dataname);
+load picdata2;
+
 N = size(images,4);
 while true
     %load model2;
