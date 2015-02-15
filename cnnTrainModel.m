@@ -36,8 +36,8 @@ for i = 1: step
   [nn_params, cost , model ,corind] = fmincg(model,F, theta, options);
   
   %更新错误记录
-  %model.corind(ind(logical(corind))) = 1; 
-  %model.corind(ind(~logical(corind))) = 0; 
+  model.corind(ind(logical(corind))) = 1; 
+  model.corind(ind(~logical(corind))) = 0; 
     
   model=cnnLog(model,'%fmincg result\n',cost);
   %保存结果至model2.mat
