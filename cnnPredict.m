@@ -46,7 +46,7 @@ for j = 1:step
      res{i} = exp( model.Layer{i}.w*res{i-1});
      res{i} = res{i}./repmat(sum(res{i}),2,1);
      b = reshape(res{i}(1,:),size(res{endmark},1),[]);
-     b(b<=0.7) = 0;
+     b(b<=0.8) = 0;
      disp(sum(sum(b>0))); 
      figure;
      imshow(b);

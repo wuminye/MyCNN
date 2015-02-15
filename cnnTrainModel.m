@@ -10,6 +10,8 @@ num_train = model.num_train;
 X = images(:,:,:,1:num_train);
 y = labels(1:num_train,:);
 
+%对错表
+model.corind = zeros(num_train,1);
 
 for i = 1: step
   if mod(i,floor(model.interval))==0
@@ -23,14 +25,19 @@ for i = 1: step
   model=cnnLog(model,'[ Correction: %.5f%% | Cost: %e ]\n',cor,J);
   
   %分配每批训练样本
-  [ tX,ty,model] = cnnTDAllocate(model,X,y ,pn );
+  [ tX,ty,model,ind] = cnnTDAllocate(model,X,y ,pn );
   
   fprintf('faces:%d\n',sum(ty(:,1)==1));
   
   
   F=@(p)CostFunction( p, tX, ty, model );
   options = optimset('MaxIter', itn);
-  [nn_params, cost , model] = fmincg(model,F, theta, options);
+  [nn_params, cost , model ,corind] = fmincg(model,F, theta, options);
+  
+  %更新错误记录
+  model.corind(ind(logical(corind))) = 1; 
+  model.corind(ind(~logical(corind))) = 0; 
+    
   model=cnnLog(model,'%fmincg result\n',cost);
   %保存结果至model2.mat
   model = LoadTheta(nn_params,model);
