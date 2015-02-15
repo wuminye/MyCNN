@@ -11,24 +11,25 @@ X = images(:,:,:,1:num_train);
 y = labels(1:num_train,:);
 
 %对错表
-model.corind = zeros(num_train,1);
+model.corind = ones(num_train,1);
 
 for i = 1: step
   if mod(i,floor(model.interval))==0
-      [ J , cor ] = cnnAnalyze( model,model.traintestnum,images,labels);
+      [ J , cor,nul ,indf] = cnnAnalyze( model,model.traintestnum,images,labels);
       model=cnnLog(model,'\n*[ Correction: %.5f%% | Cost: %e ]*\n\n',cor,J);
   end
   [pn,itn] = getpn(model,i,step,num_train);
   model=cnnLog(model,'< %d > Num_train: %d  Iter_num: %d \n',i,pn,itn);
   
-  [ J , cor ] = cnnAnalyze( model,model.testnum,images,labels);
+  [ J , cor ,nul,indf] = cnnAnalyze( model,model.testnum,images,labels);
   model=cnnLog(model,'[ Correction: %.5f%% | Cost: %e ]\n',cor,J);
   
   %分配每批训练样本
   [ tX,ty,model,ind] = cnnTDAllocate(model,X,y ,pn );
   
   fprintf('faces:%d\n',sum(ty(:,1)==1));
-  
+  [ J , cor ,nul ,indf] = cnnAnalyze( model,size(tX,4),tX,ty);
+  fprintf('Correction for train: %.5f%% | Cost: %e \n',cor,J);
   
   F=@(p)CostFunction( p, tX, ty, model );
   options = optimset('MaxIter', itn);
@@ -47,9 +48,12 @@ for i = 1: step
   
   save model2  model
   
-  [ J , cor ] = cnnAnalyze( model,model.testnum,images,labels);
+  [ J , cor ,ind ,indf] = cnnAnalyze( model,model.testnum,X,y);
   model=cnnLog(model,'[ Correction: %.5f%% | Cost: %e ]\n',cor,J);
   model=cnnLog(model,'------ Cost: %e | %.5f%% -----\n\n',cost(end),cost(1)/cost(end)*100);
+  
+  model.corind(ind) = 1; 
+  model.corind(indf) = 0; 
   
   theta = nn_params;
 end

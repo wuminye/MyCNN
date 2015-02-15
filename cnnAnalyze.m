@@ -1,4 +1,4 @@
-function [ J , cor ] = cnnAnalyze( model,num,images,labels )
+function [ J , cor ,ind ,indf] = cnnAnalyze( model,num,images,labels )
 %CNNANALYZE Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -6,16 +6,18 @@ function [ J , cor ] = cnnAnalyze( model,num,images,labels )
 if ~exist('num', 'var')
     num = size(images,4);
 end
+tt = [1:size(images,4)]';
 
 %随机选取num个样本分析
 index = randperm(size(images,4),num); 
 
 images = images(:,:,:,index);
 labels = labels(index,:);
-
+tt = tt(index);
 
 lambda = model.lambda;
 
+ind = zeros(num,1);
 J = 0;
 %计算每个样本的带价值和修正梯度
 cor = 0;
@@ -27,6 +29,7 @@ parfor i = 1 : num
    yy = labels(i,:)';
   if onehot2num(output) == onehot2num(yy)
        cor = cor + 1;
+       ind(i)=1;
   end
 %============代价函数计算==============
    %J = J + (-yy'*log(output)-(1-yy')*log(1-output) ); 
@@ -39,6 +42,9 @@ end;
 J = J / num;
 J = J + lambda*cnnCalcReg(model)/(2*num);
 
+te=ind;
+ind = tt(logical(ind));
+indf = tt(~logical(te));
 cor = cor/num*100;
 
 end

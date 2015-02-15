@@ -23,11 +23,15 @@ yf = y(tf,:);
 
 %∑÷≈‰¥ÌŒÛ—˘±æ
 tnn = min(ceil(pn*0.4),size(Xt,4));
-index = randperm(size(Xp,4),tnn); 
+index = randperm(size(Xt,4),tnn); 
 tXt = Xt(:,:,:,index);
 tyt = yt(index,:);
 indt=indt(index);
 fprintf('errdata: %d.\n',tnn);
+
+
+[ J , cor ] = cnnAnalyze( model,size(tXt,4),tXt,tyt);
+fprintf('Correction for errdata: %.5f%% | Cost: %e \n',cor,J);
 
 pn = pn - tnn;
 factor = rand*0.8 + 0.2;
@@ -43,7 +47,7 @@ tXf = Xf(:,:,:,index);
 tyf = yf(index,:);
 indf=indf(index);
 
-tX = zeros(size(tXp)+[0 0 0 size(tXf,4)+size(tXt,4)]);
+tX = zeros([size(tXp,1) size(tXp,2) size(tXp,3) size(tXp,4)]+[0 0 0 size(tXf,4)+size(tXt,4)]);
 ty = zeros(size(tX,4),size(typ,2));
 ind = zeros(size(tX,4),1);
 
