@@ -13,7 +13,7 @@ for i = 1 : num
     if strcmp(cur,'Conv') || strcmp(cur,'Pooling') 
        tem = reshape(res{i},[],size(res{i},3));
        [h,im]=displayData(tem',size(res{i},2)); 
-       subplot(3,4,cnt);
+       subplot(3,3,cnt);
        imagesc(im ,[0 1]);
        %imshow(im);
        cnt =cnt+1;
@@ -23,17 +23,17 @@ end
 
 tem = reshape(res{num},[],size(res{num},3));
 %[h,im]=displayData(tem,size(res{num},3)); 
-subplot(3,4,cnt);
+subplot(3,3,cnt);
 %imagesc(im ,[0 1]);
 bar(tem,0.4,'histc');
 cnt =cnt+1;
 
-subplot(3,4,cnt);
+subplot(3,3,cnt);
  imagesc(data(:,:),[0 1]);
  
 cnt =cnt+1;
 
-subplot(3,4,cnt);
+subplot(3,3,cnt);
 imagesc(reshape(y,[],size(y,2)),[0 1]);
 axis image off
 %[a,b]=max(res{num});
