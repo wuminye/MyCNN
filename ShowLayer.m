@@ -22,7 +22,7 @@ for i = 1 : num
 end
 
 tem = reshape(res{num},[],size(res{num},3));
-[h,im]=displayData(tem,17); 
+[h,im]=displayData(tem,size(res{num},3)); 
 subplot(3,4,cnt);
 imagesc(im ,[0 1]);
 cnt =cnt+1;

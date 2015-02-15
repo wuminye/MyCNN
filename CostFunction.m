@@ -26,9 +26,9 @@ parfor i = 1 : num_data
    J = J + -yy'*log(output);
 %====================================
    T{i} = cnnGrad( model, res , yy ,num_data);
-   if mod(i,4000)==0
+ %  if mod(i,4000)==0
       %fprintf('.');
-   end
+  % end
  
 end;
 J = J / num_data;

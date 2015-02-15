@@ -29,10 +29,10 @@ parfor i = 1 : num
        cor = cor + 1;
   end
 %============代价函数计算==============
-   J = J + (-yy'*log(output)-(1-yy')*log(1-output) ); 
+   %J = J + (-yy'*log(output)-(1-yy')*log(1-output) ); 
    
    %使用SoftMax的代价函数
-   %J = J + -yy'*log(output);
+   J = J + -yy'*log(output);
 %====================================
 
 end;

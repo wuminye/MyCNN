@@ -5,7 +5,8 @@ model = GetModel('face2');
 
 num_train = 2;
 
-[images , labels] = LoadData(model.dataname);
+%[images , labels] = LoadData(model.dataname);
+load picdata
 
 images = images(:,:,:,1:num_train);
 labels = labels(1:num_train,:);

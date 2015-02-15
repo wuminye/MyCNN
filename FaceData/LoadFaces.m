@@ -1,7 +1,7 @@
 function [ X,y] = LoadFaces()
 % 加载人脸样本
 %   Detailed explanation goes here
- % load('Database');
+  load('Database');
  dir = './FaceData/pic/';
  %dir = './pic/';
  dir2 = './FaceData/lfw/';
@@ -35,7 +35,7 @@ function [ X,y] = LoadFaces()
  
       h = w*rx/ry;
 
-      F = rgb2gray(imread([dir data.filename]));
+      F = imread([dir data.filename]);
       F = double(F)/255;
 
       nF = F(ceil(py-h/2:py+h/2),ceil(px - w/2:px + w/2));
@@ -44,7 +44,7 @@ function [ X,y] = LoadFaces()
       y(end+1,1) = 1;
       X(:,:,1,end+1) = medfilt2(nF);
       y(end+1,1) = 1;
-      imshow(nF);
+      %imshow(nF);
   end
   
   fprintf('begin read LFW...\n');
@@ -78,7 +78,7 @@ function [ X,y] = LoadFaces()
       y(end+1,1) = 1;
       X(:,:,1,end+1) = medfilt2(nF);
       y(end+1,1) = 1;
-      imshow(nF);
+     % imshow(nF);
   end
   
   fprintf('Loaded %d faces.\n',size(X,4));

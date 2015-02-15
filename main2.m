@@ -2,8 +2,8 @@ tic;
 
 model = GetModel('face2');
 
-[images , labels] = LoadData(model.dataname);
-
+%[images , labels] = LoadData(model.dataname);
+load picdata
 
 
 %images = reshape(images,784,1,size(images,3));

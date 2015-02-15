@@ -18,10 +18,10 @@ fprintf('<< %d  files totally>>\n',LengthFiles);
 load Database2
 fprintf('Database.cnt = %d  \n',Database.cnt);
 be = Database.i+1;
-for i = be:6625
+for i = be:LengthFiles
     fprintf('\r[ %d ] processing\r',i);
     rst = detect_file(api,strcat(filedir,Files(i).name), 'all');
-    close all;
+    %close all;
     img_width = rst{1}.img_width;
     img_height = rst{1}.img_height;
     face = rst{1}.face;
@@ -31,8 +31,7 @@ for i = be:6625
     lm = cell(length(face),1);
     im = imread(strcat(filedir,Files(i).name));
 
-    %imshow(im);
-  %  hold on;
+    
     
     if length(face) == 0 || length(face)>=2
         continue;
@@ -45,7 +44,10 @@ for i = be:6625
         center = face_i.position.center;
         w = face_i.position.width / 100 * img_width;
         h = face_i.position.height / 100 * img_height;
-        %{
+        
+        imshow(im);
+    hold on;
+        
         rectangle('Position', ...
             [center.x * img_width / 100 -  w/2, center.y * img_height / 100 - h/2, w, h], ...
             'Curvature', 0.4, 'LineWidth',2, 'EdgeColor', 'blue');
@@ -67,19 +69,19 @@ for i = be:6625
         
         pt = ps.nose;
         scatter(pt.x * img_width / 100, pt.y * img_height / 100, 'g.');
-        %}
+        
     end
     
-   % pause(0.05);
+    pause(0.05);
     Database.cnt = Database.cnt +1;
     Database.data{Database.cnt}.filename = Files(i).name;
     Database.data{Database.cnt}.data = rst;
     Database.data{Database.cnt}.landmark = lm;
-    if mod(Database.cnt,70)==0
+    if mod(Database.cnt,170)==0
        Database.i = i;
        save Database2 Database 
        fprintf('Saved.\n');
     end
 end
-fprintf('%d/%d Done...\n',cnt,LengthFiles);
+fprintf('%d/%d Done...\n',Database.cnt,LengthFiles);
 save Database2 Database

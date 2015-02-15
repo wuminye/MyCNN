@@ -13,17 +13,19 @@ y = labels(1:num_train,:);
 
 for i = 1: step
   if mod(i,floor(model.interval))==0
-    %  [ J , cor ] = cnnAnalyze( model,model.traintestnum,images,labels);
-     % model=cnnLog(model,'\n*[ Correction: %.5f%% | Cost: %e ]*\n\n',cor,J);
+      [ J , cor ] = cnnAnalyze( model,model.traintestnum,images,labels);
+      model=cnnLog(model,'\n*[ Correction: %.5f%% | Cost: %e ]*\n\n',cor,J);
   end
   [pn,itn] = getpn(model,i,step,num_train);
   model=cnnLog(model,'< %d > Num_train: %d  Iter_num: %d \n',i,pn,itn);
   
-  %[ J , cor ] = cnnAnalyze( model,model.testnum,images,labels);
-  %model=cnnLog(model,'[ Correction: %.5f%% | Cost: %e ]\n',cor,J);
+  [ J , cor ] = cnnAnalyze( model,model.testnum,images,labels);
+  model=cnnLog(model,'[ Correction: %.5f%% | Cost: %e ]\n',cor,J);
   
   %分配每批训练样本
   [ tX,ty,model] = cnnTDAllocate(model,X,y ,pn );
+  
+  fprintf('faces:%d\n',sum(ty(:,1)==1));
   
   
   F=@(p)CostFunction( p, tX, ty, model );
@@ -38,8 +40,8 @@ for i = 1: step
   
   save model2  model
   
- % [ J , cor ] = cnnAnalyze( model,model.testnum,images,labels);
-  %model=cnnLog(model,'[ Correction: %.5f%% | Cost: %e ]\n',cor,J);
+  [ J , cor ] = cnnAnalyze( model,model.testnum,images,labels);
+  model=cnnLog(model,'[ Correction: %.5f%% | Cost: %e ]\n',cor,J);
   model=cnnLog(model,'------ Cost: %e | %.5f%% -----\n\n',cost(end),cost(1)/cost(end)*100);
   
   theta = nn_params;
