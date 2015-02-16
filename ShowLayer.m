@@ -1,4 +1,4 @@
-function [ ] = ShowLayer( model, data ,y)
+function [ res ] = ShowLayer( model, data ,y)
 %可视化网络的中间二维图像计算结果
 %data为featureMap的格式
 %close all;

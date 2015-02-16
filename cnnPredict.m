@@ -1,4 +1,4 @@
-function [ ress ] = cnnPredict( model,data)
+function [ ress ,X ] = cnnPredict( model,data)
 %CNNPREDICT Summary of this function goes here
 %   Detailed explanation goes here
 if size(data,1)==1   %Œƒº˛ ‰»Î
@@ -11,7 +11,7 @@ end
 scale = 1;
 step = 4;
 ress =cell(step,1);
-
+X = zeros(36,32,1,0);
 for j = 1:step
      res = cell(length(model.Layer),1);
      res{1} = imresize(data,scale);
@@ -46,13 +46,82 @@ for j = 1:step
      res{i} = exp( model.Layer{i}.w*res{i-1});
      res{i} = res{i}./repmat(sum(res{i}),2,1);
      b = reshape(res{i}(1,:),size(res{endmark},1),[]);
+     ress{j} = b;
+     
+     %figure;
+     [tX] = splitIMG(model,res{1},b);
+     temp = X;
+     X = zeros(size(tX,1),size(tX,2),size(tX,3),size(tX,4)+size(temp,4));
+     X(:,:,1,1:size(temp,4)) = temp;
+     X(:,:,1,size(temp,4)+1:end) = tX;
+     
+     %{
      b(b<=0.8) = 0;
      disp(sum(sum(b>0))); 
      figure;
      imshow(b);
+     %}
      scale = scale*0.7;
 end
 
     
+end
+
+
+function [X]=splitIMG(model,img,data)
+
+[sx ,sy] = size(img);
+[dx , dy] = size(data);
+[xx ,yy] = meshgrid([1:dx],[1:dy]);
+xx = xx';
+yy = yy';
+
+rx = 36;
+ry = 32;
+
+X = zeros(rx,ry,1,0);
+
+th = 0.5;
+
+x = xx(data>=th);
+y = yy(data>=th);
+
+N = size(x,1);
+
+disp(N);
+
+for i = 1:floor(N)
+    tx = x(i);
+    ty = y(i);
+    
+    cx = ceil(tx*sx/dx - rx/2);
+    cy = ceil(ty*sy/dy - ry/2);
+    
+    if cx<1 || cy<1 || cx+rx-1>sx || cy+ry-1>sy
+        continue;
+    end
+    
+    
+    res = cnnCalcnet( model, img(cx:cx+rx-1,cy:cy+ry-1));
+    rr = res{end};
+    
+    if rr(1)>0.2
+       fprintf('P / N-- %.6f\t/\t%.6f\n',data(tx,ty),rr(1));
+       X(:,:,1,end+1) = img(cx:cx+rx-1,cy:cy+ry-1);
+       %{
+       close all;
+       imshow( X(:,:,1,end));
+       figure;
+       ShowLayer( model, X(:,:,1,end) ,[0 1]);
+       pause;
+       %}
+    end
+    
+    
+    
+end
+
+
+
 end
 
