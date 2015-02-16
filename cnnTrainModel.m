@@ -27,9 +27,9 @@ for i = 1: step
   %分配每批训练样本
   [ tX,ty,model,ind] = cnnTDAllocate(model,X,y ,pn );
   
-  fprintf('faces:%d\n',sum(ty(:,1)==1));
+  model=cnnLog(model,'faces:%d\n',sum(ty(:,1)==1));
   [ J , cor ,nul ,indf] = cnnAnalyze( model,size(tX,4),tX,ty);
-  fprintf('Correction for train: %.5f%% | Cost: %e \n',cor,J);
+ model=cnnLog(model,'Correction for train: %.5f%% | Cost: %e \n',cor,J);
   
   F=@(p)CostFunction( p, tX, ty, model );
   options = optimset('MaxIter', itn);
@@ -48,7 +48,7 @@ for i = 1: step
   
   save model2  model
   
-  [ J , cor ,ind ,indf] = cnnAnalyze( model,model.testnum,X,y);
+  [ J , cor ,ind ,indf] = cnnAnalyze( model,model.testnum*5,X,y);
   model=cnnLog(model,'[ Correction: %.5f%% | Cost: %e ]\n',cor,J);
   model=cnnLog(model,'------ Cost: %e | %.5f%% -----\n\n',cost(end),cost(1)/cost(end)*100);
   

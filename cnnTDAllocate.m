@@ -27,14 +27,14 @@ index = randperm(size(Xt,4),tnn);
 tXt = Xt(:,:,:,index);
 tyt = yt(index,:);
 indt=indt(index);
-fprintf('errdata: %d.\n',tnn);
+model=cnnLog(model,'errdata: %d.\n',tnn);
 
 
 [ J , cor ] = cnnAnalyze( model,size(tXt,4),tXt,tyt);
-fprintf('Correction for errdata: %.5f%% | Cost: %e \n',cor,J);
+model=cnnLog(model,'Correction for errdata: %.5f%% | Cost: %e \n',cor,J);
 
 pn = pn - tnn;
-factor = rand*0.8 + 0.2;
+factor = rand*0.6 + 0.2;
 
 
 index = randperm(size(Xp,4),ceil(pn*factor)); 
