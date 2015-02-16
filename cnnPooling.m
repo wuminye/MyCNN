@@ -12,6 +12,7 @@ featureMap = zeros(floor(size(inputFeature ,1)/kdx),...
               floor(size(inputFeature ,2)/kdy),size(inputFeature ,3));
 
 for i = 1 : num
+    %{
    for x = 1:size(inputFeature ,1)/kdx 
        for y = 1:size(inputFeature ,2)/kdy 
            pacth = inputFeature((x-1)*kdx+1:(x-1)*kdx+kdx,...
@@ -19,6 +20,9 @@ for i = 1 : num
            featureMap(x,y,i) = mean(pacth(:));
        end
    end
+    %}
+    tmp = conv2(inputFeature(:,:,i), ones(kdx,kdy),'valid'); 
+    featureMap(:,:,i) = tmp(1:kdx:end,1:kdy:end)/(kdx*kdy);
 end
 
 
