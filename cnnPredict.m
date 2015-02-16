@@ -81,14 +81,14 @@ ry = 32;
 
 X = zeros(rx,ry,1,0);
 
-th = 0.5;
+th = 0.1;
 
 x = xx(data>=th);
 y = yy(data>=th);
 
 N = size(x,1);
 
-disp(N);
+
 
 for i = 1:floor(N)
     tx = x(i);
