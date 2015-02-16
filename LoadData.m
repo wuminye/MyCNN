@@ -40,8 +40,15 @@ if strcmp(name,'face2')
     addpath('./FaceData/');
    
     [ X1,y1] = LoadFaces();
+    load errdata;
     [ X2,y2] = LoadNoFaces();
-   
+    
+    en = size(X,4);
+    
+    disp(en);
+    X2(:,:,1,1:en) = X;
+    
+    
     X = zeros(size(X1)+[0 0 0 size(X2,4)]);
     y = zeros(size(X,4),size(y1,2));
    
@@ -50,9 +57,9 @@ if strcmp(name,'face2')
     X(:,:,1,size(X1,4)+1:end) = X2;
     y(size(X1,4)+1:end,:) = y2;
    
-    index = randperm(size(X,4));
-    X = X(:,:,:,index);
-    y = y(index,:);
+   % index = randperm(size(X,4));
+    %X = X(:,:,:,index);
+    %y = y(index,:);
     
    fprintf('Loaded %d.\n',size(X,4));
 end
