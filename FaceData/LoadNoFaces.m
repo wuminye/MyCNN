@@ -11,7 +11,7 @@ LengthFiles = length(Files);
 
 rx = 36; %目标高度
 ry = 32; %目标宽度
-step = 70;
+step = 80;
 
 X = zeros(rx,ry,1,0);
 y = zeros(0,2);
@@ -39,7 +39,7 @@ for i = 1 : LengthFiles
            end
        end
        scale = scale*0.6;
-       step1 = ceil(step1*0.75);
+       step1 = ceil(step1*0.70);
     end
     
 end
