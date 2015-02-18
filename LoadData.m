@@ -43,6 +43,10 @@ if strcmp(name,'face2')
     load errdata;
     [ X2,y2] = LoadNoFaces();
     
+    index = randperm(size(X2,4));
+    X2 = X2(:,:,:,index);
+    y2 = y2(index,:);
+    
     en = size(X,4);
     
     disp(en);

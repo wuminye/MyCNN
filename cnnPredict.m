@@ -1,10 +1,15 @@
-function [ ress ,X ] = cnnPredict( model,data)
+function [ ress ,X ] = cnnPredict( model,data , state)
 %CNNPREDICT Summary of this function goes here
 %   Detailed explanation goes here
+
+if ~exist('state', 'var')
+    state = 0;
+end
+
 if size(data,1)==1   %文件输入
     data = imread(data);
     data = rgb2gray(data);
-    data = imresize(data,1500/max(size(data)));
+    data = imresize(data,2000/max(size(data)));
     data = double(data)/255;
 end   
 
@@ -46,15 +51,20 @@ for j = 1:step
      res{i} = exp( model.Layer{i}.w*res{i-1});
      res{i} = res{i}./repmat(sum(res{i}),2,1);
      b = reshape(res{i}(1,:),size(res{endmark},1),[]);
-     ress{j} = b;
+     
      
      %figure;
-     [tX] = splitIMG(model,res{1},b);
-     temp = X;
-     X = zeros(size(tX,1),size(tX,2),size(tX,3),size(tX,4)+size(temp,4));
-     X(:,:,1,1:size(temp,4)) = temp;
-     X(:,:,1,size(temp,4)+1:end) = tX;
-     
+     rate = [0.1 0.2]'; % 默认检测误报样本
+      
+     ress{j} = b;
+      
+     if state == 0
+         [tX] = splitIMG(model,res{1},b,rate);
+         temp = X;
+         X = zeros(size(tX,1),size(tX,2),size(tX,3),size(tX,4)+size(temp,4));
+         X(:,:,1,1:size(temp,4)) = temp;
+         X(:,:,1,size(temp,4)+1:end) = tX;
+     end
      %{
      b(b<=0.8) = 0;
      disp(sum(sum(b>0))); 
@@ -68,7 +78,7 @@ end
 end
 
 
-function [X]=splitIMG(model,img,data)
+function [X]=splitIMG(model,img,data,rate)
 
 [sx ,sy] = size(img);
 [dx , dy] = size(data);
@@ -81,7 +91,7 @@ ry = 32;
 
 X = zeros(rx,ry,1,0);
 
-th = 0.1;
+th = rate(1);
 
 x = xx(data>=th);
 y = yy(data>=th);
@@ -104,9 +114,11 @@ for i = 1:floor(N)
     
     res = cnnCalcnet( model, img(cx:cx+rx-1,cy:cy+ry-1));
     rr = res{end};
-    
-    if rr(1)>0.2
-       fprintf('P / N-- %.6f\t/\t%.6f\n',data(tx,ty),rr(1));
+   % imshow(img(cx:cx+rx-1,cy:cy+ry-1));
+    if rr(1)>rate(2)
+       if rate(2) <0.5
+          fprintf('P / N-- %.6f\t/\t%.6f\n',data(tx,ty),rr(1));
+       end
        X(:,:,1,end+1) = img(cx:cx+rx-1,cy:cy+ry-1);
        %{
        close all;

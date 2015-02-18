@@ -1,6 +1,8 @@
 tic;
 
-model = GetModel('face2');
+%model = GetModel('face2');
+load model2
+
 
 %[images , labels] = LoadData(model.dataname);
 load picdata
@@ -21,3 +23,4 @@ save model2  model
 [ J , cor ,nul,indf] = cnnAnalyze( model,size(images,4),images,labels);
 model=cnnLog(model,'$[ Correction: %.5f%% | Cost: %e ]$\n',cor,J);
 toc;
+
