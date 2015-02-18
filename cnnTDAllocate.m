@@ -34,7 +34,7 @@ model=cnnLog(model,'errdata: %d.\n',tnn);
 model=cnnLog(model,'Correction for errdata: %.5f%% | Cost: %e \n',cor,J);
 
 pn = pn - tnn;
-factor = rand*0.6 + 0.2;
+factor = rand*0.4 + 0.3;
 
 
 index = randperm(size(Xp,4),ceil(pn*factor)); 
