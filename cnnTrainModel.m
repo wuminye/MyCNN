@@ -15,20 +15,20 @@ model.corind = ones(num_train,1);
 
 for i = 1: step
   if mod(i,floor(model.interval))==0
-      [ J , cor,nul ,indf] = cnnAnalyze( model,model.traintestnum,images,labels);
+      [ J , cor,nul ,indf,model] = cnnAnalyze( model,model.traintestnum,images,labels);
       model=cnnLog(model,'\n*[ Correction: %.5f%% | Cost: %e ]*\n\n',cor,J);
   end
   [pn,itn] = getpn(model,i,step,num_train);
   model=cnnLog(model,'< %d > Num_train: %d  Iter_num: %d \n',i,pn,itn);
   
-  [ J , cor ,nul,indf] = cnnAnalyze( model,model.testnum,images,labels);
+  [ J , cor ,nul,indf,model] = cnnAnalyze( model,model.testnum,images,labels);
   model=cnnLog(model,'[ Correction: %.5f%% | Cost: %e ]\n',cor,J);
   
   %分配每批训练样本
   [ tX,ty,model,ind] = cnnTDAllocate(model,X,y ,pn );
   
   model=cnnLog(model,'faces:%d\n',sum(ty(:,1)==1));
-  [ J , cor ,nul ,indf] = cnnAnalyze( model,size(tX,4),tX,ty);
+  [ J , cor ,nul ,indf,model] = cnnAnalyze( model,size(tX,4),tX,ty);
  model=cnnLog(model,'Correction for train: %.5f%% | Cost: %e \n',cor,J);
   
   F=@(p)CostFunction( p, tX, ty, model );
@@ -43,14 +43,26 @@ for i = 1: step
   %保存结果至model2.mat
   model = LoadTheta(nn_params,model);
   
-  ShowLayer( model, X(:,:,1,1) ,y(1,:) );
-  saveas(gcf,'data.fig');
+ % ShowLayer( model, X(:,:,1,1) ,y(1,:) );
+  %saveas(gcf,'data.fig');
   
   save model2  model
   
-  [ J , cor ,ind ,indf] = cnnAnalyze( model,model.testnum*5,X,y);
+  [ J , cor ,ind ,indf,mode,tp,tn] = cnnAnalyze( model,model.testnum,X,y);
   model=cnnLog(model,'[ Correction: %.5f%% | Cost: %e ]\n',cor,J);
+  model=cnnLog(model,'TP: %.4f\tTN: %.4f\n',tp,tn);
   model=cnnLog(model,'------ Cost: %e | %.5f%% -----\n\n',cost(end),cost(1)/cost(end)*100);
+  
+  ppp = cost(1)/cost(end)*100;
+  
+  if ppp>1000
+      model.lambda = model.lambda*1.1;
+      model=cnnLog(model,'[lambda changed]: %e \n',model.lambda);
+  end
+  if ppp<150
+      model.lambda = model.lambda*0.9;
+      model=cnnLog(model,'[lambda changed]: %e \n',model.lambda);
+  end
   
   model.corind(ind) = 1; 
   model.corind(indf) = 0; 
