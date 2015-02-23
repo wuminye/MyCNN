@@ -12,7 +12,7 @@ while true
         break;
     end
     [images , labels] = LoadData(model.dataname);
-    images = images(:,:,:,1:130000);
-    labels = labels(1:130000,:);
+    %images = images(:,:,:,1:130000);
+    %labels = labels(1:130000,:);
     save picdata images labels;
 end

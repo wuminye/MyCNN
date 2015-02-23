@@ -18,7 +18,7 @@ step = 7;
 ress =cell(step,1);
 X = zeros(36,32,1,0);
 for j = 1:step
-    tic;
+   
     fprintf('%d\n',j);
      res = cell(length(model.Layer),1);
      res{1} = imresize(data,scale);
@@ -75,7 +75,7 @@ for j = 1:step
      figure;
      imshow(b);
      %}
-     toc;
+ 
      scale = scale*0.85;
 end
 

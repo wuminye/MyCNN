@@ -60,7 +60,7 @@ for i = 1: step
       model=cnnLog(model,'[lambda changed]: %e \n',model.lambda);
   end
   if ppp<150
-      model.lambda = model.lambda*0.9;
+      model.lambda = model.lambda*0.8;
       model=cnnLog(model,'[lambda changed]: %e \n',model.lambda);
   end
   
