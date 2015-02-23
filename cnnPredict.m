@@ -9,19 +9,22 @@ end
 if size(data,1)==1   %文件输入
     data = imread(data);
     data = rgb2gray(data);
-    data = imresize(data,2000/max(size(data)));
+    data = imresize(data,800/max(size(data)));
     data = double(data)/255;
 end   
 
 scale = 1;
-step = 4;
+step = 7;
 ress =cell(step,1);
 X = zeros(36,32,1,0);
 for j = 1:step
+    tic;
+    fprintf('%d\n',j);
      res = cell(length(model.Layer),1);
      res{1} = imresize(data,scale);
      endmark = 1;
      for i  = 2 : length(model.Layer)
+       
          cur = model.Layer{i}.type;
          if strcmp(cur,'Reshape')
              res{i} = cnnReshape(res{i-1},model.Layer{i}.kernelsize); 
@@ -40,6 +43,7 @@ for j = 1:step
              endmark = i-1;
              break;
          end
+         
      end
      temp = zeros(size(res{endmark},3),size(res{endmark},1)*size(res{endmark},2));
      for p = 1 : size(res{endmark},3)
@@ -71,7 +75,8 @@ for j = 1:step
      figure;
      imshow(b);
      %}
-     scale = scale*0.7;
+     toc;
+     scale = scale*0.85;
 end
 
     
@@ -104,8 +109,9 @@ for i = 1:floor(N)
     tx = x(i);
     ty = y(i);
     
-    cx = ceil(tx*sx/dx - rx/2);
-    cy = ceil(ty*sy/dy - ry/2);
+     %坐标转换到原图
+     cx = ceil(tx*(sx-36)/dx - rx/2 + 16);
+     cy = ceil(ty*(sy-32)/dy - ry/2 + 16);
     
     if cx<1 || cy<1 || cx+rx-1>sx || cy+ry-1>sy
         continue;
