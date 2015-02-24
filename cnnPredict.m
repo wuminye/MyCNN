@@ -18,7 +18,12 @@ step = 7;
 ress =cell(step,1);
 X = zeros(36,32,1,0);
 for j = 1:step
-   
+    
+    %过载保护
+    if size(X,4)>800 
+        break;
+    end
+    
     fprintf('%d\n',j);
      res = cell(length(model.Layer),1);
      res{1} = imresize(data,scale);
@@ -27,7 +32,16 @@ for j = 1:step
        
          cur = model.Layer{i}.type;
          if strcmp(cur,'Reshape')
-             res{i} = cnnReshape(res{i-1},model.Layer{i}.kernelsize); 
+            % res{i} = cnnReshape(res{i-1},model.Layer{i}.kernelsize); 
+             window = model.Layer{i-1}.out;
+             res{i} = zeros(size(res{i-1},1)-window(1)+1,size(res{i-1},2)-window(2)+1,model.Layer{i}.kernelsize(3));
+             for x = 1:size(res{i-1},1)-window(1)+1
+                 for y = 1 : size(res{i-1},2)-window(2)+1
+                     tmp = res{i-1}(x:x+window(1)-1,y:y+window(2)-1,:);
+                    
+                     res{i}(x,y,:) = reshape(tmp,model.Layer{i}.kernelsize);
+                 end
+             end
          end
          if strcmp(cur,'SoftMax')
             res{i} = cnnSoftMax(res{i-1},model.Layer{i}.w);
@@ -58,7 +72,7 @@ for j = 1:step
      
      
      %figure;
-     rate = [0.1 0.2]'; % 默认检测误报样本
+     rate = [0.2 0.3]'; % 默认检测误报样本
       
      ress{j} = b;
       
