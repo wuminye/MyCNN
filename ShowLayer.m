@@ -18,7 +18,7 @@ for i = 1 : num
        tem = reshape(res{i},[],size(res{i},3));
        [h,im]=displayData(tem',size(res{i},2)); 
        subplot(sx,sy,cnt);
-       imagesc(im ,[0 1]);
+       imagesc(im ,[min(im(:)) max(im(:))]);
        %imshow(im);
        cnt =cnt+1;
     end
