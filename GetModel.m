@@ -69,7 +69,7 @@ end
 if strcmp(name,'face2')
    input = [36 32 1];
     
-   num_layer = 10;
+   num_layer = 9;
    Layer = cell(num_layer,1);
 
    Layer{1}.type = 'Input';
@@ -77,38 +77,32 @@ if strcmp(name,'face2')
       
    Layer{2}.type = 'Conv';
    Layer{2}.kernelsize = [5 5]; %  32 28
-   Layer{2}.mapnum  =  3;
+   Layer{2}.mapnum  =  2;
       
    Layer{3}.type = 'Pooling';
    Layer{3}.kernelsize = [2 2]; %  16 14
       
    Layer{4}.type = 'Conv';
-   Layer{4}.kernelsize = [3 3]; %  14 12
-   Layer{4}.mapnum  =   8;
-      
-   Layer{5}.type = 'Conv';
-   Layer{5}.kernelsize = [5 5];  % 10 8
-   Layer{5}.mapnum  =   16;
+   Layer{4}.kernelsize = [5 5]; %  12 10
+   Layer{4}.mapnum  =   4;  
    
+   Layer{5}.type = 'Pooling';
+   Layer{5}.kernelsize = [2 2]; %  6 5
    
-   Layer{6}.type = 'Pooling';
-   Layer{6}.kernelsize = [2 2]; %  5 4
+   Layer{6}.type = 'Conv';
+   Layer{6}.kernelsize = [3 4];  % 4 2
+   Layer{6}.mapnum  =   20;
+     
    
-   Layer{7}.type = 'Conv';
-   Layer{7}.kernelsize = [3 3];  % 3 2
-   Layer{7}.mapnum  =   20;
-   
-   
-   Layer{8}.type = 'Conv';
-   Layer{8}.kernelsize = [3 2];  % 1 1
-   Layer{8}.mapnum  =   40;
+   Layer{7}.type = 'Reshape';
+   Layer{7}.kernelsize = [1 1 2*4*20];
     
 
-   Layer{9}.type = 'ANN';
-   Layer{9}.out = [30 1];
+   Layer{8}.type = 'ANN';
+   Layer{8}.out = [48 1];
 
-   Layer{10}.type = 'SoftMax';
-   Layer{10}.out = [2 1];
+   Layer{9}.type = 'SoftMax';
+   Layer{9}.out = [2 1];
    
 end
    

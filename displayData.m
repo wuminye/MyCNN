@@ -37,8 +37,8 @@ for j = 1:display_rows
 		% Copy the patch
 		
 		% Get the max value of the patch
-		%max_val = max(abs(X(curr_ex, :)));
-        max_val = 1;
+		max_val = max(abs(X(curr_ex, :)));
+        %max_val = 1;
 		display_array(pad + (j - 1) * (example_height + pad) + (1:example_height), ...
 		              pad + (i - 1) * (example_width + pad) + (1:example_width)) = ...
 						reshape(X(curr_ex, :), example_height, example_width) / max_val;
