@@ -78,7 +78,7 @@ for i = num-1:-1: 2
     if strcmp(cur,'Conv') 
 
         %修正卷积层的误差，要乘以导数。
-        res{i}.t = res{i}.t.*(data{i}.*(1-data{i}));
+        res{i}.t = res{i}.t.*deActiveFunction(data{i});
         
         res{i}.w = zeros(size(model.Layer{i}.w));
         res{i}.b = zeros(size(model.Layer{i}.b));
@@ -102,7 +102,7 @@ for i = num-1:-1: 2
     
     
     if strcmp(cur,'ANN')
-        res{i}.t = res{i}.t.*(data{i}.*(1-data{i}));
+        res{i}.t = res{i}.t.*deActiveFunction(data{i});
         res{i}.b = res{i}.t;
         res{i}.t = reshape(res{i}.t,1,1,[]); % 可要可不要？？
         res{i}.w = res{i}.b(:)*reshape(data{i-1}, [] ,1)';
