@@ -84,6 +84,9 @@ for i = num-1:-1: 2
         res{i}.b = zeros(size(model.Layer{i}.b));
         for q = 1 : size(res{i}.w,4)
            for p = 1 : size(res{i}.w,3)
+               if model.Layer{i}.connector(q,p)~=1
+                   continue;
+               end
                res{i}.w(:,:,p,q) = conv2(data{i-1}(:,:,p), rot90(rot90(res{i}.t(:,:,q))),'valid');
                %------------这里要不要再翻转回来呢?????????????????????
                %res{i}.w(:,:,p,q) = rot90(rot90(conv2(data{i-1}(:,:,p), rot90(rot90(res{i}.t(:,:,q))),'valid')));

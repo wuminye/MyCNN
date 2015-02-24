@@ -30,6 +30,14 @@ for i = 1 : num_layer
        Layer{i}.w = rand([ Layer{i}.kernelsize ,Layer{i-1}.out(3) ,Layer{i}.mapnum ])*2*r - r;
        Layer{i}.b = rand(Layer{i}.mapnum,1)*2*r - r ;   %实数偏置
        Layer{i}.connector = ones(Layer{i}.mapnum,Layer{i-1}.out(3));
+       
+       
+       if i~=2   %非头一个卷积
+           %随机切断链接
+           Np = size(Layer{i}.connector(:),1);
+           index = randperm(Np,ceil(Np*0.35));
+           Layer{i}.connector(index) = 0;
+       end
    end
     
    if strcmp(cur,'Pooling')
