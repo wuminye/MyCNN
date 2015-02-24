@@ -11,40 +11,54 @@ cp = 0;
 
 %load model2
 
-[res] = cnnPredict(model,data,1);
+[res,~,scales] = cnnPredict(model,data,1);
 
 %先处理原始热度图
 for i = 1 : length(res)
 
-  %  res{i}(res{i}<=0.2) = 0;
+    %res{i}(res{i}<=0.1) = 0;
     %imshow(res{i});
-    %[faces]=splitIMG(model,data,res{i},[0.4 0.5]);
+    t= res{i}*0.9;
+    if i~= 1
+        t = t + 0.2*imresize(res{i-1},size(t));
+    end
+    if i~= length(res)
+        t = t + 0.2*imresize(res{i+1},size(t));
+    end
+    %t = medfilt2(t,[2 2]);
+    figure;
+    subplot(2,1,1);
+    imshow(t);
+   subplot(2,1,2);
+    [faces]=splitIMG(model,imresize(data,scales(i)),t,[0.55 0.8]);
 end
 
-
+%{
 imgs = res{1};
 for i = 2 : length(res)
     
-    tem = imresize(res{i},size(imgs));
+    tem = myimTransform(res{i},size(imgs));
     imgs = imgs + tem; 
 end
    
    
 
    t = imgs;
-   t = imgs>0.2;
-   t = medfilt2(t);
+   
+   %t = medfilt2(t,[2 2]);
+   %t = imgs>0.3;
+   %t = medfilt2(t,[2 2]);
    figure;
    imshow(t);
    
    
-   [faces]=splitIMG(model,data,t,[0.4 0.7]);
- 
+   [faces]=splitIMG(model,data,t,[0.4 0.70]);
+ %}
 end
 
 function [X]=splitIMG(model,img,data,rate)
 
-figure;
+
 imshow(img);
 hold on;
 
@@ -72,33 +86,55 @@ for i = 1:floor(N)
 
     tx = x(i);
     ty = y(i);
-    for scale = 1:0.7:4
+    for scale = 0.8:0.2:1.2
         %坐标转换到原图
-        cx = ceil(tx*(sx-36)/dx - rx*scale/2 + 16);
-        cy = ceil(ty*(sy-32)/dy - ry*scale/2 + 16);
+        tcx = ceil(tx*(sx-36)/dx - rx*scale/2 + 16);
+        tcy = ceil(ty*(sy-32)/dy - ry*scale/2 + 16);
         %cx = ceil(tx*(sx)/dx - rx*scale/2 );
         %cy = ceil(ty*(sy)/dy - ry*scale/2 );
-    
-       if cx<1 || cy<1 || ceil(cx+rx*scale-1)>sx || ceil(cy+ry*scale-1)>sy
-           continue;
-        end
-        timg = img(cx:ceil(cx+rx*scale-1),cy:ceil(cy+ry*scale-1));
-        timg = imresize(timg,[rx,ry]);
-        res = cnnCalcnet( model, timg);
-        rr = res{end};
-       % imshow(img(cx:cx+rx-1,cy:cy+ry-1));
-        if rr(1)>rate(2)
-
-           X(:,:,1,end+1) = timg;
-            rectangle('Position', ...
-            [cy, cx, ry*scale, rx*scale], ...
-            'Curvature', 0.4, 'LineWidth',1, 'EdgeColor', 'blue');
-        drawnow;
-          % imshow(timg);
-          % pause;
-        end
+       for cx = tcx:5:tcx
+           for cy = tcy-6:6:tcy
+                if cx<1 || cy<1 || ceil(cx+rx*scale-1)>sx || ceil(cy+ry*scale-1)>sy
+                   continue;
+                end
+                timg = img(cx:ceil(cx+rx*scale-1),cy:ceil(cy+ry*scale-1));
+                timg = imresize(timg,[rx,ry]);
+                res = cnnCalcnet( model, timg);
+                rr = res{end};
+                imshow(timg);
+               
+                if rr(1)>rate(2)
+                    %disp([rr(1) rr(2)]);
+                   X(:,:,1,end+1) = timg;
+                    rectangle('Position', ...
+                    [cy, cx, ry*scale, rx*scale], ...
+                    'Curvature', 0.4, 'LineWidth',1, 'EdgeColor', 'blue');
+                   drawnow;
+                   fprintf('%d %d %f %f \n',cx,cy,rr(1), rr(2));
+                  % imshow(timg);
+                  % pause;
+                end
+           end
+       end
    end
     
 end
 
+end
+
+function res = myimTransform(img,dsize)
+   [m ,n] = size(img);
+   scale = dsize./[m ,n];
+   res = zeros(dsize);
+
+   for x = 1 : m
+       for y = 1: n
+           dd = scale.*[x y];
+           if (dd(1)>0.5 && dd(2)>0.5)
+               dd = round(dd);
+               res(dd(1),dd(2)) = img(x,y);
+           end
+           
+       end
+   end
 end

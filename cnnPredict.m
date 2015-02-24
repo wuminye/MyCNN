@@ -1,4 +1,4 @@
-function [ ress ,X ] = cnnPredict( model,data , state)
+function [ ress ,X ,scales] = cnnPredict( model,data , state)
 %CNNPREDICT Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -14,9 +14,10 @@ if size(data,1)==1   %文件输入
 end   
 
 scale = 1;
-step = 7;
+step = 5;
 ress =cell(step,1);
 X = zeros(36,32,1,0);
+scales = zeros(0,1);
 for j = 1:step
     
     %过载保护
@@ -27,6 +28,15 @@ for j = 1:step
     fprintf('%d\n',j);
      res = cell(length(model.Layer),1);
      res{1} = imresize(data,scale);
+     scales(end+1,1) = scale;
+     %{
+     imshow( res{1});
+     hold on;
+      rectangle('Position', ...
+            [1, 1, 32, 36], ...
+            'Curvature', 0.4, 'LineWidth',1, 'EdgeColor', 'blue');
+     figure;
+     %}
      endmark = 1;
      for i  = 2 : length(model.Layer)
        
@@ -90,7 +100,7 @@ for j = 1:step
      imshow(b);
      %}
  
-     scale = scale*0.85;
+     scale = scale*0.62;
 end
 
     
