@@ -1,4 +1,4 @@
-
+addpath('./FaceData/');
 model = GetModel('face2');
 save model2 model;
 
