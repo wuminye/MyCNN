@@ -42,7 +42,7 @@ function [ X,y] = LoadFaces()
       nF = imresize(nF,[rx,ry]);
       X(:,:,1,end+1) = nF;
       y(end+1,1) = 1;
-      X(:,:,1,end+1) = medfilt2(nF);
+      X(:,:,1,end+1) = medfilt2(nF,[2 2]);
       y(end+1,1) = 1;
       %imshow(nF);
   end
@@ -76,7 +76,7 @@ function [ X,y] = LoadFaces()
       nF = imresize(nF,[rx,ry]);
       X(:,:,1,end+1) = nF;
       y(end+1,1) = 1;
-      X(:,:,1,end+1) = medfilt2(nF);
+      X(:,:,1,end+1) = medfilt2(nF,[2 2]);
       y(end+1,1) = 1;
      % imshow(nF);
   end
