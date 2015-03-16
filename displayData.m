@@ -38,6 +38,10 @@ for j = 1:display_rows
 		
 		% Get the max value of the patch
 		max_val = max(abs(X(curr_ex, :)));
+        if (max_val < 1e-1)  
+            max_val =1e-1;
+        end
+        %disp(max_val);
         %max_val = 1;
 		display_array(pad + (j - 1) * (example_height + pad) + (1:example_height), ...
 		              pad + (i - 1) * (example_width + pad) + (1:example_width)) = ...
