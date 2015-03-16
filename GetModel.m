@@ -76,26 +76,26 @@ if strcmp(name,'face2')
    Layer{1}.out = input;
       
    Layer{2}.type = 'Conv';
-   Layer{2}.kernelsize = [5 5]; %  32 28
+   Layer{2}.kernelsize = [7 7]; %  30 26
    Layer{2}.mapnum  =  4;
       
    Layer{3}.type = 'Pooling';
-   Layer{3}.kernelsize = [2 2]; %  16 14
+   Layer{3}.kernelsize = [2 2]; %  15 13
       
    Layer{4}.type = 'Conv';
-   Layer{4}.kernelsize = [5 5]; %  12 10
-   Layer{4}.mapnum  =   8;  
+   Layer{4}.kernelsize = [6 6]; %  10 8
+   Layer{4}.mapnum  =   10;  
    
    Layer{5}.type = 'Pooling';
-   Layer{5}.kernelsize = [2 2]; %  6 5
+   Layer{5}.kernelsize = [2 2]; %  5 4
    
    Layer{6}.type = 'Conv';
-   Layer{6}.kernelsize = [6 5];  % 1 1
-   Layer{6}.mapnum  =   25;
+   Layer{6}.kernelsize = [5 4];  % 1 1
+   Layer{6}.mapnum  =   30;
        
    
    Layer{7}.type = 'ANN';
-   Layer{7}.out = [20 1];
+   Layer{7}.out = [23 1];
 
    Layer{8}.type = 'SoftMax';
    Layer{8}.out = [2 1];
@@ -104,7 +104,7 @@ end
    
 model = InitModel(Layer);
 
-model.lambda = 0.0001;
+model.lambda = 0.03;
 model.dataname = name;  %数据库名称
 
 model.num_train = 60000; %用于训练的样本数量

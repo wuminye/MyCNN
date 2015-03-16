@@ -20,17 +20,17 @@ for i = 1 : length(res)
     %imshow(res{i});
     t= res{i}*0.9;
     if i~= 1
-        t = t + 0.2*imresize(res{i-1},size(t));
+        t = t + 0.1*imresize(res{i-1},size(t));
     end
     if i~= length(res)
-        t = t + 0.2*imresize(res{i+1},size(t));
+        t = t + 0.1*imresize(res{i+1},size(t));
     end
     %t = medfilt2(t,[2 2]);
     figure;
     subplot(2,1,1);
     imshow(t);
    subplot(2,1,2);
-    [faces]=splitIMG(model,imresize(data,scales(i)),t,[0.55 0.8]);
+    [faces]=splitIMG(model,imresize(data,scales(i)),t,[0.5 0.6]);
 end
 
 %{
@@ -92,8 +92,8 @@ for i = 1:floor(N)
         tcy = ceil(ty*(sy-32)/dy - ry*scale/2 + 16);
         %cx = ceil(tx*(sx)/dx - rx*scale/2 );
         %cy = ceil(ty*(sy)/dy - ry*scale/2 );
-       for cx = tcx:5:tcx
-           for cy = tcy-6:6:tcy
+       for cx = tcx-5:5:tcx+5
+           for cy = tcy-3:3:tcy+3
                 if cx<1 || cy<1 || ceil(cx+rx*scale-1)>sx || ceil(cy+ry*scale-1)>sy
                    continue;
                 end
@@ -102,9 +102,9 @@ for i = 1:floor(N)
                 res = cnnCalcnet( model, timg);
                 rr = res{end};
                 imshow(timg);
-               
+              % disp([rr(1) rr(2)]);
                 if rr(1)>rate(2)
-                    %disp([rr(1) rr(2)]);
+                    
                    X(:,:,1,end+1) = timg;
                     rectangle('Position', ...
                     [cy, cx, ry*scale, rx*scale], ...
