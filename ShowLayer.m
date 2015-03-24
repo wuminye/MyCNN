@@ -14,7 +14,7 @@ cnt=1;
 %colormap(gray);
 for i = 1 : num
     cur = model.Layer{i}.type;
-    if strcmp(cur,'Conv') || strcmp(cur,'Pooling') || strcmp(cur,'ANN')
+    if strcmp(cur,'Conv') || strcmp(cur,'Pooling') || strcmp(cur,'ANN')  || strcmp(cur,'Convs')
        tem = reshape(res{i},[],size(res{i},3));
        [h,im]=displayData(tem',size(res{i},2)); 
        subplot(sx,sy,cnt);
