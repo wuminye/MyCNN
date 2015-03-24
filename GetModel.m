@@ -69,36 +69,36 @@ end
 if strcmp(name,'face2')
    input = [36 32 1];
     
-   num_layer = 8;
+   num_layer = 7;
    Layer = cell(num_layer,1);
 
    Layer{1}.type = 'Input';
    Layer{1}.out = input;
       
-   Layer{2}.type = 'Conv';
-   Layer{2}.kernelsize = [7 7]; %  30 26
+   Layer{2}.type = 'Convs';
+   Layer{2}.kernelsize = [7 7]; 
    Layer{2}.mapnum  =  4;
-      
-   Layer{3}.type = 'Pooling';
-   Layer{3}.kernelsize = [2 2]; %  15 13
-      
+   Layer{2}.stride = 2   ; %  18 16
+   
+   Layer{3}.type = 'Convs';
+   Layer{3}.kernelsize = [5 5]; 
+   Layer{3}.mapnum  =  8;
+   Layer{3}.stride = 2   ; %  9 8
+  
    Layer{4}.type = 'Conv';
-   Layer{4}.kernelsize = [6 6]; %  10 8
-   Layer{4}.mapnum  =   10;  
+   Layer{4}.kernelsize = [6 6]; %  4 3
+   Layer{4}.mapnum  =   16;  
    
-   Layer{5}.type = 'Pooling';
-   Layer{5}.kernelsize = [2 2]; %  5 4
-   
-   Layer{6}.type = 'Conv';
-   Layer{6}.kernelsize = [5 4];  % 1 1
-   Layer{6}.mapnum  =   30;
+   Layer{5}.type = 'Conv';
+   Layer{5}.kernelsize = [4 3];  % 1 1
+   Layer{5}.mapnum  =   30;
        
    
-   Layer{7}.type = 'ANN';
-   Layer{7}.out = [23 1];
+   Layer{6}.type = 'ANN';
+   Layer{6}.out = [23 1];
 
-   Layer{8}.type = 'SoftMax';
-   Layer{8}.out = [2 1];
+   Layer{7}.type = 'SoftMax';
+   Layer{7}.out = [2 1];
    
 end
    

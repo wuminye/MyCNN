@@ -13,6 +13,11 @@ function [ res ] = cnnCalcnet( model ,data )
         res{i} = cnnSoftMax(res{i-1},model.Layer{i}.w);
      end
      
+     if strcmp(cur,'Convs')
+        res{i} = cnnConvs(res{i-1},model.Layer{i}.w,model.Layer{i}.b,...
+                          model.Layer{i}.connector, model.Layer{i}.stride);
+     end
+     
      if strcmp(cur,'Conv')
          res{i} = cnnConv(res{i-1},model.Layer{i}.w,model.Layer{i}.b,...
                           model.Layer{i}.connector);

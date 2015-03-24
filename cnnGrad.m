@@ -49,6 +49,24 @@ for i = num-1:-1: 2
         end  
     end
     
+     if strcmp(nex,'Convs')
+        res{i}.t = zeros(model.Layer{i}.out);
+       
+        for p = 1:size(res{i}.t,3)
+            for q = 1:size(res{i+1}.t,3)
+               if model.Layer{i+1}.connector(q,p)~=1
+                   continue;
+               end
+               tem = zeros(model.Layer{i}.out(1:2));
+               tem(1:model.Layer{i+1}.stride:end,1:model.Layer{i+1}.stride:end)...
+                   = res{i+1}.t(:,:,q);
+               
+               res{i}.t(:,:,p) = res{i}.t(:,:,p) + ...
+                        conv2(tem,model.Layer{i+1}.w(:,:,p,q),'same');
+            end
+        end  
+    end
+    
     
     if  strcmp(nex,'ANN') || strcmp(nex,'SoftMax')
         %te = reshape(data{i}(1,1,:), [] ,1);
@@ -90,6 +108,39 @@ for i = num-1:-1: 2
                res{i}.w(:,:,p,q) = conv2(data{i-1}(:,:,p), rot90(rot90(res{i}.t(:,:,q))),'valid');
                %------------这里要不要再翻转回来呢?????????????????????
                %res{i}.w(:,:,p,q) = rot90(rot90(conv2(data{i-1}(:,:,p), rot90(rot90(res{i}.t(:,:,q))),'valid')));
+            end
+            tem =res{i}.t(:,:,q);
+            res{i}.b(q) = sum(tem(:));
+        end
+        
+    end
+    
+     %计算卷积层的核函数梯度
+    if strcmp(cur,'Convs') 
+
+        %修正卷积层的误差，要乘以导数。
+        res{i}.t = res{i}.t.*deActiveFunction(data{i});
+        
+        res{i}.w = zeros(size(model.Layer{i}.w));
+        res{i}.b = zeros(size(model.Layer{i}.b));
+        for q = 1 : size(res{i}.w,4)
+           for p = 1 : size(res{i}.w,3)
+               if model.Layer{i}.connector(q,p)~=1
+                   continue;
+               end
+               tem = zeros(model.Layer{i-1}.out(1:2));
+               tem(1:model.Layer{i}.stride:end,1:model.Layer{i}.stride:end)...
+                   = res{i}.t(:,:,q);
+              
+               
+               %扩充矩阵!!!! stride为偶数  w的长宽 为奇数 
+               [x1, y1] = size( data{i-1}(:,:,p));
+                hk = floor(size(model.Layer{i}.w)/2);
+               nf = zeros(size(tem,1)+hk(1)*2,...
+                          size(tem,2)+hk(2)*2);
+               nf(hk(1)+1:hk(1)+x1,hk(2)+1:hk(2)+y1) = data{i-1}(:,:,p);
+               res{i}.w(:,:,p,q) = conv2(nf, rot90(rot90(tem)),'vaild');
+   
             end
             tem =res{i}.t(:,:,q);
             res{i}.b(q) = sum(tem(:));
