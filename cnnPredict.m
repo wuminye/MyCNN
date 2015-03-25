@@ -129,7 +129,7 @@ th = rate(1);
 x = xx(data>=th);
 y = yy(data>=th);
 
-N = size(x,1);
+N = numel(x);
 
 
 
