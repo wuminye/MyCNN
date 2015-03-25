@@ -6,8 +6,8 @@ assert(size(connector ,1) == size(w ,4), ['Dims of featureMap or connector error
 
 old_num = size(inputFeature ,3);
 num = size(w ,4);
-x = size(inputFeature ,1)/stride;
-y = size(inputFeature ,2)/stride;
+x = ceil(size(inputFeature ,1)/stride);
+y = ceil(size(inputFeature ,2)/stride);
 
 featureMap = zeros(x ,y ,num);
 

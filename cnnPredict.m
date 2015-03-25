@@ -14,7 +14,7 @@ if size(data,1)==1   %Œƒº˛ ‰»Î
 end   
 
 scale = 1;
-step = 5;
+step = 7;
 ress =cell(step,1);
 X = zeros(36,32,1,0);
 scales = zeros(0,1);
@@ -60,6 +60,10 @@ for j = 1:step
              res{i} = cnnConv(res{i-1},model.Layer{i}.w,model.Layer{i}.b,...
                               model.Layer{i}.connector);
          end
+         if strcmp(cur,'Convs')
+             res{i} = cnnConvs(res{i-1},model.Layer{i}.w,model.Layer{i}.b,...
+                              model.Layer{i}.connector,model.Layer{i}.stride);
+         end
           if strcmp(cur,'Pooling')
              res{i} = cnnPooling(res{i-1}, model.Layer{i}.kernel );
           end
@@ -100,7 +104,7 @@ for j = 1:step
      imshow(b);
      %}
  
-     scale = scale*0.62;
+     scale = scale*0.72;
 end
 
     
