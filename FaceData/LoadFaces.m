@@ -1,38 +1,38 @@
 function [ X,y] = LoadFaces()
-% ¼ÓÔØÈËÁ³Ñù±¾
+% ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 %   Detailed explanation goes here
   load('Database');
  dir = './FaceData/pic/';
  %dir = './pic/';
  dir2 = './FaceData/lfw/';
  %dir2 = './lfw/';
- 
- 
-  rx = 36; %Ä¿±ê¸ß¶È
-  ry = 32; %Ä¿±ê¿í¶È
-  
+
+
+  rx = 36; %Ä¿ï¿½ï¿½ï¿½ß¶ï¿½
+  ry = 32; %Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+
   N = Database.cnt ;
   %N = 100 ;
-  
+
   X = zeros(rx,ry,1,0);
   y = zeros(0,2);
- 
+
   fprintf('begin read IMG...\n');
   for i = 1 : N
       data = Database.data{i};
       ang = str2double(data.filename(6:8));
-      %´ó½Ç¶ÈÑù±¾¶ªÆú
-      if abs(ang)>=40
+      %ï¿½ï¿½ï¿½Ç¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+      if abs(ang)>=30
           continue;
       end
       fprintf('\r%5d\r',i);
-      
+
       [px,py,h,w] = getpoint(data.data{1});
        w = w*1.15;
       if abs(ang)>=25
            w = w *1.1;
       end
- 
+
       h = w*rx/ry;
 
       F = imread([dir data.filename]);
@@ -46,28 +46,28 @@ function [ X,y] = LoadFaces()
       y(end+1,1) = 1;
       %imshow(nF);
   end
-  
+
   fprintf('begin read LFW...\n');
   load('Database2');
-  
+
   N = Database.cnt ;
   for i = 1 : N
       data = Database.data{i};
-      
+
       fprintf('\r%5d\r',i);
-      
+
       [px,py,h,w] = getpoint(data.data{1});
-      
-    
-      
+
+
+
       w = w*1.15;
-       
+
       h = w*rx/ry;
 
       F = rgb2gray(imread([dir2 data.filename]));
       F = double(F)/255;
-      
-      %·ÀÖ¹Ô½½ç
+
+      %ï¿½ï¿½Ö¹Ô½ï¿½ï¿½
       if py-h/2<1 || py+h/2>size(F,1) || px - w/2<1 || px + w/2>size(F,2)
           continue;
       end
@@ -80,9 +80,9 @@ function [ X,y] = LoadFaces()
       y(end+1,1) = 1;
      % imshow(nF);
   end
-  
+
   fprintf('Loaded %d faces.\n',size(X,4));
-  
+
 end
 
 
