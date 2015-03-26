@@ -14,57 +14,66 @@ for i = 1 : num_layer
    if strcmp(cur,'Reshape')
         Layer{i}.out =  Layer{i}.kernelsize;
    end
-   
+
    if strcmp(cur,'SoftMax')
       r = sqrt(6)/(max(Layer{i-1}.out(:)) + Layer{i}.out(1));
       p = max(Layer{i-1}.out(:));
       Layer{i}.w = rand(Layer{i}.out(1),p)*2*r - r ;
    end
-   
-   if strcmp(cur,'Conv') 
+
+   if strcmp(cur,'Conv')
        Layer{i}.out = [Layer{i-1}.out(1)- Layer{i}.kernelsize(1)+1,...
                        Layer{i-1}.out(2)- Layer{i}.kernelsize(2)+1, Layer{i}.mapnum];
        r = sqrt(6)/(Layer{i}.kernelsize*Layer{i}.kernelsize' + 1);
        %r = sqrt(6)/(Layer{i-1}.out(1)*Layer{i-1}.out(2) + 1);
-       %featuremap¶à¸ö¾í»ýºË --- 4D
+       %featuremapï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ --- 4D
        Layer{i}.w = rand([ Layer{i}.kernelsize ,Layer{i-1}.out(3) ,Layer{i}.mapnum ])*2*r - r;
-       Layer{i}.b = rand(Layer{i}.mapnum,1)*2*r - r ;   %ÊµÊýÆ«ÖÃ
+       Layer{i}.b = rand(Layer{i}.mapnum,1)*2*r - r ;   %Êµï¿½ï¿½Æ«ï¿½ï¿½
        Layer{i}.connector = ones(Layer{i}.mapnum,Layer{i-1}.out(3));
-       
-       
-       if i~=2   %·ÇÍ·Ò»¸ö¾í»ý
-           %Ëæ»úÇÐ¶ÏÁ´½Ó
+
+
+       if i>30   %ï¿½ï¿½Í·Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+           %ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½
            Np = size(Layer{i}.connector(:),1);
-           index = randperm(Np,ceil(Np*0.35));
+           index = randperm(Np,ceil(Np*0.45));
            Layer{i}.connector(index) = 0;
        end
+       for nn = 1:Layer{i-1}.out(3)
+         Layer{i}.connector(ceil(Layer{i}.mapnum*rand()),nn) =1;
+         Layer{i}.connector(ceil(Layer{i}.mapnum*rand()),nn) =1;
+       end
    end
-   
-   if strcmp(cur,'Convs') 
+
+   if strcmp(cur,'Convs')
        Layer{i}.out = [Layer{i-1}.out(1) / Layer{i}.stride ,...
                        Layer{i-1}.out(2) / Layer{i}.stride, Layer{i}.mapnum];
        r = sqrt(6)/(Layer{i}.kernelsize*Layer{i}.kernelsize' + 1);
        %r = sqrt(6)/(Layer{i-1}.out(1)*Layer{i-1}.out(2) + 1);
-       %featuremap¶à¸ö¾í»ýºË --- 4D
+       %featuremapï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ --- 4D
        Layer{i}.w = rand([ Layer{i}.kernelsize ,Layer{i-1}.out(3) ,Layer{i}.mapnum ])*2*r - r;
-       Layer{i}.b = rand(Layer{i}.mapnum,1)*2*r - r ;   %ÊµÊýÆ«ÖÃ
+       Layer{i}.b = rand(Layer{i}.mapnum,1)*2*r - r ;   %Êµï¿½ï¿½Æ«ï¿½ï¿½
        Layer{i}.connector = ones(Layer{i}.mapnum,Layer{i-1}.out(3));
-       
-       
-       if i~=2   %·ÇÍ·Ò»¸ö¾í»ý
-           %Ëæ»úÇÐ¶ÏÁ´½Ó
+
+
+       if i>30   %ï¿½ï¿½Í·Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+           %ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½
            Np = size(Layer{i}.connector(:),1);
-           index = randperm(Np,ceil(Np*0.35));
+           index = randperm(Np,ceil(Np*0.45));
            Layer{i}.connector(index) = 0;
        end
+
+       for nn = 1:Layer{i-1}.out(3)
+         Layer{i}.connector(ceil(Layer{i}.mapnum*rand()),nn) =1;
+         Layer{i}.connector(ceil(Layer{i}.mapnum*rand()),nn) =1;
+       end
    end
-    
+
    if strcmp(cur,'Pooling')
        Layer{i}.out = floor([Layer{i-1}.out(1:2)./Layer{i}.kernelsize , Layer{i-1}.out(3)]);
        Layer{i}.kernel.x = Layer{i}.kernelsize(1);
        Layer{i}.kernel.y = Layer{i}.kernelsize(2);
    end
-   
+
    if strcmp(cur,'ANN')
       pp = max(Layer{i-1}.out(:));
       p = max(Layer{i}.out(:));
@@ -77,4 +86,3 @@ end
 model.Layer = Layer;
 
 end
-

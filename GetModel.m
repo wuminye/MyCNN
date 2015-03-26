@@ -4,7 +4,7 @@ function [ model ] = GetModel(name)
 
 if strcmp(name,'MNIST')
    input = [28 28 1];
-    
+
    num_layer = 8;
    Layer = cell(num_layer,1);
 
@@ -36,90 +36,90 @@ if strcmp(name,'MNIST')
    Layer{8}.out  = [10 1];
 
 end
-   
+
 if strcmp(name,'faces')
    input = [20 20 1];
-   
+
    num_layer = 6;
    Layer = cell(num_layer,1);
-   
+
    Layer{1}.type = 'Input';
    Layer{1}.out = input;
-   
+
    Layer{2}.type = 'Conv';
    Layer{2}.kernelsize = [3 3];
    Layer{2}.mapnum  =   8;
-   
+
    Layer{3}.type = 'Pooling';
    Layer{3}.kernelsize = [2 2];
-   
+
    Layer{4}.type = 'Conv';
    Layer{4}.kernelsize = [9 9];
    Layer{4}.mapnum  =   32;
-   
+
    Layer{5}.type = 'ANN';
    Layer{5}.out = [32 1];
-   
+
    Layer{6}.type = 'SoftMax';
    Layer{6}.out  = [2 1];
-   
+
 end
 
 
 if strcmp(name,'face2')
    input = [36 32 1];
-    
+
    num_layer = 7;
    Layer = cell(num_layer,1);
 
    Layer{1}.type = 'Input';
    Layer{1}.out = input;
-      
+
+     
    Layer{2}.type = 'Convs';
-   Layer{2}.kernelsize = [7 7]; 
+   Layer{2}.kernelsize = [5 5];
    Layer{2}.mapnum  =  4;
-   Layer{2}.stride = 2   ; %  18 16
-   
+   Layer{2}.stride = 2 ;    %  18 16
+
+
    Layer{3}.type = 'Convs';
-   Layer{3}.kernelsize = [5 5]; 
+   Layer{3}.kernelsize = [5 5];
    Layer{3}.mapnum  =  8;
-   Layer{3}.stride = 2   ; %  9 8
-  
+   Layer{3}.stride = 2 ;    %  9 8
+
    Layer{4}.type = 'Conv';
-   Layer{4}.kernelsize = [6 6]; %  4 3
-   Layer{4}.mapnum  =   16;  
+   Layer{4}.kernelsize = [5 5];
+   Layer{4}.mapnum  =   16;  %5 4
    
    Layer{5}.type = 'Conv';
-   Layer{5}.kernelsize = [4 3];  % 1 1
-   Layer{5}.mapnum  =   30;
-       
-   
+   Layer{5}.kernelsize = [5 4];
+   Layer{5}.mapnum  =   32;  %1 1
+
    Layer{6}.type = 'ANN';
-   Layer{6}.out = [23 1];
+   Layer{6}.out = [28 1];
 
    Layer{7}.type = 'SoftMax';
    Layer{7}.out = [2 1];
-   
+
 end
-   
+
 model = InitModel(Layer);
 
-model.lambda = 0.03;
-model.dataname = name;  %Êý¾Ý¿âÃû³Æ
+model.lambda = 0.003;
+model.dataname = name;  %ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½ï¿½
 
-model.num_train = 60000; %ÓÃÓÚÑµÁ·µÄÑù±¾ÊýÁ¿
-model.MaxIter = 350; % ÅúÁ¿ÌÝ¶È·¨µÄµü´ú´ÎÊý
+model.num_train = 60000; %ï¿½ï¿½ï¿½ï¿½Ñµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+model.MaxIter = 350; % ï¿½ï¿½ï¿½ï¿½ï¿½Ý¶È·ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-model.testnum = 400 ; %Ã¿ÅúÑµÁ·Ç°ºó ²âÊÔÑù±¾µÄÊýÁ¿
-model.traintestnum = 1500 ; %Ã¿¶àÅúÑµÁ·Ç°ºó ²âÊÔÑù±¾µÄÊýÁ¿
-model.tick = 16 ; %ÑµÁ·Ê±µÄ¿Ì¶È
-model.itn =  27 ; %Ã¿ÅúÑµÁ·×î´óµü´ú´ÎÊý
-model.step = 45 ; %ÑµÁ·µÄÅú´ÎÊý
-model.interval = model.step/7;  %Ã¿¸ô¶àÉÙÅúÒ»´Î´ó¼ì²é
-model.reservation = 0.0005;    %Ã¿Åú×îÉÙ±£ÁôµÄÑù±¾±ÈÀý
-model.rate = 0.1;    %Ã¿ÅúÑù±¾ÊýÁ¿Ëõ·Å±ÈÀý
-model.itreservation = 0.2;    %Ã¿Åú×îÉÙ±£ÁôµÄµü´ú´ÎÊý±ÈÀý
+model.testnum = 400 ; %Ã¿ï¿½ï¿½Ñµï¿½ï¿½Ç°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+model.traintestnum = 1500 ; %Ã¿ï¿½ï¿½ï¿½ï¿½Ñµï¿½ï¿½Ç°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+model.tick = 16 ; %Ñµï¿½ï¿½Ê±ï¿½Ä¿Ì¶ï¿½
+model.itn =  27 ; %Ã¿ï¿½ï¿½Ñµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+model.step = 45 ; %Ñµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+model.interval = model.step/7;  %Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Î´ï¿½ï¿½ï¿½ï¿½ï¿½
+model.reservation = 0.0005;    %Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½Ù±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+model.rate = 0.1;    %Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å±ï¿½ï¿½ï¿½
+model.itreservation = 0.2;    %Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½Ù±ï¿½ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-model.logn = 0 ; %³õÊ¼»¯ÈÕÖ¾¼ÆÊý
+model.logn = 0 ; %ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
 end
-
