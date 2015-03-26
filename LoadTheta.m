@@ -7,7 +7,7 @@ pos = 1;
 for i = 2 : num
     t = model.Layer{i};
     cur = t.type;
-    if strcmp(cur,'Conv')
+    if strcmp(cur,'Conv') ||  strcmp(cur,'Convs')
          n = length(t.b(:));
          model.Layer{i}.b = reshape(theta(pos:pos+n-1),size(t.b));
          pos=pos+n;
