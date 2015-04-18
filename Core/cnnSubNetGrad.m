@@ -1,12 +1,12 @@
-function [ res ] = cnnGrad( model, data ,errdata)
+function [ res ] = cnnSubNetGrad( model, data ,errdata)
 %model 为模型，data为前向过程的计算结果
-%最后一层的误差项直接由参数传入errdata ,为一个struct
+%最后一层的误差项直接由参数传入errdata ,一个struct 包含计算好的梯度
 num = length(model.Layer);
 res = cell(num,1);
 
 res{num} = errdata;
 
-for i = num-1:-1: 2
+for i = num-1:-1: 1
     t = model.Layer{i};
     cur = t.type;
     nex =  model.Layer{i+1}.type;
@@ -75,6 +75,10 @@ for i = num-1:-1: 2
         
     end
     
+    %Input层不用计算梯度
+    if i == 1
+        break;
+    end
 %================梯度计算================================================    
      %计算卷积层的核函数梯度
     if strcmp(cur,'Conv') 
