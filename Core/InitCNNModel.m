@@ -81,13 +81,20 @@ function [ model ] = InitCNNModel()
 
 num_sublayer = 3;
 
-model.sublayer = cell(num_sublayer,1);
+model.sublayer = cell(num_sublayer+1,1);
 
-model.sublayer{1}.subnet{1}.model = model_1_1;
-model.sublayer{2}.subnet{1}.model = model_2_1;
-model.sublayer{2}.subnet{2}.model = model_2_2;
-model.sublayer{3}.subnet{1}.model = model_3_1;
-
+% model.sublayer{1}.subnet{1} ÒªÉùÃ÷ £¬Õâ²ãÁô¿Õ
+model.sublayer{1}.subnet{1} = 0;
+model.sublayer{2}.subnet{1}.model = model_1_1;
+model.sublayer{3}.subnet{1}.model = model_2_1;
+model.sublayer{3}.subnet{2}.model = model_2_2;
+model.sublayer{4}.subnet{1}.model = model_3_1;
+%-------- CONNECTION --------------------
+model.sublayer{2}.connect = ones(1,length(model.sublayer{2}.subnet));
+model.sublayer{3}.connect = ones(length(model.sublayer{2}.subnet),...
+                             length(model.sublayer{3}.subnet));
+model.sublayer{4}.connect = ones(length(model.sublayer{3}.subnet),...
+                              length(model.sublayer{4}.subnet));
 %============================================================
 
 model.lambda = 0.002; 

@@ -32,7 +32,14 @@ for i = 2 : num_sublayer
             if model.sublayer{i}.connect(k,j) == 0
                continue; 
             end
-            inFeatureMap = mergeFeatureMap(inFeatureMap,res{i-1}{k}{end});
+           % inFeatureMap = mergeFeatureMap(inFeatureMap,res{i-1}{k}{end});
+            
+            tem = zeros(size(inFeatureMap,1),size(inFeatureMap,2),...
+                   size(inFeatureMap,3)+size(res{i-1}{k}{end},3));
+            tem(:,:,1:size(inFeatureMap,3)) =inFeatureMap;
+            tem(:,:,size(inFeatureMap,3)+1:end)=res{i-1}{k}{end};
+            inFeatureMap = tem;
+            
         end
         
         %-------------OUT: inFeatureMap ---------------------
