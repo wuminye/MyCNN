@@ -33,7 +33,7 @@ function [ model ] = InitCNNModel()
    Layer{end}.out = [14 12 8];
    
    Layer{end+1}.type = 'Convs';
-   Layer{end}.kernelsize = [4 4];
+   Layer{end}.kernelsize = [5 5];
    Layer{end}.mapnum  =  12;
    Layer{end}.stride = 2 ;    %  7 6 
    

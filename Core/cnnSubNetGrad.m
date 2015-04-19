@@ -94,8 +94,7 @@ for i = num-1:-1: 1
                    continue;
                end
                res{i}.w(:,:,p,q) = conv2(data{i-1}(:,:,p), rot90(rot90(res{i}.t(:,:,q))),'valid');
-               %------------这里要不要再翻转回来呢?????????????????????
-               %res{i}.w(:,:,p,q) = rot90(rot90(conv2(data{i-1}(:,:,p), rot90(rot90(res{i}.t(:,:,q))),'valid')));
+      
             end
             tem =res{i}.t(:,:,q);
             res{i}.b(q) = sum(tem(:));
