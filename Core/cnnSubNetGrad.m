@@ -93,7 +93,7 @@ for i = num-1:-1: 1
                if model.Layer{i}.connector(q,p)~=1
                    continue;
                end
-               res{i}.w(:,:,p,q) = conv2(data{i-1}(:,:,p), rot90(rot90(res{i}.t(:,:,q))),'valid');
+               res{i}.w(:,:,p,q) = conv2(data{i-1}(:,:,p), rot90(res{i}.t(:,:,q),2),'valid');
       
             end
             tem =res{i}.t(:,:,q);
