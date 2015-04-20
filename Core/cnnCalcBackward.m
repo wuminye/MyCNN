@@ -56,7 +56,7 @@ for i = num_sublayer:-1: 2
 
                     theta.w = zeros(size(model_layer.w));
                     theta.b = zeros(size(model_layer.b));
-                    for q = 1 : size( theta,4)
+                    for q = 1 : size( theta.w,4)
                        for p = 1 : size(theta.w,3)
                            if  model_layer.connector(q,p)~=1
                                continue;
@@ -80,7 +80,7 @@ for i = num_sublayer:-1: 2
                     theta.w = zeros(size(model_layer.w));
                     theta.b = zeros(size(model_layer.b));
                     
-                    for q = 1 : size( theta,4)
+                    for q = 1 : size( theta.w,4)
                        for p = 1 : size(theta.w,3)
                            if  model_layer.connector(q,p)~=1
                                continue;
@@ -115,7 +115,7 @@ for i = num_sublayer:-1: 2
                 if strcmp(cur,'ANN')
                    theta.t = theta.t.*deActiveFunction( data{i}{j}{end});
                     theta.b = theta.t;
-                    theta.t = reshape(theta,1,1,[]); % 可要可不要？？
+                    theta.t = reshape(theta.t,1,1,[]); % 可要可不要？？
                     theta.w = theta.b(:)*reshape(data{i}{j}{end-1}, [] ,1)';
                     theta.b = theta.t;
                 end

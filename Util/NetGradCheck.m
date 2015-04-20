@@ -5,8 +5,8 @@ function err = NetGradCheck( theta,data,y,model,eps)
 
 n = size(grad,1);
 err = zeros(n,1);
-for i = 1: n
-    if mod(i,500)==0
+for i = 150: n
+    if mod(i,5000)==0
         disp(i);
         disp([ min(err) max(err)  ]);
         %disp(err(i-1));
@@ -18,13 +18,12 @@ for i = 1: n
     [J2, grad2]=CostFunction(theta,data,y,model);
 
     err(i)= abs((J1-J2)/(2*eps)-grad(i));
-
+    if  err(i) > 1e-6
     fprintf('[%i] err: %e  \t%e\t%e\n',i,err(i),(J1-J2)/(2*eps),grad(i));
-
+    end
     theta = tem;
 end
 
-disp(mean(err));
-disp(std(err));
+
 end
 
