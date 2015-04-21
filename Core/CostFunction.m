@@ -12,7 +12,7 @@ corind = zeros(num_data,1);
 %计算每个样本的带价值和修正梯度
 cor = 0;
 
-for i = 1 : num_data
+parfor i = 1 : num_data
    res = cnnCalcForward(model,input(:,:,:,i));
    output = res{end}{end}{end}(:);
    %yy = zeros(size(output,1),1);

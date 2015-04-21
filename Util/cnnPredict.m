@@ -97,14 +97,13 @@ for j = 1:step
          X(:,:,1,1:size(temp,4)) = temp;
          X(:,:,1,size(temp,4)+1:end) = tX;
      end
-     %{
-     b(b<=0.8) = 0;
-     disp(sum(sum(b>0))); 
-     figure;
-     imshow(b);
-     %}
  
-     scale = scale*0.72;
+     if state ~= 0
+        scale = scale*0.73;
+     else
+        % 0.75 + - 0.07
+        scale = scale * (rand()*0.14-0.07 + 0.75);  
+     end
 end
 
     

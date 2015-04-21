@@ -1,6 +1,10 @@
 function [ J , cor ,ind ,indf,model,tp,tn] = cnnAnalyze( model,num,images,labels )
-%CNNANALYZE Summary of this function goes here
-%   Detailed explanation goes here
+% J ----  CostFuncion 的值
+% cor  -------  正确率
+% ind  -------  正确样本在images中的编号序列
+% indf ---------- 错误样本在images中的编号序列
+% tp ------   true positive
+% tn ------   true negative
 
 
 if ~exist('num', 'var')
@@ -8,12 +12,13 @@ if ~exist('num', 'var')
 end
 tt = [1:size(images,4)]';
 
+%===================================
 %随机选取num个样本分析
 index = randperm(size(images,4),num); 
-
 images = images(:,:,:,index);
 labels = labels(index,:);
 tt = tt(index);
+%===================================
 
 lambda = model.lambda;
 
@@ -24,11 +29,10 @@ cor = 0;
 tp = 0;
 tn =0;
 parfor i = 1 : num
-   res = cnnCalcnet(model,images(:,:,:,i));
-   output = res{length(res)}(:);
-   %yy = zeros(size(output,1),1);
-   %yy(labels(i)) = 1;
-   yy = labels(i,:)';
+   res = cnnCalcForward(model,images(:,:,:,i));
+    output = res{end}{end}{end}(:);
+
+    yy = labels(i,:)';
   if onehot2num(output) == onehot2num(yy)
        cor = cor + 1;
        ind(i)=1;
@@ -47,7 +51,7 @@ parfor i = 1 : num
 
 end;
 J = J / num;
-J = J + lambda*cnnCalcReg(model)/(2*num);
+J = J + lambda*cnnCalcNetReg(model)/(2*num);
 
 te=ind;
 ind = tt(logical(ind));

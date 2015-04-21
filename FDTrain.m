@@ -1,18 +1,19 @@
 addpath('./FaceData/');
-model = GetModel('face2');
-save model2 model;
+addpath('./Core/');
+addpath('./Util/');
+model = InitCNNModel();
+save model model;
 
 
 while true
 
-    main2;
+    TrainModel;
     [ X,y ] = LoadErrNonFaces( model );
     save errdata X y ;
     if size(X,4)<50
         break;
     end
-    [images , labels] = LoadData(model.dataname);
-    %images = images(:,:,:,1:130000);
-    %labels = labels(1:130000,:);
+    [images , labels] = PrepareData(1000000,1000000);
+   
     save picdata images labels;
 end
