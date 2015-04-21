@@ -24,8 +24,8 @@ function [ X , y ] = LoadData(pn,nn )
     X = mergeFeatureMap(X1,X2);
     
     y = zeros(size(X,4),2);
-    y(1:size(X1,4),:) = [1 0];
-    y(size(X1,4)+1:end,:) = [0 1];
+    y(1:size(X1,4),1) = 1;
+    y(size(X1,4)+1:end,2) = 1;
     
      
 
