@@ -42,7 +42,7 @@ tXp = Xp(:,:,:,index);
 typ = yp(index,:);
 indp=indp(index);
 
-index = randperm(size(Xf,4),pn - size(tXp,4)); 
+index = randperm(size(Xf,4),max(pn - size(tXp,4),0)); 
 tXf = Xf(:,:,:,index);
 tyf = yf(index,:);
 indf=indf(index);

@@ -6,18 +6,19 @@ function [ X , y ] = LoadData(pn,nn )
    [ X1,y1] = LoadFaces();
    [ X2,y2] = LoadNoFaces();
    
+   X1 = mergeFeatureMap(X1,images);
+
+   
     index = randperm(size(X1,4));
     X1 = X1(:,:,:,index);
-    y1 = y1(index,:);
-   
-    X1 = mergeFeatureMap(X1,images);
-    y1 = [y1;labels];
+
+    
     
     X1 =  X1(:,:,:,1:pn);
     
     index = randperm(size(X2,4));
     X2 = X2(:,:,:,index);
-    y2 = y2(index,:);
+
     
     X2 =  X2(:,:,:,1:nn);
     

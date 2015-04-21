@@ -10,7 +10,10 @@ nn = 100000;
 fprintf('generating training data: %d face ; %d nonface\n',pn,nn);
 [ X , y ] = LoadData(pn,nn);
 
-save picdata X y
+images = X;
+labels = y;
+
+save picdata images labels
 
 fprintf('Done.\n');
 
