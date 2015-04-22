@@ -13,7 +13,7 @@ step = model.step;
 
 save model  model
 
-[ J , cor ,nul,indf] = cnnAnalyze( model,size(images,4),images,labels);
+[ J , cor ,nul,indf,model,tp,tn] = cnnAnalyze( model,size(images,4),images,labels);
 model=cnnLog(model,'$[ Correction: %.5f%% | Cost: %e ]$\n',cor,J);
-
+model=cnnLog(model,'TP: %.4f\tTN: %.4f\n',tp,tn);
 

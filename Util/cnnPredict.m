@@ -1,7 +1,7 @@
 function [ ress ,X ,scales] = cnnPredict( model,data , state)
 %CNNPREDICT Summary of this function goes here
 %   Detailed explanation goes here
-
+tttt = model; %backup
 if ~exist('state', 'var')
     state = 0;
 end
@@ -19,15 +19,23 @@ ress =cell(step,1);
 X = zeros(36,32,1,0);
 scales = zeros(0,1);
 for j = 1:step
-    
+    model = tttt;
     %¹ıÔØ±£»¤
     if size(X,4)>800 
         break;
     end
     
-    fprintf('%d\n',j);
+     fprintf('%d\n',j);
+    
+     inputimg = imresize(data,scale);
+     
+     [tt , featuremap] = cnnCalcForward( model ,inputimg ,1 );
+     
+     
+     model = model.sublayer{end}.subnet{end}.model;
+     
      res = cell(length(model.Layer),1);
-     res{1} = imresize(data,scale);
+     res{1} = featuremap;
      scales(end+1,1) = scale;
      %{
      imshow( res{1});
@@ -91,7 +99,7 @@ for j = 1:step
      ress{j} = b;
       
      if state == 0
-         [tX] = splitIMG(model,res{1},b,rate);
+         [tX] = splitIMG(tttt,inputimg,b,rate);
          temp = X;
          X = zeros(size(tX,1),size(tX,2),size(tX,3),size(tX,4)+size(temp,4));
          X(:,:,1,1:size(temp,4)) = temp;
@@ -145,8 +153,8 @@ for i = 1:floor(N)
     end
     
     
-    res = cnnCalcnet( model, img(cx:cx+rx-1,cy:cy+ry-1));
-    rr = res{end};
+    res = cnnCalcForward( model, img(cx:cx+rx-1,cy:cy+ry-1));
+    rr = res{end}{end}{end};
    % imshow(img(cx:cx+rx-1,cy:cy+ry-1));
     if rr(1)>rate(2)
        if rate(2) <0.5

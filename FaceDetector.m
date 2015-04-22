@@ -1,5 +1,9 @@
 function [ cp , faces ] = FaceDetector(model, data )
 
+addpath('./FaceData/');
+addpath('./Core/');
+addpath('./Util/');
+
 if size(data,1)==1   %文件输入
     data = imread(data);
     data = rgb2gray(data);
@@ -30,7 +34,7 @@ for i = 1 : length(res)
     subplot(2,1,1);
     imshow(t);
    subplot(2,1,2);
-    [faces]=splitIMG(model,imresize(data,scales(i)),t,[0.5 0.6]);
+    [faces]=splitIMG(model,imresize(data,scales(i)),t,[0.4 0.6]);
 end
 
 %{
@@ -86,21 +90,32 @@ for i = 1:floor(N)
 
     tx = x(i);
     ty = y(i);
-    for scale = 0.8:0.2:1.2
+    for scale = 0.7:0.2:1.3
         %坐标转换到原图
         tcx = ceil(tx*(sx-36)/dx - rx*scale/2 + 16);
-        tcy = ceil(ty*(sy-32)/dy - ry*scale/2 + 16);
+        tcy = ceil(ty*(sy-36)/dy - ry*scale/2 + 16);
         %cx = ceil(tx*(sx)/dx - rx*scale/2 );
         %cy = ceil(ty*(sy)/dy - ry*scale/2 );
-       for cx = tcx-5:5:tcx+5
-           for cy = tcy-3:3:tcy+3
+        ccnt = 0; % 如果已检测到人脸，就不再周围区域搜索
+       for cx = tcx:5:tcx
+           
+           if ccnt >2
+                break;
+            end
+           
+           for cy = tcy:3:tcy+3
+               
+           if ccnt >2
+                break;
+            end
+           
                 if cx<1 || cy<1 || ceil(cx+rx*scale-1)>sx || ceil(cy+ry*scale-1)>sy
                    continue;
                 end
                 timg = img(cx:ceil(cx+rx*scale-1),cy:ceil(cy+ry*scale-1));
                 timg = imresize(timg,[rx,ry]);
-                res = cnnCalcnet( model, timg);
-                rr = res{end};
+                res = cnnCalcForward( model, timg);
+                rr = res{end}{end}{end};
                 imshow(timg);
               % disp([rr(1) rr(2)]);
                 if rr(1)>rate(2)
@@ -113,6 +128,7 @@ for i = 1:floor(N)
                    fprintf('%d %d %f %f \n',cx,cy,rr(1), rr(2));
                   % imshow(timg);
                   % pause;
+                  ccnt = ccnt + 1;
                 end
            end
        end

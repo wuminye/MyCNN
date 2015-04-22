@@ -19,7 +19,7 @@ for cf = 1 : num
         end
         tem = conv2(inputFeature(:,:,lf),rot90(w(:,:,lf,cf),2),'same');
         tem = tem(1:stride:end,1:stride:end);
-        featureMap(:,:,cf) = featureMap(:,:,cf) +tem;
+        featureMap(:,:,cf) = tem + featureMap(:,:,cf) ;
     end
     featureMap(:,:,cf) = ActiveFunction(featureMap(:,:,cf) + b(cf));
 end

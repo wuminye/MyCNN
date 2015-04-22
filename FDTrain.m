@@ -13,7 +13,7 @@ while true
     if size(X,4)<50
         break;
     end
-    [images , labels] = PrepareData(1000000,1000000);
-   
+    [images , labels] = PrepareData(100000,100000);
+
     save picdata images labels;
 end

@@ -96,7 +96,7 @@ for i = num_sublayer:-1: 2
                            nf = zeros(size(tem,1)+hk(1)*2,...
                                       size(tem,2)+hk(2)*2);
                            nf(hk(1)+1:hk(1)+x1,hk(2)+1:hk(2)+y1) = data{i}{j}{end-1}(:,:,p);
-                           theta.w(:,:,p,q) = conv2(nf, rot90(tem,2),'vaild');
+                           theta.w(:,:,p,q) = conv2(nf, rot90(tem,2),'valid');
 
                         end
                         tem =theta.t(:,:,q);
