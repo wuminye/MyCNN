@@ -14,6 +14,11 @@ while true
         break;
     end
     [images , labels] = PrepareData(100000,100000);
-
-    save picdata images labels;
+    if strcmp(model.type, 'small') ==1
+         save picdatasmall images labels;
+    else    
+        save picdata images labels;
+       % inputimg = imresize(data,scale);
+    end
+    
 end

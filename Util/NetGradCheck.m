@@ -1,11 +1,11 @@
 function err = NetGradCheck( theta,data,y,model,eps)
 %GRADCHECK Summary of this function goes here
 %   Detailed explanation goes here
-[J, grad]=CostFunction(theta,data,y,model);
+tic;[J, grad]=CostFunction(theta,data,y,model);toc;
 
 n = size(grad,1);
 err = zeros(n,1);
-for i = 150: n
+for i = 1: n
     if mod(i,5000)==0
         disp(i);
         disp([ min(err) max(err)  ]);

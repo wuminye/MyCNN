@@ -1,31 +1,25 @@
-function err = gradcheck( theta,data,y,model,eps)
-%GRADCHECK Summary of this function goes here
-%   Detailed explanation goes here
-[J, grad]=CostFunction(theta,data,y,model);
 
-n = size(grad,1);
-err = zeros(n,1);
-for i = 1: n
-    if mod(i,500)==0
-        disp(i);
-        disp([ min(err) max(err)  ]);
-        %disp(err(i-1));
-    end
-    tem = theta;
-    theta(i)= theta(i)+eps;
-    [J1, grad1]=CostFunction(theta,data,y,model);
-    theta(i)= theta(i)-2*eps;
-    [J2, grad2]=CostFunction(theta,data,y,model);
+addpath('./Core/');
+addpath('./Util/');
 
-    err(i)= abs((J1-J2)/(2*eps)-grad(i));
-    %if err(i)>=eps 
-        fprintf('[%i] err: %e  \t%e\t%e\n',i,err(i),(J1-J2)/(2*eps),grad(i));
-        %disp(err(i));
-    %end;
-    theta = tem;
+model = InitCNNModel();
+
+num_train = 4;
+load picdata
+
+
+images = images(:,:,:,1:num_train);
+labels = labels(1:num_train,:);
+
+if strcmp(model.type, 'small') ==1
+    images =  NormalizeIMG( images ,0.5);
+else    
+    images =  NormalizeIMG(images);
 end
+
+theta = SaveNetTheta(model);
+
+err = NetGradCheck( theta ,images,labels,model,1e-6);
 
 disp(mean(err));
 disp(std(err));
-end
-

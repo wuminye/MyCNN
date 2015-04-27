@@ -32,8 +32,8 @@ for i = 1 : num_layer
        Layer{i}.connector = ones(Layer{i}.mapnum,Layer{i-1}.out(3));
 
 
-       if Layer{i-1}.out(3)> 10 &&  Layer{i}.out(3) >5 
-          %对高层随机切断链接
+       if Layer{i-1}.out(3) + Layer{i}.out(3) >15 
+          %随机切断链接
            Np = size(Layer{i}.connector(:),1);
            index = randperm(Np,ceil(Np*0.35));
            Layer{i}.connector(index) = 0;
@@ -55,8 +55,8 @@ for i = 1 : num_layer
        Layer{i}.connector = ones(Layer{i}.mapnum,Layer{i-1}.out(3));
 
 
-       if Layer{i-1}.out(3)> 10 &&  Layer{i}.out(3) >5
-           %对高层随机切断链接
+       if Layer{i-1}.out(3) + Layer{i}.out(3) >15 
+           %随机切断链接
            Np = size(Layer{i}.connector(:),1);
            index = randperm(Np,ceil(Np*0.35));
            Layer{i}.connector(index) = 0;

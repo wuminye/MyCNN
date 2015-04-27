@@ -19,6 +19,10 @@ function [ X, y ] = PrepareData(pn,nn)
    load picdata;
    load errdata;
    load model;
+   
+   if strcmp(model.type, 'small') ==1
+        X =NormalizeIMG( X ,0.5);
+   end
    index = labels(:,2) ==1;
 
    tmp = images(:,:,:,index);

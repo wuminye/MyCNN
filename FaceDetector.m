@@ -22,19 +22,19 @@ for i = 1 : length(res)
 
     %res{i}(res{i}<=0.1) = 0;
     %imshow(res{i});
-    t= res{i}*0.9;
+    t= res{i}*1;
     if i~= 1
         t = t + 0.1*imresize(res{i-1},size(t));
     end
     if i~= length(res)
         t = t + 0.1*imresize(res{i+1},size(t));
     end
-    %t = medfilt2(t,[2 2]);
+    t = medfilt2(t,[2 2]);
     figure;
     subplot(2,1,1);
     imshow(t);
    subplot(2,1,2);
-    [faces]=splitIMG(model,imresize(data,scales(i)),t,[0.4 0.6]);
+    [faces]=splitIMG(model,imresize(data,scales(i)),t,[0.9 0.8]);
 end
 
 %{

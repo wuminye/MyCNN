@@ -13,6 +13,7 @@ if size(data,1)==1   %ÎÄ¼şÊäÈë
     data = double(data)/255;
 end   
 
+
 scale = 1;
 step = 7;
 ress =cell(step,1);
@@ -26,8 +27,12 @@ for j = 1:step
     end
     
      fprintf('%d\n',j);
-    
-     inputimg = imresize(data,scale);
+    if strcmp(model.type, 'small') ==1
+        inputimg = imresize(data,scale*0.5);
+    else    
+        inputimg = imresize(data,scale);
+    end
+     
      
      [tt , featuremap] = cnnCalcForward( model ,inputimg ,1 );
      
@@ -99,7 +104,12 @@ for j = 1:step
      ress{j} = b;
       
      if state == 0
-         [tX] = splitIMG(tttt,inputimg,b,rate);
+        if strcmp(tttt.type, 'small') ==1
+            [tX] = splitIMG(tttt,imresize(data,scale),b,rate);
+        else    
+            [tX] = splitIMG(tttt,inputimg,b,rate);
+        end
+        
          temp = X;
          X = zeros(size(tX,1),size(tX,2),size(tX,3),size(tX,4)+size(temp,4));
          X(:,:,1,1:size(temp,4)) = temp;
@@ -152,8 +162,11 @@ for i = 1:floor(N)
         continue;
     end
     
-    
-    res = cnnCalcForward( model, img(cx:cx+rx-1,cy:cy+ry-1));
+     if strcmp(model.type, 'small') ==1
+       res = cnnCalcForward( model, imresize(img(cx:cx+rx-1,cy:cy+ry-1),0.5));
+     else 
+       res = cnnCalcForward( model, img(cx:cx+rx-1,cy:cy+ry-1));
+     end
     rr = res{end}{end}{end};
    % imshow(img(cx:cx+rx-1,cy:cy+ry-1));
     if rr(1)>rate(2)
