@@ -30,10 +30,10 @@ for i = 1 : LengthFiles
        for ix = 1:step1:sx-rx+1
            for iy = 1:step1:sy-ry+1
                
-               X(:,:,1,end+1)=nF(ix:ix+rx-1,iy:iy+ry-1);
+               X(:,:,1,end+1)=histeq(nF(ix:ix+rx-1,iy:iy+ry-1));
                y(end+1,2) = 1;
                %imshow(X(:,:,1,end));
-               X(:,:,1,end+1)=medfilt2(nF(ix:ix+rx-1,iy:iy+ry-1));
+               X(:,:,1,end+1)=histeq(medfilt2(nF(ix:ix+rx-1,iy:iy+ry-1)));
                y(end+1,2) = 1;
               % imshow(X(:,:,1,end));
            end

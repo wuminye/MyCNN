@@ -173,7 +173,7 @@ for i = 1:floor(N)
        if rate(2) <0.5
           fprintf('P / N-- %.6f\t/\t%.6f\n',data(tx,ty),rr(1));
        end
-       X(:,:,1,end+1) = img(cx:cx+rx-1,cy:cy+ry-1);
+       X(:,:,1,end+1) = histeq(img(cx:cx+rx-1,cy:cy+ry-1));
        %{
        close all;
        imshow( X(:,:,1,end));

@@ -22,7 +22,7 @@ function [ X,y] = LoadFaces()
       data = Database.data{i};
       ang = str2double(data.filename(6:8));
       %���Ƕ���������
-      if abs(ang)>=30
+      if abs(ang)>=35
           continue;
       end
       fprintf('\r%5d\r',i);
@@ -31,6 +31,7 @@ function [ X,y] = LoadFaces()
        w = w*1.15;
       if abs(ang)>=25
            w = w *1.1;
+        %   py = py + w*0.1;
       end
 
       h = w*rx/ry;
@@ -39,12 +40,12 @@ function [ X,y] = LoadFaces()
       F = double(F)/255;
 
       nF = F(ceil(py-h/2:py+h/2),ceil(px - w/2:px + w/2));
-      nF = imresize(nF,[rx,ry]);
+      nF = histeq(imresize(nF,[rx,ry]));
       X(:,:,1,end+1) = nF;
       y(end+1,1) = 1;
-      X(:,:,1,end+1) = medfilt2(nF,[2 2]);
+      X(:,:,1,end+1) = histeq(medfilt2(nF,[2 2]));
       y(end+1,1) = 1;
-      %imshow(nF);
+    %  imshow(nF);
   end
 
   fprintf('begin read LFW...\n');
@@ -73,10 +74,10 @@ function [ X,y] = LoadFaces()
       end
 
       nF = F(ceil(py-h/2:py+h/2),ceil(px - w/2:px + w/2));
-      nF = imresize(nF,[rx,ry]);
+      nF = histeq(imresize(nF,[rx,ry]));
       X(:,:,1,end+1) = nF;
       y(end+1,1) = 1;
-      X(:,:,1,end+1) = medfilt2(nF,[2 2]);
+      X(:,:,1,end+1) = histeq(medfilt2(nF,[2 2]));
       y(end+1,1) = 1;
      % imshow(nF);
   end

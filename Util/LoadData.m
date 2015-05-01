@@ -2,16 +2,19 @@ function [ X , y ] = LoadData(pn,nn )
 
 
    addpath('./FaceData/');
-   load morphdata;
+   
    [ X1,y1] = LoadFaces();
    [ X2,y2] = LoadNoFaces();
    
+   load morphdata;
    X1 = mergeFeatureMap(X1,images);
-
+   
+   load ffdb;
+   X1 = mergeFeatureMap(X1,X);
    
     index = randperm(size(X1,4));
     X1 = X1(:,:,:,index);
-
+    
     
     
     X1 =  X1(:,:,:,1:pn);
