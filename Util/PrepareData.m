@@ -16,10 +16,16 @@ function [ X, y ] = PrepareData(pn,nn)
 
    % disp(en);
    % X2(:,:,1,1:en) = X;
-   load picdata;
+
    load errdata;
    load model;
-   
+   if strcmp(model.type, 'small') ==1
+       load picdatasmall
+       % images =  NormalizeIMG( images ,0.5);
+    else    
+        load picdata
+        %images =  NormalizeIMG(images);
+    end
    if strcmp(model.type, 'small') ==1
         X =NormalizeIMG( X ,0.5);
    end
