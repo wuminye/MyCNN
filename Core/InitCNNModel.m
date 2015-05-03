@@ -99,7 +99,7 @@ model.sublayer{4}.connect = ones(length(model.sublayer{3}.subnet),...
 
 %}
 
-input = [18 16 1];
+input = [36 32 1];
 
 %---------------------------------------------
 % subnet 1-1
@@ -109,23 +109,28 @@ input = [18 16 1];
    Layer{end+1}.type = 'Input';
    Layer{end}.out = input;
      
+   Layer{end+1}.type = 'Convs';
+   Layer{end}.kernelsize = [5 5];
+   Layer{end}.mapnum  =  2;
+   Layer{end}.stride = 2 ;    %  18 16
+   
    Layer{end+1}.type = 'Conv';
    Layer{end}.kernelsize = [3 3];
-   Layer{end}.mapnum  =   6;  %16 14
+   Layer{end}.mapnum  =   5;  %16 14
    
    Layer{end+1}.type = 'Pooling';
    Layer{end}.kernelsize = [2 2];  %  8 7
    
    Layer{end+1}.type = 'Conv';
    Layer{end}.kernelsize = [5 5];
-   Layer{end}.mapnum  =   12;  %4 3
+   Layer{end}.mapnum  =   8;  %4 3
    
    Layer{end+1}.type = 'Conv';
    Layer{end}.kernelsize = [4 3];
-   Layer{end}.mapnum  =   26;  % 1 1
+   Layer{end}.mapnum  =   18;  % 1 1
    
    Layer{end+1}.type = 'ANN';
-   Layer{end}.out = [42 1];
+   Layer{end}.out = [25 1];
    
    Layer{end+1}.type = 'SoftMax';
    Layer{end}.out = [2 1];
@@ -141,7 +146,7 @@ model.sublayer{1}.subnet{1} = 0;
 model.sublayer{2}.subnet{1}.model = model_1_1;
 %-------- CONNECTION --------------------
 model.sublayer{2}.connect = ones(1,length(model.sublayer{2}.subnet));
-model.type = 'small';
+model.type = 'big';
 
 
 model.lambda = 0.03; 

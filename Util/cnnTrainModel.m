@@ -25,45 +25,68 @@ for i = 1: step
   model=cnnLog(model,'< %d > Num_train: %d  Iter_num: %d \n',i,pn,itn);
   
   [ J , cor ,nul,indf,model] = cnnAnalyze( model,model.testnum,images,labels);
-
   model=cnnLog(model,'[ Correction: %.5f%% | Cost: %e ]\n',cor,J);
+  precor = cor;  %前一次的正确率
+  trainflag = 1;  %判断是否要用当前样本继续训练
   
   %分配每批训练样本
   [ tX,ty,model,ind] = cnnTDAllocate(model,X,y ,pn );
   
   model=cnnLog(model,'faces:%d\n',sum(ty(:,1)==1));
   [ J , cor ,nul ,indf,model] = cnnAnalyze( model,size(tX,4),tX,ty);
+  model=cnnLog(model,'Correction for train: %.5f%% | Cost: %e \n',cor,J);
+ 
 
- model=cnnLog(model,'Correction for train: %.5f%% | Cost: %e \n',cor,J);
   
-  F=@(p)CostFunction( p, tX, ty, model );
-  options = optimset('MaxIter', itn);
-  [nn_params, cost , model ,corind] = fmincg(model,F, theta, options);
+  cost = [];
+  while trainflag == 1
+      theta = SaveNetTheta(model);
+      F=@(p)CostFunction( p, tX, ty, model );
+      options = optimset('MaxIter', itn);
+      [nn_params, cost1 , model ,corind] = fmincg(model,F, theta, options);
+      cost = [cost;cost1];
+      %{
+      %更新错误记录
+      model.corind(ind(logical(corind))) = 1; 
+      model.corind(ind(~logical(corind))) = 0; 
+%}
+     
+      %保存结果至model.mat
+      ttt = model;
+      model = LoadNetTheta(nn_params,model);
+      theta = nn_params;
+     % ShowLayer( model, X(:,:,1,1) ,y(1,:) );
+      %saveas(gcf,'data.fig');
+
+      save model  model
+
+      [ J , cor ,ind ,indf,model,tp,tn] = cnnAnalyze( model,model.testnum,X,y);
+
+      %更新错误表
+      model.corind(ind) = 1; 
+      model.corind(indf) = 0; 
   
-  %更新错误记录
-  model.corind(ind(logical(corind))) = 1; 
-  model.corind(ind(~logical(corind))) = 0; 
-    
-  model=cnnLog(model,'%fmincg result\n',cost);
-  %保存结果至model.mat
-  model = LoadNetTheta(nn_params,model);
-  
- % ShowLayer( model, X(:,:,1,1) ,y(1,:) );
-  %saveas(gcf,'data.fig');
-  
-  save model  model
-  
-  [ J , cor ,ind ,indf,model,tp,tn] = cnnAnalyze( model,model.testnum,X,y);
-  
-  %更新错误表
-  model.corind(ind) = 1; 
-  model.corind(indf) = 0; 
-  
-  
+      if abs(precor - cor) < 2 || precor>cor
+          %model = ttt; %还原模型
+          model=cnnLog(model,'===Bad Samples==  %.5f\n',cor);
+          trainflag = 0;
+      else 
+          precor = cor;
+      end
+      
+  end
+   model=cnnLog(model,'%fmincg result\n',cost);
   model=cnnLog(model,'[ Correction: %.5f%% | Cost: %e ]\n',cor,J);
   model=cnnLog(model,'TP: %.4f\tTN: %.4f\n',tp,tn);
   model=cnnLog(model,'------ Cost: %e | %.5f%% -----\n\n',cost(end),cost(1)/cost(end)*100);
   
+ [ J , cor,nul ,indf,model] = cnnAnalyze( model,model.traintestnum,images,labels);
+ model=cnnLog(model,'\n*[ Correction: %.5f%% | Cost: %e ]*\n\n',cor,J);
+ 
+ if cor > 96
+     model=cnnLog(model,'Goals achieved. quit.\n');
+     break;
+ end
 %=============================================================
 % 调整lambda 
   ppp = cost(1)/cost(end)*100;
@@ -78,8 +101,8 @@ for i = 1: step
   end
 %========================================================  
 
-  
-  theta = nn_params;
+
+
 end
 
 outmodel = model;
