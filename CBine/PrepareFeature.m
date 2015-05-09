@@ -1,10 +1,12 @@
-function [ X ] = PrepareFeature( models, images)
+function [ X ,CNT] = PrepareFeature( models, images)
 
 N = size(images,4);
-res = cnnCalcForward(models{1},images(:,:,:,1));
-output = res{end}{end}{end-1};
+CNT = 0;
+for i = 1:length(models)
+    CNT = CNT + models{i}.sublayer{end}.subnet{end}.model.Layer{end-1}.out(1);
+end
 
-X = zeros(1,1,size(output,3)*length(models),N);
+X = zeros(1,1,CNT,N);
 
 parfor i = 1:N
     tem = [];
