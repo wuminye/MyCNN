@@ -109,33 +109,42 @@ input = [36 32 1];
    Layer{end+1}.type = 'Input';
    Layer{end}.out = input;
      
-   Layer{end+1}.type = 'Convs';
+   
+   Layer{end+1}.type = 'Conv';
    Layer{end}.kernelsize = [5 5];
-   Layer{end}.mapnum  =  2;
-   Layer{end}.stride = 2 ;    %  18 16
+   Layer{end}.mapnum  =   3;  %32 28
+   
+   Layer{end+1}.type = 'Pooling';
+   Layer{end}.kernelsize = [2 2];  %  16 14
    
    Layer{end+1}.type = 'Conv';
    Layer{end}.kernelsize = [3 3];
-   Layer{end}.mapnum  =   5;  %16 14
+   Layer{end}.mapnum  =   10;  %14 12
    
    Layer{end+1}.type = 'Pooling';
-   Layer{end}.kernelsize = [2 2];  %  8 7
-   
-   Layer{end+1}.type = 'Conv';
-   Layer{end}.kernelsize = [5 5];
-   Layer{end}.mapnum  =   8;  %4 3
+   Layer{end}.kernelsize = [2 2];  %  7 6
    
    Layer{end+1}.type = 'Conv';
    Layer{end}.kernelsize = [4 3];
-   Layer{end}.mapnum  =   18;  % 1 1
+   Layer{end}.mapnum  =   20;  % 4 4
+   
+   Layer{end+1}.type = 'Pooling';
+   Layer{end}.kernelsize = [2 2];  %  2 2
+   
+   Layer{end+1}.type = 'Conv';
+   Layer{end}.kernelsize = [2 2];
+   Layer{end}.mapnum  =   30;  % 1 1
    
    Layer{end+1}.type = 'ANN';
-   Layer{end}.out = [25 1];
+   Layer{end}.out = [18 1];
+   
    
    Layer{end+1}.type = 'SoftMax';
    Layer{end}.out = [2 1];
    
    model_1_1 = InitSubnet( Layer );
+   
+
 %====================================================
 
 num_sublayer = 1;
