@@ -112,32 +112,33 @@ input = [36 32 1];
    
    Layer{end+1}.type = 'Conv';
    Layer{end}.kernelsize = [5 5];
-   Layer{end}.mapnum  =   3;  %32 28
+   Layer{end}.mapnum  =   4;  %32 28
    
    Layer{end+1}.type = 'Pooling';
    Layer{end}.kernelsize = [2 2];  %  16 14
    
    Layer{end+1}.type = 'Conv';
    Layer{end}.kernelsize = [3 3];
-   Layer{end}.mapnum  =   10;  %14 12
+   Layer{end}.mapnum  =   12;  %14 12
    
    Layer{end+1}.type = 'Pooling';
    Layer{end}.kernelsize = [2 2];  %  7 6
    
    Layer{end+1}.type = 'Conv';
-   Layer{end}.kernelsize = [4 3];
-   Layer{end}.mapnum  =   20;  % 4 4
-   
-   Layer{end+1}.type = 'Pooling';
-   Layer{end}.kernelsize = [2 2];  %  2 2
-   
+   Layer{end}.kernelsize = [3 3];
+   Layer{end}.mapnum  =   22;  % 5 4
+      
    Layer{end+1}.type = 'Conv';
-   Layer{end}.kernelsize = [2 2];
-   Layer{end}.mapnum  =   30;  % 1 1
+   Layer{end}.kernelsize = [3 3];
+   Layer{end}.mapnum  =   50;  % 3 2
+   
+   Layer{end+1}.type = 'Reshape';
+   Layer{end}.kernelsize = [1 1 300];
+   
    
    Layer{end+1}.type = 'ANN';
-   Layer{end}.out = [18 1];
-   
+   Layer{end}.out = [880 1];
+      
    
    Layer{end+1}.type = 'SoftMax';
    Layer{end}.out = [2 1];
@@ -158,10 +159,10 @@ model.sublayer{2}.connect = ones(1,length(model.sublayer{2}.subnet));
 model.type = 'big';
 
 
-model.lambda = 0.03; 
+model.lambda = 0.003; 
 %model.dataname = name;  %数据库名称 
 
-model.num_train = 200000; %用于训练的样本数量 
+model.num_train = 80000; %用于训练的样本数量 
 model.MaxIter = 20; % 批量梯度法的迭代次数 
 
  
@@ -171,9 +172,9 @@ model.tick = 15 ; %训练时的刻度
 model.itn =  25 ; %每批训练最大迭代次数 
 model.step = 30 ; %训练的批次数 
 model.interval = model.step/7;  %每隔多少批一次大检查 
-model.reservation = 0.00015;    %每批最少保留的样本比例 
-model.rate = 0.009;    %每批样本数量缩放比例 
-model.itreservation = 0.3;    %每批最少保留的迭代次数比例 
+model.reservation = 0.0009;    %每批最少保留的样本比例 
+model.rate = 0.020;    %每批样本数量缩放比例 
+model.itreservation = 0.4;    %每批最少保留的迭代次数比例 
 
  
 model.logn = 0 ; %初始化日志计数 

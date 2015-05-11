@@ -79,7 +79,7 @@ for i = 1: step
   model=cnnLog(model,'[ Correction: %.5f%% | Cost: %e ]\n',cor,J);
   model=cnnLog(model,'TP: %.4f\tTN: %.4f\n',tp,tn);
   model=cnnLog(model,'------ Cost: %e | %.5f%% -----\n\n',cost(end),cost(1)/cost(end)*100);
-  
+ %{ 
  [ J , cor,nul ,indf,model] = cnnAnalyze( model,model.traintestnum,images,labels);
  model=cnnLog(model,'\n*[ Correction: %.5f%% | Cost: %e ]*\n\n',cor,J);
  
@@ -87,6 +87,7 @@ for i = 1: step
      model=cnnLog(model,'Goals achieved. quit.\n');
      break;
  end
+  %}
 %=============================================================
 % µ÷Õûlambda 
   ppp = cost(1)/cost(end)*100;
