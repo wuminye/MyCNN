@@ -5,8 +5,8 @@ addpath('./FaceData/');
 addpath('./Core/');
 addpath('./Util/');
 
-pn = 100000;
-nn = 100000;
+pn = 40000;
+nn = 40000;
 fprintf('generating training data: %d face ; %d nonface\n',pn,nn);
 [ X , y ] = LoadData(pn,nn);
 

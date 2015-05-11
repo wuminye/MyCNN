@@ -7,6 +7,9 @@ function [ X , y ] = LoadData(pn,nn )
    [ X2,y2] = LoadNoFaces();
    
    load morphdata;
+   %随机选取一些morph样本
+    index = randperm(size(images,4),10000);
+    images = images(:,:,:,index);
    X1 = mergeFeatureMap(X1,images);
    
    load ffdb;

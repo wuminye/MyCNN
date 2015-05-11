@@ -13,7 +13,7 @@ while true
     if size(X,4)<50
         break;
     end
-    [images , labels] = PrepareData(100000,100000);
+    [images , labels] = PrepareData(40000,40000);
     if strcmp(model.type, 'small') ==1
          save picdatasmall images labels;
     else    
