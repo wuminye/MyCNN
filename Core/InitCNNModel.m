@@ -118,26 +118,26 @@ input = [36 32 1];
    Layer{end}.kernelsize = [2 2];  %  16 14
    
    Layer{end+1}.type = 'Conv';
-   Layer{end}.kernelsize = [3 3];
-   Layer{end}.mapnum  =   12;  %14 12
+   Layer{end}.kernelsize = [5 5];
+   Layer{end}.mapnum  =   12;  %12 10
    
    Layer{end+1}.type = 'Pooling';
-   Layer{end}.kernelsize = [2 2];  %  7 6
+   Layer{end}.kernelsize = [2 2];  %  6 5
    
    Layer{end+1}.type = 'Conv';
    Layer{end}.kernelsize = [3 3];
-   Layer{end}.mapnum  =   22;  % 5 4
+   Layer{end}.mapnum  =   26;  % 4 3
       
    Layer{end+1}.type = 'Conv';
    Layer{end}.kernelsize = [3 3];
-   Layer{end}.mapnum  =   50;  % 3 2
+   Layer{end}.mapnum  =   60;  % 2 1
    
    Layer{end+1}.type = 'Reshape';
-   Layer{end}.kernelsize = [1 1 300];
+   Layer{end}.kernelsize = [1 1 120];
    
    
    Layer{end+1}.type = 'ANN';
-   Layer{end}.out = [880 1];
+   Layer{end}.out = [580 1];
       
    
    Layer{end+1}.type = 'SoftMax';
@@ -172,9 +172,9 @@ model.tick = 15 ; %训练时的刻度
 model.itn =  25 ; %每批训练最大迭代次数 
 model.step = 30 ; %训练的批次数 
 model.interval = model.step/7;  %每隔多少批一次大检查 
-model.reservation = 0.0009;    %每批最少保留的样本比例 
-model.rate = 0.020;    %每批样本数量缩放比例 
-model.itreservation = 0.4;    %每批最少保留的迭代次数比例 
+model.reservation = 0.0007;    %每批最少保留的样本比例 
+model.rate = 0.015;    %每批样本数量缩放比例 
+model.itreservation = 0.35;    %每批最少保留的迭代次数比例 
 
  
 model.logn = 0 ; %初始化日志计数 

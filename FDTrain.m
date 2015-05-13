@@ -9,6 +9,10 @@ while true
 
     TrainModel;
     [ X,y ] = LoadErrNonFaces( model );
+    if size(X,4)>80000
+       X = X(:,:,:,1:80000);
+       y = y(1:80000,:);
+    end
     save errdata X y ;
     if size(X,4)<50
         break;
@@ -20,5 +24,6 @@ while true
         save picdata images labels;
        % inputimg = imresize(data,scale);
     end
-    
+    model.lambda = model.lambda * 400;
+    save model model;
 end

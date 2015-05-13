@@ -35,7 +35,7 @@ for i = 1 : num_layer
        if Layer{i-1}.out(3) + Layer{i}.out(3) >15 
           %Ëæ»úÇÐ¶ÏÁ´½Ó
            Np = size(Layer{i}.connector(:),1);
-           index = randperm(Np,ceil(Np*0.35));
+           index = randperm(Np,ceil(Np*0.15));
            Layer{i}.connector(index) = 0;
        end
        for nn = 1:Layer{i-1}.out(3)
@@ -58,7 +58,7 @@ for i = 1 : num_layer
        if Layer{i-1}.out(3) + Layer{i}.out(3) >15 
            %Ëæ»úÇÐ¶ÏÁ´½Ó
            Np = size(Layer{i}.connector(:),1);
-           index = randperm(Np,ceil(Np*0.35));
+           index = randperm(Np,ceil(Np*0.15));
            Layer{i}.connector(index) = 0;
        end
 
