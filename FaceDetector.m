@@ -1,5 +1,5 @@
-function [ cp , faces ] = FaceDetector(model, data )
-
+function [ cp , faces, list] = FaceDetector(model, data ,model2)
+list=[];
 addpath('./FaceData/');
 addpath('./Core/');
 addpath('./Util/');
@@ -11,9 +11,9 @@ if size(data,1)==1   %文件输入
     data = double(data)/255;
 end   
 
+
 cp = 0;
 
-%load model2
 
 [res,~,scales] = cnnPredict(model,data,1);
 
@@ -29,41 +29,24 @@ for i = 1 : length(res)
     if i~= length(res)
         t = t + 0.1*imresize(res{i+1},size(t));
     end
-    t = medfilt2(t,[2 2]);
-    figure;
-    subplot(2,1,1);
-    imshow(t);
-   subplot(2,1,2);
-    [faces]=splitIMG(model,imresize(data,scales(i)),t,[0.9 0.8]);
-end
-
-%{
-imgs = res{1};
-for i = 2 : length(res)
+  %  t = medfilt2(t,[2 2]);
+ %   figure;
+  %  subplot(2,1,1);
+  %  imshow(t);
+  % subplot(2,1,2);
+    [faces,tem]=splitIMG(model2,imresize(data,scales(i)),t,[0.6 0.5],scales(i));
+    list = [list;tem];
     
-    tem = myimTransform(res{i},size(imgs));
-    imgs = imgs + tem; 
-end
-   
-   
 
-   t = imgs;
-   
-   %t = medfilt2(t,[2 2]);
-   %t = imgs>0.3;
-   %t = medfilt2(t,[2 2]);
-   figure;
-   imshow(t);
-   
-   
-   [faces]=splitIMG(model,data,t,[0.4 0.70]);
- %}
+end
+       drawresult(data,list,res);
+
 end
 
-function [X]=splitIMG(model,img,data,rate)
+function [X,list]=splitIMG(model,img,data,rate,SCAL)
 
-
-imshow(img);
+list = [];
+%imshow(img);
 hold on;
 
 [sx ,sy] = size(img); %原始图片大小
@@ -90,42 +73,55 @@ for i = 1:floor(N)
 
     tx = x(i);
     ty = y(i);
-    for scale = 0.7:0.2:1.3
+    ccnt = 0; % 如果已检测到人脸，就不再周围区域搜索
+    
+    for scale = 0.8:0.2:1.2
         %坐标转换到原图
         tcx = ceil(tx*(sx-36)/dx - rx*scale/2 + 16);
         tcy = ceil(ty*(sy-36)/dy - ry*scale/2 + 16);
         %cx = ceil(tx*(sx)/dx - rx*scale/2 );
         %cy = ceil(ty*(sy)/dy - ry*scale/2 );
-        ccnt = 0; % 如果已检测到人脸，就不再周围区域搜索
-       for cx = tcx:5:tcx
-           
-           if ccnt >2
+         if ccnt >1
+                break;
+            end
+       for cx = tcx-4*scale:4*scale:tcx+4*scale
+           cx = round(cx);
+           if ccnt >1
                 break;
             end
            
-           for cy = tcy:3:tcy+3
-               
-           if ccnt >2
+           for cy = tcy-3*scale:3*scale:tcy+3*scale
+               cy = round(cy);
+           if ccnt >1
                 break;
             end
            
                 if cx<1 || cy<1 || ceil(cx+rx*scale-1)>sx || ceil(cy+ry*scale-1)>sy
                    continue;
                 end
+            
                 timg = img(cx:ceil(cx+rx*scale-1),cy:ceil(cy+ry*scale-1));
-                timg = imresize(timg,[rx,ry]);
+                ttimg = imresize(timg,[rx,ry]);
+                if strcmp(model.type, 'small') ==1
+                     timg = imresize(timg,[rx,ry]*0.5);
+                else    
+                     timg = imresize(timg,[rx,ry]);
+                end
                 res = cnnCalcForward( model, timg);
                 rr = res{end}{end}{end};
-                imshow(timg);
+        %        imshow(timg);
               % disp([rr(1) rr(2)]);
                 if rr(1)>rate(2)
                     
-                   X(:,:,1,end+1) = timg;
+                   X(:,:,1,end+1) = ttimg;
+                   %{
                     rectangle('Position', ...
                     [cy, cx, ry*scale, rx*scale], ...
                     'Curvature', 0.4, 'LineWidth',1, 'EdgeColor', 'blue');
-                   drawnow;
-                   fprintf('%d %d %f %f \n',cx,cy,rr(1), rr(2));
+                   %}
+                %   drawnow;
+                   list = [list ; [cx+rx*scale/2 cy+ry*scale/2  rx*scale ry*scale]/SCAL];
+                 %  fprintf('%d %d %f %f \n',cx,cy,rr(1), rr(2));
                   % imshow(timg);
                   % pause;
                   ccnt = ccnt + 1;
@@ -137,6 +133,33 @@ for i = 1:floor(N)
 end
 
 end
+
+
+function drawresult(img,list,res)
+  close all;
+  N = length(res);
+  N = ceil(sqrt(N));
+  
+  figure;
+  for i = 1: length(res)
+    subplot(N,N,i);
+    imshow(res{i});
+  end
+  figure;
+  imshow(img);
+  hold on;
+  for i = 1: size(list,1)
+        cx = list(i,1) - list(i,3)/2;
+        cy = list(i,2) - list(i,4)/2;
+        rectangle('Position', ...
+                  [cy, cx, list(i,4), list(i,3)], ...
+                  'Curvature', 0.4, 'LineWidth',1, 'EdgeColor', 'blue');
+      
+  end
+
+
+end
+
 
 function res = myimTransform(img,dsize)
    [m ,n] = size(img);
