@@ -34,11 +34,13 @@ for i = 1 : length(res)
   %  subplot(2,1,1);
   %  imshow(t);
   % subplot(2,1,2);
-    [faces,tem]=splitIMG(model2,imresize(data,scales(i)),t,[0.6 0.5],scales(i));
+    [faces,tem]=splitIMG(model2,imresize(data,scales(i)),t,[0.8 0.5],scales(i));
     list = [list;tem];
     
 
 end
+       list = ClusterFaces( list);
+
        drawresult(data,list,res);
 
 end
@@ -120,7 +122,7 @@ for i = 1:floor(N)
                     'Curvature', 0.4, 'LineWidth',1, 'EdgeColor', 'blue');
                    %}
                 %   drawnow;
-                   list = [list ; [cx+rx*scale/2 cy+ry*scale/2  rx*scale ry*scale]/SCAL];
+                   list = [list ; [(cx+rx*scale/2) (cy+ry*scale/2)  rx*scale ry*scale]/SCAL];
                  %  fprintf('%d %d %f %f \n',cx,cy,rr(1), rr(2));
                   % imshow(timg);
                   % pause;
@@ -153,7 +155,7 @@ function drawresult(img,list,res)
         cy = list(i,2) - list(i,4)/2;
         rectangle('Position', ...
                   [cy, cx, list(i,4), list(i,3)], ...
-                  'Curvature', 0.4, 'LineWidth',1, 'EdgeColor', 'blue');
+                  'Curvature', 0.4, 'LineWidth',2, 'EdgeColor', 'green');
       
   end
 
