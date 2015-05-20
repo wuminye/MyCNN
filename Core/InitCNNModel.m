@@ -112,32 +112,32 @@ input = [36 32 1];
    
    Layer{end+1}.type = 'Conv';
    Layer{end}.kernelsize = [5 5];
-   Layer{end}.mapnum  =   4;  %32 28
+   Layer{end}.mapnum  =   2;  %32 28
    
    Layer{end+1}.type = 'Pooling';
    Layer{end}.kernelsize = [2 2];  %  16 14
    
    Layer{end+1}.type = 'Conv';
-   Layer{end}.kernelsize = [5 5];
-   Layer{end}.mapnum  =   12;  %12 10
+   Layer{end}.kernelsize = [3 3];
+   Layer{end}.mapnum  =   6;  %14 12
    
    Layer{end+1}.type = 'Pooling';
-   Layer{end}.kernelsize = [2 2];  %  6 5
+   Layer{end}.kernelsize = [2 2];  %  7 6
    
    Layer{end+1}.type = 'Conv';
    Layer{end}.kernelsize = [3 3];
-   Layer{end}.mapnum  =   26;  % 4 3
+   Layer{end}.mapnum  =   12;  % 5 4
       
    Layer{end+1}.type = 'Conv';
    Layer{end}.kernelsize = [3 3];
-   Layer{end}.mapnum  =   60;  % 2 1
+   Layer{end}.mapnum  =   25;  % 3 2
    
    Layer{end+1}.type = 'Reshape';
-   Layer{end}.kernelsize = [1 1 120];
+   Layer{end}.kernelsize = [1 1 150];
    
    
    Layer{end+1}.type = 'ANN';
-   Layer{end}.out = [580 1];
+   Layer{end}.out = [300 1];
       
    
    Layer{end+1}.type = 'SoftMax';
@@ -159,7 +159,7 @@ model.sublayer{2}.connect = ones(1,length(model.sublayer{2}.subnet));
 model.type = 'big';
 
 
-model.lambda = 0.003; 
+model.lambda = 0.03; 
 %model.dataname = name;  %数据库名称 
 
 model.num_train = 80000; %用于训练的样本数量 

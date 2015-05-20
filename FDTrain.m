@@ -24,6 +24,6 @@ while true
         save picdata images labels;
        % inputimg = imresize(data,scale);
     end
-    model.lambda = model.lambda * 400;
+    model.lambda = model.lambda * 100;
     save model model;
 end

@@ -1,4 +1,4 @@
-function [ ress ,X ,scales] = cnnPredict( model,data , state)
+function [ ress ,X ,scales,res] = cnnPredict( model,data , state)
 %CNNPREDICT Summary of this function goes here
 %   Detailed explanation goes here
 tttt = model; %backup
@@ -15,7 +15,7 @@ end
 
 
 scale = 1;
-step = 7;
+step = 6;
 ress =cell(step,1);
 X = zeros(36,32,1,0);
 scales = zeros(0,1);
@@ -117,7 +117,7 @@ for j = 1:step
      end
  
      if state ~= 0
-        scale = scale*0.73;
+        scale = scale*0.8;
      else
         % 0.75 + - 0.07
         scale = scale * (rand()*0.14-0.07 + 0.75);  
