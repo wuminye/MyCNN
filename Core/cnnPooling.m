@@ -22,7 +22,7 @@ for i = 1 : num
    end
     %}
     tmp = conv2(inputFeature(:,:,i), ones(kdx,kdy),'valid'); 
-    featureMap(:,:,i) = ActiveFunction(w(i).*tmp(1:kdx:end,1:kdy:end)/(kdx*kdy)+b(i));
+    featureMap(:,:,i) =w(i).*tmp(1:kdx:end,1:kdy:end)/(kdx*kdy)+b(i);
 end
 
 

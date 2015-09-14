@@ -161,7 +161,7 @@ for i = num-1:-1: 1
     end
        
     if strcmp(cur,'Pooling') 
-        res{i}.t = res{i}.t.*deActiveFunction(data{i});
+      %  res{i}.t = res{i}.t.*deActiveFunction(data{i});
          k = model.Layer{i}.kernel;
         res{i}.b = zeros( size(res{i}.t,3),1);
         res{i}.w = zeros( size(res{i}.t,3),1);
