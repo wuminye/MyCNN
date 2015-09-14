@@ -31,7 +31,8 @@ for i = 1: step
   
   %分配每批训练样本
   [ tX,ty,model,ind] = cnnTDAllocate(model,X,y ,pn );
-  
+ 
+ 
   model=cnnLog(model,'faces:%d\n',sum(ty(:,1)==1));
   [ J , cor ,nul ,indf,model] = cnnAnalyze( model,size(tX,4),tX,ty);
   model=cnnLog(model,'Correction for train: %.5f%% | Cost: %e \n',cor,J);

@@ -1,4 +1,4 @@
-addpath('./FaceData/');
+addpath('./MNIST/');
 addpath('./Core/');
 addpath('./Util/');
 
@@ -7,11 +7,9 @@ itn = input('the number of iteration : ');
 
 load model
 
-if strcmp(model.type, 'small') ==1
-    load picdatasmall;
-else    
+
     load picdata;
-end
+
 theta = SaveNetTheta(model);
 model=cnnLog(model,'ReTrain\n');
 tic;

@@ -16,6 +16,13 @@ for i = 2 : num
         res = res + sum(tem(:));
     end
     
+    
+     if strcmp(cur,'Pooling') 
+        tem = t.w.^2;
+        res = res + sum(tem(:));
+    end
+    
+    
 end
 
 end

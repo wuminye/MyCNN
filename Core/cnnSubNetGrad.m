@@ -22,13 +22,18 @@ for i = num-1:-1: 1
     if strcmp(nex,'Conv')
         res{i}.t = zeros(model.Layer{i}.out);
        
+      
+        
         for p = 1:size(res{i}.t,3)
             for q = 1:size(res{i+1}.t,3)
+                
+               ahpla = exp(model.Layer{i+1}.beta(p,q))/ sum(exp(model.Layer{i+1}.beta(:,q)));
+               %ahpla = 1;
                if model.Layer{i+1}.connector(q,p)~=1
                    continue;
                end
                res{i}.t(:,:,p) = res{i}.t(:,:,p) + ...
-                        conv2(res{i+1}.t(:,:,q),model.Layer{i+1}.w(:,:,p,q),'full');
+                        conv2(ahpla*res{i+1}.t(:,:,q),model.Layer{i+1}.w(:,:,p,q),'full');
             end
         end  
     end
@@ -69,7 +74,7 @@ for i = num-1:-1: 1
         
         for j = 1 : size(res{i+1}.t,3)
             %有效误差矩阵
-            res{i}.t(1:x,1:y,j) = kron(res{i+1}.t(:,:,j) , B)./(k.x*k.y);
+            res{i}.t(1:x,1:y,j) = kron(res{i+1}.t(:,:,j) , B).*model.Layer{i+1}.w(j)./(k.x*k.y);
             %res{i}.t(1:x,1:y,j) = kron(res{i+1}.b(:,:,j) , B);
         end
         
@@ -88,17 +93,37 @@ for i = num-1:-1: 1
         
         res{i}.w = zeros(size(model.Layer{i}.w));
         res{i}.b = zeros(size(model.Layer{i}.b));
+        res{i}.beta = zeros(size(res{i}.w,3),size(res{i}.w,4));
+        
+       
         for q = 1 : size(res{i}.w,4)
            for p = 1 : size(res{i}.w,3)
+              % ahpla = 1;
+               
+               ahpla = exp(model.Layer{i}.beta(p,q))/ sum(exp(model.Layer{i}.beta(:,q)));
+               
+               tmp1 = res{i}.t(:,:,q).*conv2(data{i-1}(:,:,p),rot90(model.Layer{i}.w(:,:,p,q),2),'valid');
+               tmp1 = sum(tmp1(:));
+               
+               for k = 1 : size(res{i}.w,3)
+                  aa = - ahpla * exp(model.Layer{i}.beta(k,q))/ sum(exp(model.Layer{i}.beta(:,q)));
+                  if k == p
+                      aa = aa + ahpla;
+                  end
+                  res{i}.beta(k,q) = res{i}.beta(k,q) + aa*tmp1 ;
+               end 
+               
                if model.Layer{i}.connector(q,p)~=1
                    continue;
                end
-               res{i}.w(:,:,p,q) = conv2(data{i-1}(:,:,p), rot90(res{i}.t(:,:,q),2),'valid');
+               res{i}.w(:,:,p,q) = conv2(data{i-1}(:,:,p), rot90(ahpla*res{i}.t(:,:,q),2),'valid');
       
             end
             tem =res{i}.t(:,:,q);
             res{i}.b(q) = sum(tem(:));
         end
+        
+       
         
     end
     
@@ -136,8 +161,16 @@ for i = num-1:-1: 1
     end
        
     if strcmp(cur,'Pooling') 
- 
-       % res{i}.b = res{i}.t ; %.*(data{i}.*(1-data{i}));Pooling层没有激活函数
+        res{i}.t = res{i}.t.*deActiveFunction(data{i});
+         k = model.Layer{i}.kernel;
+        res{i}.b = zeros( size(res{i}.t,3),1);
+        res{i}.w = zeros( size(res{i}.t,3),1);
+        for j = 1 : size(res{i}.t,3)
+            xx = res{i}.t(:,:,j);
+            res{i}.b(j) = sum(xx(:));
+            ww = ((data{i}(:,:,j)-model.Layer{i}.b(j))/model.Layer{i}.w(j)).*res{i}.t(:,:,j);
+            res{i}.w(j) = sum(ww(:));
+        end
 
     end
     
@@ -145,7 +178,7 @@ for i = num-1:-1: 1
     if strcmp(cur,'ANN')
         res{i}.t = res{i}.t.*deActiveFunction(data{i});
         res{i}.b = res{i}.t;
-        res{i}.t = reshape(res{i}.t,1,1,[]); % 可要可不要？？
+        res{i}.t = reshape(res{i}.t,1,1,[]); 
         res{i}.w = res{i}.b(:)*reshape(data{i-1}, [] ,1)';
         res{i}.b = res{i}.t;
     end

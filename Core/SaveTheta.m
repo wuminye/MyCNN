@@ -9,6 +9,7 @@ for i = 2 : num
    if strcmp(cur,'Conv') || strcmp(cur,'Convs')
        theta = [theta ; t.b(:)];
        theta = [theta ; t.w(:)];
+       theta = [theta ; t.beta(:)];
    end
    
    if strcmp(cur,'ANN')
@@ -19,6 +20,12 @@ for i = 2 : num
     if strcmp(cur,'SoftMax')
        theta = [theta ; t.w(:)];
     end
+    
+    if strcmp(cur,'Pooling')
+       theta = [theta ; t.b(:)];
+       theta = [theta ; t.w(:)];
+    end
+    
 end
 end
 

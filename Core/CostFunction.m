@@ -85,6 +85,12 @@ function  grad1 = mergeGrad(grad1 , grad2 , mo)
                if strcmp(model.Layer{k}.type,'SoftMax')
                    grad1{i}{j}{k}.w = grad1{i}{j}{k}.w + grad2{i}{j}{k}.w;
                end
+               
+                if strcmp(model.Layer{k}.type,'Pooling')
+                   grad1{i}{j}{k}.b = grad1{i}{j}{k}.b + grad2{i}{j}{k}.b;
+                   grad1{i}{j}{k}.w = grad1{i}{j}{k}.w + grad2{i}{j}{k}.w;
+                end
+               
            end
        end
     end
@@ -102,9 +108,10 @@ function  grad = addGradReg(grad,mo ,num_data)
                        || strcmp(model.Layer{k}.type,'Convs')
                    grad{i}{j}{k}.w = grad{i}{j}{k}.w + mo.lambda*model.Layer{k}.w./num_data;
                end
-               if strcmp(model.Layer{k}.type,'SoftMax')
+               if strcmp(model.Layer{k}.type,'SoftMax') || strcmp(model.Layer{k}.type,'Pooling')
                    grad{i}{j}{k}.w = grad{i}{j}{k}.w + mo.lambda*model.Layer{k}.w./num_data;
                end
+                             
            end
        end
     end
@@ -117,13 +124,26 @@ function  dgrad = genGrad(grad,mo)
        for j = 1: length(grad{i})
            model = mo.sublayer{i}.subnet{j}.model;
            for k = 1: length(grad{i}{j})
-               if strcmp(model.Layer{k}.type,'ANN') || strcmp(model.Layer{k}.type,'Conv') ...
+               if strcmp(model.Layer{k}.type,'ANN')  ...
                        || strcmp(model.Layer{k}.type,'Convs')
                    dgrad = [dgrad; grad{i}{j}{k}.b(:); grad{i}{j}{k}.w(:);];
+     
                end
+               
+               if strcmp(model.Layer{k}.type,'Conv')
+                  dgrad = [dgrad; grad{i}{j}{k}.b(:); grad{i}{j}{k}.w(:);grad{i}{j}{k}.beta(:);];
+                %  dgrad = [dgrad; grad{i}{j}{k}.b(:); grad{i}{j}{k}.w(:);];
+               end 
+               
+               
                if strcmp(model.Layer{k}.type,'SoftMax')
                    dgrad = [dgrad;grad{i}{j}{k}.w(:);];
                end
+               
+                if strcmp(model.Layer{k}.type,'Pooling')
+                   dgrad = [dgrad;grad{i}{j}{k}.b(:); grad{i}{j}{k}.w(:);];
+               end
+               
            end
        end
     end

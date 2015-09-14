@@ -31,13 +31,19 @@ for i = 1 : num_layer
        Layer{i}.b = rand(Layer{i}.mapnum,1)*2*r - r ;   %实数偏置
        Layer{i}.connector = ones(Layer{i}.mapnum,Layer{i-1}.out(3));
 
-
+       %---------------------------------------------------------------
+       %weights for combinations of feature map
+       Layer{i}.beta = rand(Layer{i-1}.out(3) ,Layer{i}.mapnum)*2*r - r ;
+       
+       
+%{
        if Layer{i-1}.out(3) + Layer{i}.out(3) >15 
           %随机切断链接
            Np = size(Layer{i}.connector(:),1);
            index = randperm(Np,ceil(Np*0.15));
            Layer{i}.connector(index) = 0;
        end
+       %}
        for nn = 1:Layer{i-1}.out(3)
          Layer{i}.connector(ceil(Layer{i}.mapnum*rand()),nn) =1;
          Layer{i}.connector(ceil(Layer{i}.mapnum*rand()),nn) =1;
@@ -72,6 +78,9 @@ for i = 1 : num_layer
        Layer{i}.out = floor([Layer{i-1}.out(1:2)./Layer{i}.kernelsize , Layer{i-1}.out(3)]);
        Layer{i}.kernel.x = Layer{i}.kernelsize(1);
        Layer{i}.kernel.y = Layer{i}.kernelsize(2);
+       r = sqrt(6)/( Layer{i}.kernel.x*Layer{i}.kernel.y + 1);
+       Layer{i}.b = rand( Layer{i-1}.out(3),1)*2*r - r ;  %实数偏置
+       Layer{i}.w = rand( Layer{i-1}.out(3),1)*2*r - r ;
    end
 
    if strcmp(cur,'ANN')

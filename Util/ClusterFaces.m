@@ -70,6 +70,9 @@ function [minp] = GetDist(ra,rb)
         area = (dxa +dxb - max(lx) + min(lx))*(dya +dyb - max(ly) + min(ly));
         
         minp = min([area/dxa/dya  area/dxb/dyb]);
+        if max([area/dxa/dya  area/dxb/dyb])>0.95
+            minp = 1;
+        end
         return;
      end
     

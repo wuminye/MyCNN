@@ -99,50 +99,64 @@ model.sublayer{4}.connect = ones(length(model.sublayer{3}.subnet),...
 
 %}
 
-input = [36 32 1];
+input = [28 28 1];
 
 %---------------------------------------------
 % subnet 1-1
 %---------------------------------------------
    Layer = cell(0,1);
 
+   
    Layer{end+1}.type = 'Input';
    Layer{end}.out = input;
-     
-   
+        
    Layer{end+1}.type = 'Conv';
    Layer{end}.kernelsize = [5 5];
-   Layer{end}.mapnum  =   2;  %32 28
+   Layer{end}.mapnum  =   7;  %24 24s
    
    Layer{end+1}.type = 'Pooling';
-   Layer{end}.kernelsize = [2 2];  %  16 14
+   Layer{end}.kernelsize = [2 2];  %  12 12 
    
    Layer{end+1}.type = 'Conv';
-   Layer{end}.kernelsize = [3 3];
-   Layer{end}.mapnum  =   6;  %14 12
+   Layer{end}.kernelsize = [5  5 ];
+   Layer{end}.mapnum  =   20;  %8 8
    
    Layer{end+1}.type = 'Pooling';
-   Layer{end}.kernelsize = [2 2];  %  7 6
+   Layer{end}.kernelsize = [2 2];  %  4 4
    
-   Layer{end+1}.type = 'Conv';
-   Layer{end}.kernelsize = [3 3];
-   Layer{end}.mapnum  =   12;  % 5 4
+ 
+   
+     Layer{end+1}.type = 'Reshape';
+   Layer{end}.kernelsize = [1 1 4*4*20];
+
       
-   Layer{end+1}.type = 'Conv';
-   Layer{end}.kernelsize = [3 3];
-   Layer{end}.mapnum  =   25;  % 3 2
-   
-   Layer{end+1}.type = 'Reshape';
-   Layer{end}.kernelsize = [1 1 150];
    
    
    Layer{end+1}.type = 'ANN';
    Layer{end}.out = [300 1];
-      
+
+     
    
    Layer{end+1}.type = 'SoftMax';
-   Layer{end}.out = [2 1];
+   Layer{end}.out = [10 1];
+
+   %{
+   Layer{end+1}.type = 'Input';
+   Layer{end}.out = input;
    
+   Layer{end+1}.type = 'Pooling';
+   Layer{end}.kernelsize = [2 2];  %  14 14
+   
+    Layer{end+1}.type = 'Pooling';
+   Layer{end}.kernelsize = [2 2];  %  14 14
+   
+   Layer{end+1}.type = 'Reshape';
+   Layer{end}.kernelsize = [1 1 7*7];
+   Layer{end}.mapnum  =   2;  % 1 1
+   
+   Layer{end+1}.type = 'SoftMax';
+   Layer{end}.out = [10 1];
+   %}
    model_1_1 = InitSubnet( Layer );
    
 
@@ -159,21 +173,21 @@ model.sublayer{2}.connect = ones(1,length(model.sublayer{2}.subnet));
 model.type = 'big';
 
 
-model.lambda = 0.03; 
+model.lambda = 0.003; 
 %model.dataname = name;  %数据库名称 
 
-model.num_train = 80000; %用于训练的样本数量 
+model.num_train = 60000; %用于训练的样本数量 
 model.MaxIter = 20; % 批量梯度法的迭代次数 
 
  
-model.testnum = 200 ; %每批训练前后 测试样本的数量 
-model.traintestnum = 4000 ; %每多批训练前后 测试样本的数量 
+model.testnum = 500 ; %每批训练前后 测试样本的数量 
+model.traintestnum = 1000 ; %每多批训练前后 测试样本的数量 
 model.tick = 15 ; %训练时的刻度 
-model.itn =  25 ; %每批训练最大迭代次数 
-model.step = 30 ; %训练的批次数 
+model.itn =  50 ; %每批训练最大迭代次数 
+model.step = 36 ; %训练的批次数 
 model.interval = model.step/7;  %每隔多少批一次大检查 
-model.reservation = 0.0007;    %每批最少保留的样本比例 
-model.rate = 0.015;    %每批样本数量缩放比例 
+model.reservation = 0.0014;    %每批最少保留的样本比例 
+model.rate = 0.03;    %每批样本数量缩放比例 
 model.itreservation = 0.35;    %每批最少保留的迭代次数比例 
 
  

@@ -1,4 +1,4 @@
-function [ featureMap ] = cnnConv( inputFeature , w , b , connector)
+function [ featureMap ] = cnnConv( inputFeature , w , b , connector,beta)
 %CNNCONV Summary of this function goes here
 %   Detailed explanation goes here
 %   ===========================================
@@ -26,13 +26,20 @@ y = oy - size(w,2) + 1;
 % do Conv, [valid] dim of each featuremap to inputFeature
 featureMap = zeros(x ,y ,num);
 
+
+
+
 for cf = 1 : num
     for lf = 1 : old_num
+        
+        ahpla = exp(beta(lf,cf))/ sum(exp(beta(:,cf)));
+       % ahpla = 1;
+        
         if connector(cf,lf)==0
             continue;
         end
         tem = conv2(inputFeature(:,:,lf),rot90(w(:,:,lf,cf),2),'valid');
-        featureMap(:,:,cf) = featureMap(:,:,cf) +tem;
+        featureMap(:,:,cf) = featureMap(:,:,cf) +ahpla*tem;
     end
     featureMap(:,:,cf) = ActiveFunction(featureMap(:,:,cf) + b(cf));
 end

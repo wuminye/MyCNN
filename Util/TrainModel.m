@@ -1,6 +1,6 @@
 addpath('./Core/');
 addpath('./Util/');
-
+addpath('./MNIST/');
 load model
 
 

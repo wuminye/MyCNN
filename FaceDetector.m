@@ -1,13 +1,18 @@
 function [ cp , faces, list] = FaceDetector(model, data ,model2)
-list=[];
+list=zeros(0,4);
 addpath('./FaceData/');
 addpath('./Core/');
 addpath('./Util/');
 
 if size(data,1)==1   %ÎÄ¼þÊäÈë
     data = imread(data);
-    data = rgb2gray(data);
-    data = imresize(data,800/max(size(data)));
+   % imshow(data);
+ %   figure;
+    figure;
+     if size(data,3) > 1
+       data = rgb2gray(data);
+    end
+    data = imresize(data,6250/max(size(data)));
     data = double(data)/255;
 end   
 
@@ -34,13 +39,16 @@ for i = 1 : length(res)
   %  subplot(2,1,1);
   %  imshow(t);
   % subplot(2,1,2);
-    [faces,tem]=splitIMG(model2,imresize(data,scales(i)),t,[0.8 0.5],scales(i));
+    [faces,tem]=splitIMG(model2,imresize(data,scales(i)),t,[0.5 0.7],scales(i));
     list = [list;tem];
     
 
 end
        list = ClusterFaces( list);
-
+       list(:,1) = list(:,1) / size(data,1);
+       list(:,2) = list(:,2) / size(data,2);
+       list(:,3) = list(:,3) / size(data,1);
+       list(:,4) = list(:,4) / size(data,2);
        drawresult(data,list,res);
 
 end
@@ -142,6 +150,11 @@ function drawresult(img,list,res)
   N = length(res);
   N = ceil(sqrt(N));
   
+   list(:,1) = list(:,1) * size(img,1);
+   list(:,2) = list(:,2) * size(img,2);
+   list(:,3) = list(:,3) * size(img,1);
+   list(:,4) = list(:,4) * size(img,2);
+  
   figure;
   for i = 1: length(res)
     subplot(N,N,i);
@@ -151,10 +164,10 @@ function drawresult(img,list,res)
   imshow(img);
   hold on;
   for i = 1: size(list,1)
-        cx = list(i,1) - list(i,3)/2;
-        cy = list(i,2) - list(i,4)/2;
+        cx = list(i,1) - list(i,3)*1.25/2;
+        cy = list(i,2) - list(i,4)*1.1/2;
         rectangle('Position', ...
-                  [cy, cx, list(i,4), list(i,3)], ...
+                  [cy, cx, list(i,4)*1.1, list(i,3)*1.25], ...
                   'Curvature', 0.4, 'LineWidth',2, 'EdgeColor', 'green');
       
   end

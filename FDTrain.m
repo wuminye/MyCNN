@@ -1,4 +1,4 @@
-addpath('./FaceData/');
+addpath('./MNIST/');
 addpath('./Core/');
 addpath('./Util/');
 model = InitCNNModel();
@@ -8,12 +8,14 @@ save model model;
 while true
 
     TrainModel;
+    %{
     [ X,y ] = LoadErrNonFaces( model );
-    if size(X,4)>80000
-       X = X(:,:,:,1:80000);
-       y = y(1:80000,:);
+    if size(X,4)>60000
+       X = X(:,:,:,1:60000);
+       y = y(1:60000,:);
     end
     save errdata X y ;
+   
     if size(X,4)<50
         break;
     end
@@ -26,4 +28,5 @@ while true
     end
     model.lambda = model.lambda * 100;
     save model model;
+    %}
 end

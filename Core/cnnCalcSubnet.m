@@ -20,11 +20,11 @@ function [ res ] = cnnCalcSubnet( model ,data )
      
      if strcmp(cur,'Conv')
          res{i} = cnnConv(res{i-1},model.Layer{i}.w,model.Layer{i}.b,...
-                          model.Layer{i}.connector);
+                          model.Layer{i}.connector,model.Layer{i}.beta);
      end
      
       if strcmp(cur,'Pooling')
-         res{i} = cnnPooling(res{i-1}, model.Layer{i}.kernel );
+         res{i} = cnnPooling(res{i-1}, model.Layer{i}.kernel ,model.Layer{i}.w, model.Layer{i}.b);
       end
      
      if strcmp(cur,'ANN')

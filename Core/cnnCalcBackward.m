@@ -115,7 +115,7 @@ for i = num_sublayer:-1: 2
                 if strcmp(cur,'ANN')
                    theta.t = theta.t.*deActiveFunction( data{i}{j}{end});
                     theta.b = theta.t;
-                    theta.t = reshape(theta.t,1,1,[]); % 可要可不要？？
+                    theta.t = reshape(theta.t,1,1,[]); 
                     theta.w = theta.b(:)*reshape(data{i}{j}{end-1}, [] ,1)';
                     theta.b = theta.t;
                 end

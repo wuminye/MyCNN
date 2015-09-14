@@ -1,4 +1,4 @@
-function [ featureMap ] = cnnPooling(inputFeature, kernel )
+function [ featureMap ] = cnnPooling(inputFeature, kernel ,w,b  )
 %CNNPOOLING Summary of this function goes here
 %  目前  Pooling 输出没有激活函数
 
@@ -22,7 +22,7 @@ for i = 1 : num
    end
     %}
     tmp = conv2(inputFeature(:,:,i), ones(kdx,kdy),'valid'); 
-    featureMap(:,:,i) = tmp(1:kdx:end,1:kdy:end)/(kdx*kdy);
+    featureMap(:,:,i) = ActiveFunction(w(i).*tmp(1:kdx:end,1:kdy:end)/(kdx*kdy)+b(i));
 end
 
 

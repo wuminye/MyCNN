@@ -1,4 +1,4 @@
-
+addpath('./MNIST/');
 addpath('./Core/');
 addpath('./Util/');
 
@@ -11,11 +11,7 @@ load picdata
 images = images(:,:,:,1:num_train);
 labels = labels(1:num_train,:);
 
-if strcmp(model.type, 'small') ==1
-    images =  NormalizeIMG( images ,0.5);
-else    
-    images =  NormalizeIMG(images);
-end
+
 
 theta = SaveNetTheta(model);
 
