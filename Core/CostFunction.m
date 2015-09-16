@@ -104,9 +104,13 @@ function  grad = addGradReg(grad,mo ,num_data)
        for j = 1: length(grad{i})
            model = mo.sublayer{i}.subnet{j}.model;
            for k = 1: length(grad{i}{j})
-               if strcmp(model.Layer{k}.type,'ANN') || strcmp(model.Layer{k}.type,'Conv') ...
+               if strcmp(model.Layer{k}.type,'ANN')  ...
                        || strcmp(model.Layer{k}.type,'Convs')
                    grad{i}{j}{k}.w = grad{i}{j}{k}.w + mo.lambda*model.Layer{k}.w./num_data;
+               end
+               if  strcmp(model.Layer{k}.type,'Conv')
+                   grad{i}{j}{k}.w = grad{i}{j}{k}.w + mo.lambda*model.Layer{k}.w./num_data;
+                   grad{i}{j}{k}.beta = grad{i}{j}{k}.beta + mo.lambda*model.Layer{k}.beta./num_data;
                end
                if strcmp(model.Layer{k}.type,'SoftMax') || strcmp(model.Layer{k}.type,'Pooling')
                    grad{i}{j}{k}.w = grad{i}{j}{k}.w + mo.lambda*model.Layer{k}.w./num_data;
