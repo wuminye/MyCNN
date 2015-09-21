@@ -1,4 +1,4 @@
-function [ y ] = cnnANN( input , w, b )
+function [ y ] = cnnANN( input , w, b ,mask)
 %CNNANN Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -9,7 +9,7 @@ assert(size(w ,1) == size(b,1), ['Dims of w and b error  ', '']);
 assert(size(input ,3) == size(w ,2), ['Dims of input and w error  ', '']);
 
 tem =  input(1,1,:);
-y = w * tem(:) + b;
+y = (mask.*w) * tem(:) + b;
 
 y = ActiveFunction(y);
 y = reshape(y,1,1,[]);

@@ -64,7 +64,7 @@ for i = 2 : num_sublayer
         end
         
         res{i}{j} = ...
-            cnnCalcSubnet( model.sublayer{i}.subnet{j}.model ,inFeatureMap );
+            cnnCalcSubnet( model.sublayer{i}.subnet{j}.model ,inFeatureMap ,model.OnTrain);
 
     end
    

@@ -44,7 +44,9 @@ for i = 1: step
       theta = SaveNetTheta(model);
       F=@(p)CostFunction( p, tX, ty, model );
       options = optimset('MaxIter', itn);
+      model = DropoutStart(model);
       [nn_params, cost1 , model ,corind] = fmincg(model,F, theta, options);
+      model = DropoutEnd(model);
       cost = [cost;cost1];
       %{
       %¸üÐÂ´íÎó¼ÇÂ¼

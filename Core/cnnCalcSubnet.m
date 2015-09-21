@@ -1,4 +1,4 @@
-function [ res ] = cnnCalcSubnet( model ,data )
+function [ res ] = cnnCalcSubnet( model ,data,OnTrain )
 %CNNCALCNET Summary of this function goes here
 %   Detailed explanation goes here
  res = cell(length(model.Layer),1);
@@ -28,7 +28,10 @@ function [ res ] = cnnCalcSubnet( model ,data )
       end
      
      if strcmp(cur,'ANN')
-         res{i} = cnnANN(res{i-1}, model.Layer{i}.w, model.Layer{i}.b );
+         if  model.Layer{i}.dropout.enable == 1 && OnTrain == 1
+             res{i-1} = res{i-1} / model.Layer{i}.dropout.p;
+         end
+         res{i} = cnnANN(res{i-1}, model.Layer{i}.w, model.Layer{i}.b,model.Layer{i}.mask );
      end
  end
 

@@ -81,6 +81,7 @@ for i = 1 : num_layer
        r = sqrt(6)/( Layer{i}.kernel.x*Layer{i}.kernel.y + 1);
        Layer{i}.b = rand( Layer{i-1}.out(3),1)*2*r - r ;  %ÊµÊıÆ«ÖÃ
        Layer{i}.w = rand( Layer{i-1}.out(3),1)*2*r - r ;
+       
    end
 
    if strcmp(cur,'ANN')
@@ -89,6 +90,7 @@ for i = 1 : num_layer
       r = sqrt(6)/(pp + p);
       Layer{i}.w = rand(p,pp)*2*r - r ;
       Layer{i}.b = rand(p,1)*2*r - r;
+      Layer{i}.mask = ones(size(Layer{i}.w));
    end
 end
 

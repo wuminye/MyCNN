@@ -1,4 +1,4 @@
-function [X, fX, model,corind] = fmincg(model,f, X, options, P1, P2, P3, P4, P5)
+function [X, fX, model,corind,cor] = fmincg(model,f, X, options, P1, P2, P3, P4, P5)
 % Minimize a continuous differentialble multivariate function. Starting point
 % is given by "X" (D by 1), and the function named in the string "f", must
 % return a function value and a vector of partial derivatives. The Polack-

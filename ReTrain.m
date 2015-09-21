@@ -21,7 +21,9 @@ tic;
   model=cnnLog(model,'faces:%d\n',sum(ty(:,1)==1));
   options = optimset('MaxIter', itn);
   F=@(p)CostFunction( p, tX, ty, model );
+   model = DropoutStart(model);
   [nn_params, cost , model ,corind] = fmincg(model,F, theta, options);
+  model = DropoutEnd(model);
   model = LoadNetTheta(nn_params,model);
   
   

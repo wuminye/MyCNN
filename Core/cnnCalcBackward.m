@@ -123,7 +123,7 @@ for i = num_sublayer:-1: 2
           end
           
           res{i}{j} = cnnSubNetGrad(model.sublayer{i}.subnet{j}.model,...
-                                    data{i}{j},theta);
+                                    data{i}{j},theta,model.OnTrain);
           
           
      end

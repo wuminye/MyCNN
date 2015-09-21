@@ -1,4 +1,4 @@
-function [ res ] = cnnSubNetGrad( model, data ,errdata)
+function [ res ] = cnnSubNetGrad( model, data ,errdata,OnTrain)
 %model 为模型，data为前向过程的计算结果
 %最后一层的误差项直接由参数传入errdata ,一个struct 包含计算好的梯度
 num = length(model.Layer);
@@ -56,11 +56,19 @@ for i = num-1:-1: 1
         end  
     end
     
-    
-    if  strcmp(nex,'ANN') || strcmp(nex,'SoftMax')
-        %te = reshape(data{i}(1,1,:), [] ,1);
-        res{i}.t = model.Layer{i+1}.w'*reshape(res{i+1}.t,[],1); %.*(te.*(1-te));
+    if strcmp(nex,'SoftMax')
+        res{i}.t = (model.Layer{i+1}.w)'*reshape(res{i+1}.t,[],1); %.*(te.*(1-te));
         res{i}.t = reshape(res{i}.t,1,1,[]);
+    end
+    if  strcmp(nex,'ANN') 
+        %te = reshape(data{i}(1,1,:), [] ,1);
+        if  model.Layer{i+1}.dropout.enable == 1 && OnTrain == 1
+             res{i}.t = (model.Layer{i+1}.mask.*model.Layer{i+1}.w/ model.Layer{i+1}.dropout.p)'*reshape(res{i+1}.t,[],1); %.*(te.*(1-te));
+         else 
+             res{i}.t = (model.Layer{i+1}.mask.*model.Layer{i+1}.w)'*reshape(res{i+1}.t,[],1); 
+         end
+        res{i}.t = reshape(res{i}.t,1,1,[]);
+       
     end
     
     if strcmp(nex,'Pooling')
@@ -179,7 +187,11 @@ for i = num-1:-1: 1
         res{i}.t = res{i}.t.*deActiveFunction(data{i});
         res{i}.b = res{i}.t;
         res{i}.t = reshape(res{i}.t,1,1,[]); 
-        res{i}.w = res{i}.b(:)*reshape(data{i-1}, [] ,1)';
+        if  model.Layer{i}.dropout.enable == 1 && OnTrain == 1
+             res{i}.w = res{i}.b(:)*reshape(data{i-1}, [] ,1)'/ model.Layer{i}.dropout.p; 
+         else 
+             res{i}.w = res{i}.b(:)*reshape(data{i-1}, [] ,1)'; 
+        end
         res{i}.b = res{i}.t;
     end
 %============================================================================    
