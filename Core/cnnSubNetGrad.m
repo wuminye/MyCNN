@@ -118,7 +118,7 @@ for i = num-1:-1: 1
                   if k == p
                       aa = aa + ahpla;
                   end
-                  res{i}.beta(k,q) = res{i}.beta(k,q) + aa*tmp1 ;
+                  res{i}.beta(p,q) = res{i}.beta(p,q) + aa*tmp1 ;
                end 
                
                if model.Layer{i}.connector(q,p)~=1
