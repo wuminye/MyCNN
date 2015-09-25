@@ -188,7 +188,7 @@ for i = num-1:-1: 1
         res{i}.b = res{i}.t;
         res{i}.t = reshape(res{i}.t,1,1,[]); 
         if  model.Layer{i}.dropout.enable == 1 && OnTrain == 1
-             res{i}.w = res{i}.b(:)*reshape(data{i-1}, [] ,1)'/ model.Layer{i}.dropout.p; 
+             res{i}.w = res{i}.b(:)*reshape(data{i-1}, [] ,1)'.*model.Layer{i}.mask; 
          else 
              res{i}.w = res{i}.b(:)*reshape(data{i-1}, [] ,1)'; 
         end
