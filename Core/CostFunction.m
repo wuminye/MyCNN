@@ -12,7 +12,7 @@ corind = zeros(num_data,1);
 %计算每个样本的带价值和修正梯度
 cor = 0;
 
-parfor i = 1 : num_data
+for i = 1 : num_data
    res = cnnCalcForward(model,input(:,:,:,i));
    output = res{end}{end}{end}(:);
    %yy = zeros(size(output,1),1);
@@ -77,10 +77,15 @@ function  grad1 = mergeGrad(grad1 , grad2 , mo)
        for j = 1: length(grad1{i})
            model = mo.sublayer{i}.subnet{j}.model;
            for k = 1: length(grad1{i}{j})
-               if strcmp(model.Layer{k}.type,'ANN') || strcmp(model.Layer{k}.type,'Conv') ...
+               if strcmp(model.Layer{k}.type,'ANN')  ...
                        || strcmp(model.Layer{k}.type,'Convs')
                    grad1{i}{j}{k}.w = grad1{i}{j}{k}.w + grad2{i}{j}{k}.w;
                    grad1{i}{j}{k}.b = grad1{i}{j}{k}.b + grad2{i}{j}{k}.b;
+               end
+               if  strcmp(model.Layer{k}.type,'Conv')
+                    grad1{i}{j}{k}.w = grad1{i}{j}{k}.w + grad2{i}{j}{k}.w;
+                   grad1{i}{j}{k}.b = grad1{i}{j}{k}.b + grad2{i}{j}{k}.b;
+                   grad1{i}{j}{k}.beta = grad1{i}{j}{k}.beta + grad2{i}{j}{k}.beta;
                end
                if strcmp(model.Layer{k}.type,'SoftMax')
                    grad1{i}{j}{k}.w = grad1{i}{j}{k}.w + grad2{i}{j}{k}.w;
