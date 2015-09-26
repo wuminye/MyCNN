@@ -103,16 +103,17 @@ for i = num-1:-1: 1
         res{i}.b = zeros(size(model.Layer{i}.b));
         res{i}.beta = zeros(size(res{i}.w,3),size(res{i}.w,4));
         
-       
+       ahpla = zeros(size(res{i}.w,3), size(res{i}.w,4));
+       tmp = zeros(size(res{i}.w,3), size(res{i}.w,4));
         for q = 1 : size(res{i}.w,4)
            for p = 1 : size(res{i}.w,3)
               % ahpla = 1;
                
-               ahpla = exp(model.Layer{i}.beta(p,q))/ sum(exp(model.Layer{i}.beta(:,q)));
+               ahpla(p,q) = exp(model.Layer{i}.beta(p,q))/ sum(exp(model.Layer{i}.beta(:,q)));
                
                tmp1 = res{i}.t(:,:,q).*conv2(data{i-1}(:,:,p),rot90(model.Layer{i}.w(:,:,p,q),2),'valid');
-               tmp1 = sum(tmp1(:));
-               
+               tmp(p,q) = sum(tmp1(:));
+               %{
                for k = 1 : size(res{i}.w,3)
                   aa = - ahpla * exp(model.Layer{i}.beta(k,q))/ sum(exp(model.Layer{i}.beta(:,q)));
                   if k == p
@@ -120,15 +121,23 @@ for i = num-1:-1: 1
                   end
                   res{i}.beta(p,q) = res{i}.beta(p,q) + aa*tmp1 ;
                end 
+               %}
                
                if model.Layer{i}.connector(q,p)~=1
                    continue;
                end
-               res{i}.w(:,:,p,q) = conv2(data{i-1}(:,:,p), rot90(ahpla*res{i}.t(:,:,q),2),'valid');
-      
+               res{i}.w(:,:,p,q) = conv2(data{i-1}(:,:,p), rot90(ahpla(p,q)*res{i}.t(:,:,q),2),'valid');
+     
             end
             tem =res{i}.t(:,:,q);
             res{i}.b(q) = sum(tem(:));
+        end
+        
+        for q = 1 : size(res{i}.w,4)
+           for p = 1 : size(res{i}.w,3)
+               pp = ahpla(:,q).*tmp(:,q);
+               res{i}.beta(p,q) = ahpla(p,q)*(tmp(p,q) - sum(pp(:)));
+           end
         end
         
        
