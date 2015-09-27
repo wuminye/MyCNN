@@ -33,7 +33,11 @@ function [ model ]=DropoutNetStart(model)
         end
     
         n = size(model.Layer{i}.w(:),1);
-        model.Layer{i}.mask(randperm(n,n*model.Layer{i}.dropout.p)) = 0;
+        ind = rand(n,1);
+        ind(ind<=model.Layer{i}.dropout.p) = 0;
+        ind(ind>model.Layer{i}.dropout.p) =1;
+        ind = ~logical(ind);
+        model.Layer{i}.mask(ind) = 0;
         
     end
  end
