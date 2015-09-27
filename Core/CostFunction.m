@@ -120,7 +120,21 @@ function  grad = addGradReg(grad,mo ,num_data)
                end
                if  strcmp(model.Layer{k}.type,'Conv')
                    grad{i}{j}{k}.w = grad{i}{j}{k}.w + mo.lambda*model.Layer{k}.w./num_data;
-                   grad{i}{j}{k}.beta = grad{i}{j}{k}.beta + mo.lambda*model.Layer{k}.beta./num_data;
+                   %grad{i}{j}{k}.beta = grad{i}{j}{k}.beta + mo.lambda*model.Layer{k}.beta./num_data;
+                   
+                       
+                    for q = 1 : size(model.Layer{k}.w,4)
+                     for p = 1 : size(model.Layer{k}.w,3)
+                          ahpla = exp(model.Layer{k}.beta(p,q))/ sum(exp(model.Layer{k}.beta(:,q)));
+                          ss = 0;
+                          for kk = 1 : size(model.Layer{k}.w,3)
+                             ss = ss + abs(exp(model.Layer{k}.beta(kk,q))/ sum(exp(model.Layer{k}.beta(:,q))));                         
+                          end 
+                          
+                         grad{i}{j}{k}.beta(p,q) = grad{i}{j}{k}.beta(p,q) + 0.5*mo.lambda*(abs(ahpla) - ahpla)./num_data ;
+                     end
+                    end
+                   
                end
                if  strcmp(model.Layer{k}.type,'Pooling')
                    grad{i}{j}{k}.w = grad{i}{j}{k}.w + mo.lambda*model.Layer{k}.w./num_data;

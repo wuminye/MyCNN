@@ -10,8 +10,16 @@ for i = 2 : num
         tem = t.w.^2;
         res = res + sum(tem(:));
         
-        tem = t.beta.^2;
-        res = res + sum(tem(:));
+         % tem = t.beta.^2;
+       % res = res + sum(tem(:));
+        
+        for q = 1 : size(model.Layer{i}.w,4)
+          for p = 1 : size(model.Layer{i}.w,3)
+              ahpla = exp(model.Layer{i}.beta(p,q))/ sum(exp(model.Layer{i}.beta(:,q)));
+              res = res + abs(ahpla);
+          end
+        end
+        
     end
     
     if strcmp(cur,'Convs')
