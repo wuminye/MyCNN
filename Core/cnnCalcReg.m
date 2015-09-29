@@ -30,8 +30,8 @@ for i = 2 : num
     
     if strcmp(cur,'ANN') || strcmp(cur,'SoftMax')
        % tem = t.w.^2;
-        tem = abs(t.w);
-        res = res + sum(tem(:));
+       % tem = abs(t.w);
+       % res = res + sum(tem(:));
     end
     
     

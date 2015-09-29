@@ -12,7 +12,7 @@ corind = zeros(num_data,1);
 %计算每个样本的带价值和修正梯度
 cor = 0;
 
-for i = 1 : num_data
+parfor i = 1 : num_data
    res = cnnCalcForward(model,input(:,:,:,i));
    output = res{end}{end}{end}(:);
    %yy = zeros(size(output,1),1);
@@ -113,10 +113,12 @@ function  grad = addGradReg(grad,mo ,num_data)
                    grad{i}{j}{k}.w = grad{i}{j}{k}.w + mo.lambda*model.Layer{k}.w./num_data;
                end
                if strcmp(model.Layer{k}.type,'ANN')  
-                   tmp = model.Layer{k}.w;
+                   %{
+                   tmp = model.Layer{k}.w.*model.Layer{k}.mask;
                    tmp(model.Layer{k}.w>0) = 1;
                    tmp(model.Layer{k}.w<0) = -1;
                    grad{i}{j}{k}.w = grad{i}{j}{k}.w + 0.5*mo.lambda*tmp./num_data;
+                   %}
                end
                if  strcmp(model.Layer{k}.type,'Conv')
                    grad{i}{j}{k}.w = grad{i}{j}{k}.w + mo.lambda*model.Layer{k}.w./num_data;
