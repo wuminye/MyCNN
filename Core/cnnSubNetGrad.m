@@ -88,6 +88,24 @@ for i = num-1:-1: 1
         
     end
     
+    if strcmp(nex,'MaxPooling')
+        k = model.Layer{i+1}.kernel;
+        B = ones(k.x,k.y);
+        %初始化误差featuremap
+        res{i}.t = zeros(model.Layer{i}.out);
+        %计算有效误差矩阵的大小
+        x = size(res{i+1}.t,1)*k.x;
+        y = size(res{i+1}.t,2)*k.y;
+        
+        for j = 1 : size(res{i+1}.t,3)
+            %有效误差矩阵
+            res{i}.t(1:x,1:y,j) = kron(res{i+1}.t(:,:,j) , B);
+            res{i}.t(1:x,1:y,j) = res{i}.t(1:x,1:y,j).*model.Layer{i+1}.maxindex(:,:,j);
+            %res{i}.t(1:x,1:y,j) = kron(res{i+1}.b(:,:,j) , B);
+        end
+        
+    end
+    
     %Input层不用计算梯度
     if i == 1
         break;
@@ -191,6 +209,9 @@ for i = num-1:-1: 1
 
     end
     
+    if strcmp(cur,'MaxPooling')
+        % nothing to do
+    end
     
     if strcmp(cur,'ANN')
         res{i}.t = res{i}.t.*deActiveFunction(data{i});

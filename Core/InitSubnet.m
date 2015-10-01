@@ -84,6 +84,15 @@ for i = 1 : num_layer
        
    end
 
+   if strcmp(cur,'MaxPooling')
+       Layer{i}.out = floor([Layer{i-1}.out(1:2)./Layer{i}.kernelsize , Layer{i-1}.out(3)]);
+       Layer{i}.kernel.x = Layer{i}.kernelsize(1);
+       Layer{i}.kernel.y = Layer{i}.kernelsize(2);
+      
+       
+   end
+
+   
    if strcmp(cur,'ANN')
       pp = max(Layer{i-1}.out(:));
       p = max(Layer{i}.out(:));

@@ -27,11 +27,14 @@ for i = 2 : num
         res = res + sum(tem(:));
     end
     
+    if strcmp(cur,'ANN') 
+        
+    end
     
-    if strcmp(cur,'ANN') || strcmp(cur,'SoftMax')
-       % tem = t.w.^2;
-       % tem = abs(t.w);
-       % res = res + sum(tem(:));
+    if strcmp(cur,'SoftMax')
+        %tem = t.w.^2;
+       tem = abs(t.w);
+        res = res + sum(tem(:));
     end
     
     

@@ -1,4 +1,4 @@
-function [ res ] = cnnCalcSubnet( model ,data,OnTrain )
+function [ res ,model] = cnnCalcSubnet( model ,data,OnTrain )
 %CNNCALCNET Summary of this function goes here
 %   Detailed explanation goes here
  res = cell(length(model.Layer),1);
@@ -25,6 +25,11 @@ function [ res ] = cnnCalcSubnet( model ,data,OnTrain )
      
       if strcmp(cur,'Pooling')
          res{i} = cnnPooling(res{i-1}, model.Layer{i}.kernel ,model.Layer{i}.w, model.Layer{i}.b);
+      end
+      
+       if strcmp(cur,'MaxPooling')
+         [res{i},MaxIndex ] = cnnMaxPooling(res{i-1}, model.Layer{i}.kernel );
+         model.Layer{i}.maxindex = MaxIndex;
       end
      
      if strcmp(cur,'ANN')

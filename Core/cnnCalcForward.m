@@ -1,4 +1,4 @@
-function [ res , inFeatureMap] = cnnCalcForward( model ,data ,state )
+function [ res , inFeatureMap,model] = cnnCalcForward( model ,data ,state )
 %对于整合网络的计算
 %data 为featuremap格式
 %model的格式:   model.sublayer{i}.subnet{j} 为第i层中第j个subnet
@@ -63,7 +63,7 @@ for i = 2 : num_sublayer
             break;
         end
         
-        res{i}{j} = ...
+        [res{i}{j},model.sublayer{i}.subnet{j}.model] = ...
             cnnCalcSubnet( model.sublayer{i}.subnet{j}.model ,inFeatureMap ,model.OnTrain);
 
     end
