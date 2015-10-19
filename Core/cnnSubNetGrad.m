@@ -1,4 +1,4 @@
-function [ res ] = cnnSubNetGrad( model, data ,errdata,OnTrain)
+function [ res ] = cnnSubNetGrad( model, data ,errdata,M,OnTrain)
 %model 为模型，data为前向过程的计算结果
 %最后一层的误差项直接由参数传入errdata ,一个struct 包含计算好的梯度
 num = length(model.Layer);
@@ -27,8 +27,8 @@ for i = num-1:-1: 1
         for p = 1:size(res{i}.t,3)
             for q = 1:size(res{i+1}.t,3)
                 
-               ahpla = exp(model.Layer{i+1}.beta(p,q))/ sum(exp(model.Layer{i+1}.beta(:,q)));
-               %ahpla = 1;
+              % ahpla = exp(model.Layer{i+1}.beta(p,q))/ sum(exp(model.Layer{i+1}.beta(:,q)));
+               ahpla = 1;
                if model.Layer{i+1}.connector(q,p)~=1
                    continue;
                end
@@ -100,7 +100,7 @@ for i = num-1:-1: 1
         for j = 1 : size(res{i+1}.t,3)
             %有效误差矩阵
             res{i}.t(1:x,1:y,j) = kron(res{i+1}.t(:,:,j) , B);
-            res{i}.t(1:x,1:y,j) = res{i}.t(1:x,1:y,j).*model.Layer{i+1}.maxindex(:,:,j);
+            res{i}.t(1:x,1:y,j) = res{i}.t(1:x,1:y,j).*M{i+1}(:,:,j);
             %res{i}.t(1:x,1:y,j) = kron(res{i+1}.b(:,:,j) , B);
         end
         
@@ -121,16 +121,16 @@ for i = num-1:-1: 1
         res{i}.b = zeros(size(model.Layer{i}.b));
         res{i}.beta = zeros(size(res{i}.w,3),size(res{i}.w,4));
         
-       ahpla = zeros(size(res{i}.w,3), size(res{i}.w,4));
-       tmp = zeros(size(res{i}.w,3), size(res{i}.w,4));
+      % ahpla = zeros(size(res{i}.w,3), size(res{i}.w,4));
+      % tmp = zeros(size(res{i}.w,3), size(res{i}.w,4));
         for q = 1 : size(res{i}.w,4)
            for p = 1 : size(res{i}.w,3)
               % ahpla = 1;
                
-               ahpla(p,q) = exp(model.Layer{i}.beta(p,q))/ sum(exp(model.Layer{i}.beta(:,q)));
+              % ahpla(p,q) = exp(model.Layer{i}.beta(p,q))/ sum(exp(model.Layer{i}.beta(:,q)));
                
-               tmp1 = res{i}.t(:,:,q).*conv2(data{i-1}(:,:,p),rot90(model.Layer{i}.w(:,:,p,q),2),'valid');
-               tmp(p,q) = sum(tmp1(:));
+             %  tmp1 = res{i}.t(:,:,q).*conv2(data{i-1}(:,:,p),rot90(model.Layer{i}.w(:,:,p,q),2),'valid');
+              % tmp(p,q) = sum(tmp1(:));
                %{
                for k = 1 : size(res{i}.w,3)
                   aa = - ahpla * exp(model.Layer{i}.beta(k,q))/ sum(exp(model.Layer{i}.beta(:,q)));
@@ -144,13 +144,14 @@ for i = num-1:-1: 1
                if model.Layer{i}.connector(q,p)~=1
                    continue;
                end
-               res{i}.w(:,:,p,q) = conv2(data{i-1}(:,:,p), rot90(ahpla(p,q)*res{i}.t(:,:,q),2),'valid');
+              % res{i}.w(:,:,p,q) = conv2(data{i-1}(:,:,p), rot90(ahpla(p,q)*res{i}.t(:,:,q),2),'valid');
+               res{i}.w(:,:,p,q) = conv2(data{i-1}(:,:,p), rot90(res{i}.t(:,:,q),2),'valid');
      
             end
             tem =res{i}.t(:,:,q);
             res{i}.b(q) = sum(tem(:));
         end
-        
+        %{
         for q = 1 : size(res{i}.w,4)
            for p = 1 : size(res{i}.w,3)
                pp = ahpla(:,q).*tmp(:,q);
@@ -158,7 +159,7 @@ for i = num-1:-1: 1
            end
         end
         
-       
+       %}
         
     end
     

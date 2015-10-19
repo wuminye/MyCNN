@@ -6,7 +6,7 @@ model = InitCNNModel();
 
 num_train = 4;
 load picdata
-
+images = NormalizeIMG( images);
 
 images = images(:,:,:,1:num_train);
 labels = labels(1:num_train,:);

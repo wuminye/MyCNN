@@ -7,14 +7,16 @@ sx = 3;
 sy = 4;
 
 tic;
-res = cnnCalcnet(model,data);
+res = cnnCalcSubnet(model,data,0);
 toc;
 num = length(model.Layer);
 cnt=1;
 %colormap(gray);
+axis image off
 for i = 1 : num
+    axis image off
     cur = model.Layer{i}.type;
-    if strcmp(cur,'Conv') || strcmp(cur,'Pooling') || strcmp(cur,'ANN')  || strcmp(cur,'Convs')
+    if strcmp(cur,'Conv') || strcmp(cur,'Pooling') || strcmp(cur,'ANN')  || strcmp(cur,'Convs')|| strcmp(cur,'MaxPooling')
        tem = reshape(res{i},[],size(res{i},3));
        [h,im]=displayData(tem',size(res{i},2)); 
        subplot(sx,sy,cnt);
@@ -38,6 +40,7 @@ subplot(sx,sy,cnt);
 cnt =cnt+1;
 
 subplot(sx,sy,cnt);
+axis image off
 imagesc(reshape(y,[],size(y,2)),[0 1]);
 axis image off
 %[a,b]=max(res{num});

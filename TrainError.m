@@ -37,7 +37,11 @@ J = J + lambda*cnnCalcNetReg(model)/(2*num);
 
 fprintf('number of Error data:%d     J: %e\n',cor,J);
 
+ind(randperm(size(ind,1),sum(ind(:))*2)) =1;
+
 ind = logical(ind);
+
+
 
 images = images(:,:,:,ind);
 labels = labels(ind,:);

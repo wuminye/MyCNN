@@ -5,7 +5,7 @@ addpath('./Util/');
 load model
 load testdata
 
-
+images = NormalizeIMG( images);
 
  
 model=cnnLog(model,'---------TestModel-------------\n');

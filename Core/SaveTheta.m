@@ -6,10 +6,16 @@ theta = [];
 for i = 2 : num
    t = model.Layer{i};
    cur = t.type;
-   if strcmp(cur,'Conv') || strcmp(cur,'Convs')
+   if  strcmp(cur,'Convs')
        theta = [theta ; t.b(:)];
        theta = [theta ; t.w(:)];
-       theta = [theta ; t.beta(:)];
+       
+   end
+   
+   if strcmp(cur,'Conv') 
+       theta = [theta ; t.b(:)];
+       theta = [theta ; t.w(:)];
+      % theta = [theta ; t.beta(:)];
    end
    
    if strcmp(cur,'ANN')

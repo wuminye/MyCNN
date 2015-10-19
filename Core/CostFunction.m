@@ -12,8 +12,8 @@ corind = zeros(num_data,1);
 %计算每个样本的带价值和修正梯度
 cor = 0;
 
-for i = 1 : num_data
-   [res,~,model] = cnnCalcForward(model,input(:,:,:,i));
+parfor i = 1 : num_data
+   [res,~,M] = cnnCalcForward(model,input(:,:,:,i));
    output = res{end}{end}{end}(:);
    %yy = zeros(size(output,1),1);
    %yy(y(i)) = 1;
@@ -39,7 +39,7 @@ for i = 1 : num_data
    a = reshape((te1 - yy)./num_data,1,1,[]);
    b = (te1 - yy)*te2'./num_data;
 
-   T{i} = cnnCalcBackward( model, res , makestruct(a,b) );
+   T{i} = cnnCalcBackward( model, res , makestruct(a,b) ,M);
 
  
 %=============================================== 
@@ -85,7 +85,7 @@ function  grad1 = mergeGrad(grad1 , grad2 , mo)
                if  strcmp(model.Layer{k}.type,'Conv')
                     grad1{i}{j}{k}.w = grad1{i}{j}{k}.w + grad2{i}{j}{k}.w;
                    grad1{i}{j}{k}.b = grad1{i}{j}{k}.b + grad2{i}{j}{k}.b;
-                   grad1{i}{j}{k}.beta = grad1{i}{j}{k}.beta + grad2{i}{j}{k}.beta;
+                 %  grad1{i}{j}{k}.beta = grad1{i}{j}{k}.beta + grad2{i}{j}{k}.beta;
                end
                if strcmp(model.Layer{k}.type,'SoftMax')
                    grad1{i}{j}{k}.w = grad1{i}{j}{k}.w + grad2{i}{j}{k}.w;
@@ -124,7 +124,7 @@ function  grad = addGradReg(grad,mo ,num_data)
                    grad{i}{j}{k}.w = grad{i}{j}{k}.w + mo.lambda*model.Layer{k}.w./num_data;
                    %grad{i}{j}{k}.beta = grad{i}{j}{k}.beta + mo.lambda*model.Layer{k}.beta./num_data;
                    
-                       
+                     %{  
                     for q = 1 : size(model.Layer{k}.w,4)
                      for p = 1 : size(model.Layer{k}.w,3)
                           ahpla = exp(model.Layer{k}.beta(p,q))/ sum(exp(model.Layer{k}.beta(:,q)));
@@ -136,6 +136,7 @@ function  grad = addGradReg(grad,mo ,num_data)
                          grad{i}{j}{k}.beta(p,q) = grad{i}{j}{k}.beta(p,q) + 0.5*mo.lambda*(abs(ahpla) - ahpla)./num_data ;
                      end
                     end
+                   %}
                    
                end
                if  strcmp(model.Layer{k}.type,'Pooling')
@@ -167,8 +168,8 @@ function  dgrad = genGrad(grad,mo)
                end
                
                if strcmp(model.Layer{k}.type,'Conv')
-                  dgrad = [dgrad; grad{i}{j}{k}.b(:); grad{i}{j}{k}.w(:);grad{i}{j}{k}.beta(:);];
-                %  dgrad = [dgrad; grad{i}{j}{k}.b(:); grad{i}{j}{k}.w(:);];
+                %  dgrad = [dgrad; grad{i}{j}{k}.b(:); grad{i}{j}{k}.w(:);grad{i}{j}{k}.beta(:);];
+                  dgrad = [dgrad; grad{i}{j}{k}.b(:); grad{i}{j}{k}.w(:);];
                end 
                
                

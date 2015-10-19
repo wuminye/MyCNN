@@ -112,31 +112,79 @@ input = [28 28 1];
    
    Layer{end+1}.type = 'Conv';
    Layer{end}.kernelsize = [5 5];
-   Layer{end}.mapnum  =   4;  %24 24s
+   Layer{end}.mapnum  =   5;  %24 24s
+  % Layer{end}.stride = 2 ;    %  8 7
    
-   Layer{end+1}.type = 'Pooling';
+  
+   Layer{end+1}.type = 'MaxPooling';
    Layer{end}.kernelsize = [2 2];  %  12 12 
+   
+   Layer{end+1}.type = 'Conv';
+   Layer{end}.kernelsize = [5 5];
+   Layer{end}.mapnum  =   10;  
+
+   Layer{end+1}.type = 'MaxPooling';
+   Layer{end}.kernelsize = [2 2];  %  12 12 
+
+   %{
+   Layer{end+1}.type = 'Conv';
+   Layer{end}.kernelsize = [3 3];
+   Layer{end}.mapnum  =   10;  %10 10s
+   
+   Layer{end+1}.type = 'MaxPooling';
+   Layer{end}.kernelsize = [2 2];  %  5 5
+   
+   Layer{end+1}.type = 'Conv';
+   Layer{end}.kernelsize = [2 2];
+   Layer{end}.mapnum  =   25;  %4 4s
+   
+   
+   Layer{end+1}.type = 'MaxPooling';
+   Layer{end}.kernelsize = [2 2];  %  2 2
+   
+   Layer{end+1}.type = 'Conv';
+   Layer{end}.kernelsize = [2 2];
+   Layer{end}.mapnum  =   40;  %1 1s
+   
+   %}
+   %{
+   Layer{end+1}.type = 'Conv';
+   Layer{end}.kernelsize = [2 2];
+   Layer{end}.mapnum  =   30;  %1 1s
+   %}
    %{
    Layer{end+1}.type = 'Conv';
    Layer{end}.kernelsize = [3  3 ];
-   Layer{end}.mapnum  =   12;  %10 10
-   
+   Layer{end}.mapnum  =   10;  %10 10
+  
    Layer{end+1}.type = 'Pooling';
    Layer{end}.kernelsize = [2 2];  %  5 5
-   %}
- 
+
+   
+   Layer{end+1}.type = 'Pooling';
+   Layer{end}.kernelsize = [2 2];  %  2 2
+   
+
    
      Layer{end+1}.type = 'Reshape';
-   Layer{end}.kernelsize = [1 1  12*12*4];
-
-      
+   Layer{end}.kernelsize = [1 1  3*3*1];
+%}
+       Layer{end+1}.type = 'Reshape';
+   Layer{end}.kernelsize = [1 1  4*4*10];
    
-    Layer{end+1}.type = 'ANN';
-   Layer{end}.out = [550 1];
+
+   Layer{end+1}.type = 'ANN';
+   Layer{end}.out = [170 1];
    Layer{end}.dropout.p = 0.5;
    Layer{end}.dropout.enable = 1;
 
- 
+   
+   Layer{end+1}.type = 'ANN';
+   Layer{end}.out = [110 1];
+   Layer{end}.dropout.p = 0.5;
+   Layer{end}.dropout.enable = 1;
+
+
    
    Layer{end+1}.type = 'SoftMax';
    Layer{end}.out = [10 1];
@@ -174,11 +222,11 @@ model.sublayer{2}.connect = ones(1,length(model.sublayer{2}.subnet));
 model.type = 'big';
 
 
-model.lambda = 0.0003; 
+model.lambda = 0.006; 
 %model.dataname = name;  %数据库名称 
 
 model.num_train = 60000; %用于训练的样本数量 
-model.MaxIter = 20; % 批量梯度法的迭代次数 
+model.MaxIter = 30; % 批量梯度法的迭代次数 
 
  
 model.testnum = 500 ; %每批训练前后 测试样本的数量 

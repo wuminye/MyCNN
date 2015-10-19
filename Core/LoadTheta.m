@@ -7,17 +7,29 @@ pos = 1;
 for i = 2 : num
     t = model.Layer{i};
     cur = t.type;
-    if strcmp(cur,'Conv') ||  strcmp(cur,'Convs')
+    
+    if  strcmp(cur,'Convs')
          n = length(t.b(:));
          model.Layer{i}.b = reshape(theta(pos:pos+n-1),size(t.b));
          pos=pos+n;
          n = length(t.w(:));
          model.Layer{i}.w = reshape(theta(pos:pos+n-1),size(t.w));
          pos=pos+n;
-         
+        
+    end
+    
+    if strcmp(cur,'Conv')
+         n = length(t.b(:));
+         model.Layer{i}.b = reshape(theta(pos:pos+n-1),size(t.b));
+         pos=pos+n;
+         n = length(t.w(:));
+         model.Layer{i}.w = reshape(theta(pos:pos+n-1),size(t.w));
+         pos=pos+n;
+         %{
           n = length(t.beta(:));
          model.Layer{i}.beta = reshape(theta(pos:pos+n-1),size(t.beta));
          pos=pos+n;
+         %}
         
     end
     

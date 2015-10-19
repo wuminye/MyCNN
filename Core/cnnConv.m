@@ -32,8 +32,8 @@ featureMap = zeros(x ,y ,num);
 for cf = 1 : num
     for lf = 1 : old_num
         
-        ahpla = exp(beta(lf,cf))/ sum(exp(beta(:,cf)));
-       % ahpla = 1;
+       % ahpla = exp(beta(lf,cf))/ sum(exp(beta(:,cf)));
+        ahpla = 1;
         
         if connector(cf,lf)==0
             continue;

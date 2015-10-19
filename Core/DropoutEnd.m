@@ -22,6 +22,11 @@ function [ model ]=DropoutNetEnd(model)
     cur = model.Layer{i}.type;
     
     if strcmp(cur,'ANN')
+        tmp = model.Layer{i}.w.*model.Layer{i}.mask;
+        tmp = tmp.^2;
+        mm = max(tmp(:));
+        if mm > 2
+        end
         
         model.Layer{i}.mask = ones(size(model.Layer{i}.w));      
     end

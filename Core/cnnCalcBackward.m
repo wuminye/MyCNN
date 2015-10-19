@@ -1,4 +1,4 @@
-function [ res ] = cnnCalcBackward( model, data , errdata )
+function [ res ] = cnnCalcBackward( model, data , errdata ,M)
 
 num_sublayer = length(model.sublayer); %获得有几层.
 res = cell(num_sublayer,1);
@@ -123,7 +123,7 @@ for i = num_sublayer:-1: 2
           end
           
           res{i}{j} = cnnSubNetGrad(model.sublayer{i}.subnet{j}.model,...
-                                    data{i}{j},theta,model.OnTrain);
+                                    data{i}{j},theta,M{i}{j},model.OnTrain);
           
           
      end
