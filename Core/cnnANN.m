@@ -9,9 +9,9 @@ assert(size(w ,1) == size(b,1), ['Dims of w and b error  ', '']);
 assert(size(input ,3) == size(w ,2), ['Dims of input and w error  ', '']);
 
 tem =  input(1,1,:);
-y = (mask.*w) * tem(:) + b;
+y = w * tem(:) + b;
 
-y = ActiveFunction(y);
+y = ActiveFunction(y.*mask);
 y = reshape(y,1,1,[]);
 end
 

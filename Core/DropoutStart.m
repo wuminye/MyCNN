@@ -32,7 +32,7 @@ function [ model ]=DropoutNetStart(model)
             continue;
         end
     
-        n = size(model.Layer{i}.w(:),1);
+        n = size(model.Layer{i}.b(:),1);
         ind = rand(n,1);
         ind(ind<=model.Layer{i}.dropout.p) = 0;
         ind(ind>model.Layer{i}.dropout.p) =1;
